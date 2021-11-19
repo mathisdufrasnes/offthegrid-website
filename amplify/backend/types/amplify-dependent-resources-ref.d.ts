@@ -9,5 +9,17 @@ export type AmplifyDependentResourcesAttributes = {
             "AppClientIDWeb": "string",
             "AppClientID": "string"
         }
+    },
+    "api": {
+        "offthegridwebsite": {
+            "GraphQLAPIIdOutput": "string",
+            "GraphQLAPIEndpointOutput": "string"
+        }
+    },
+    "storage": {
+        "amplifyimages": {
+            "BucketName": "string",
+            "Region": "string"
+        }
     }
 }
