@@ -1,0 +1,25 @@
+type Comments @model @auth(rules: [{allow: public}]) @key(name: "byNews", fields: ["idNews"]) {
+  id: ID!
+  idNews: ID
+  author: String
+  content: String
+  language: String
+  date: AWSDateTime
+}
+
+type News @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  idNews: Int!
+  title: String!
+  titleFR: String!
+  author: String!
+  date: AWSDate
+  content: String
+  contentFR: String
+  type: String
+  typeFR: String
+  nbComments: Int
+  img: String
+  Comments: [Comments] @connection(keyName: "byNews", fields: ["id"])
+}
+  

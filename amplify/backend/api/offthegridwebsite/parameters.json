@@ -1,0 +1,12 @@
+{
+  "AppSyncApiName": "offthegridwebsite",
+  "DynamoDBBillingMode": "PAY_PER_REQUEST",
+  "DynamoDBEnableServerSideEncryption": false,
+  "AuthCognitoUserPoolId": {
+    "Fn::GetAtt": [
+      "authoffthegridwebsite5ace61bc",
+      "Outputs.UserPoolId"
+    ]
+  },
+  "AuthModeLastUpdated": "2021-11-19T23:23:02.612Z"
+}
