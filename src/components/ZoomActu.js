@@ -533,7 +533,7 @@ export default function ZoomActu() {
                                             )}
                                         </Grid>
                                     }
-                                    <Grid container direction={'column'}>
+                                    {/*<Grid container direction={'column'}>
                                         <Grid item className={classes.gridElements}>
                                             <Typography className={classes.smallBold}>
                                                 Laissez un commentaire :
@@ -557,7 +557,9 @@ export default function ZoomActu() {
                                                         />
                                                     </Grid>
                                                     <Grid item>
-                                                        <Button disabled={captchaVerif} type={'submit'} color={'primary'} variant={'contained'} className={classes.button}>
+                                                        <Button disabled={captchaVerif} type={'submit'}
+                                                                color={'primary'} variant={'contained'}
+                                                                className={classes.button}>
                                                             Envoyer votre commentaire
                                                         </Button>
                                                     </Grid>
@@ -565,7 +567,7 @@ export default function ZoomActu() {
                                             </form>
                                         </Grid>
 
-                                    </Grid>
+                                    </Grid>*/}
                                 </Grid>
                             </Grid>
                         </Box>
