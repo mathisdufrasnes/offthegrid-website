@@ -1,6 +1,67 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
+export const getNotes = /* GraphQL */ `
+  query GetNotes($id: ID!) {
+    getNotes(id: $id) {
+      id
+      content
+      _version
+      _deleted
+      _lastChangedAt
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const listNotess = /* GraphQL */ `
+  query ListNotess(
+    $filter: ModelNotesFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listNotess(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        content
+        _version
+        _deleted
+        _lastChangedAt
+        createdAt
+        updatedAt
+      }
+      nextToken
+      startedAt
+    }
+  }
+`;
+export const syncNotes = /* GraphQL */ `
+  query SyncNotes(
+    $filter: ModelNotesFilterInput
+    $limit: Int
+    $nextToken: String
+    $lastSync: AWSTimestamp
+  ) {
+    syncNotes(
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      lastSync: $lastSync
+    ) {
+      items {
+        id
+        content
+        _version
+        _deleted
+        _lastChangedAt
+        createdAt
+        updatedAt
+      }
+      nextToken
+      startedAt
+    }
+  }
+`;
 export const getComments = /* GraphQL */ `
   query GetComments($id: ID!) {
     getComments(id: $id) {
@@ -8,8 +69,10 @@ export const getComments = /* GraphQL */ `
       idNews
       author
       content
-      language
       date
+      _version
+      _deleted
+      _lastChangedAt
       createdAt
       updatedAt
     }
@@ -27,12 +90,45 @@ export const listCommentss = /* GraphQL */ `
         idNews
         author
         content
-        language
         date
+        _version
+        _deleted
+        _lastChangedAt
         createdAt
         updatedAt
       }
       nextToken
+      startedAt
+    }
+  }
+`;
+export const syncComments = /* GraphQL */ `
+  query SyncComments(
+    $filter: ModelCommentsFilterInput
+    $limit: Int
+    $nextToken: String
+    $lastSync: AWSTimestamp
+  ) {
+    syncComments(
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      lastSync: $lastSync
+    ) {
+      items {
+        id
+        idNews
+        author
+        content
+        date
+        _version
+        _deleted
+        _lastChangedAt
+        createdAt
+        updatedAt
+      }
+      nextToken
+      startedAt
     }
   }
 `;
@@ -51,21 +147,27 @@ export const getNews = /* GraphQL */ `
       typeFR
       nbComments
       img
+      _version
+      _deleted
+      _lastChangedAt
+      createdAt
+      updatedAt
       Comments {
         items {
           id
           idNews
           author
           content
-          language
           date
+          _version
+          _deleted
+          _lastChangedAt
           createdAt
           updatedAt
         }
         nextToken
+        startedAt
       }
-      createdAt
-      updatedAt
     }
   }
 `;
@@ -89,13 +191,59 @@ export const listNewss = /* GraphQL */ `
         typeFR
         nbComments
         img
-        Comments {
-          nextToken
-        }
+        _version
+        _deleted
+        _lastChangedAt
         createdAt
         updatedAt
+        Comments {
+          nextToken
+          startedAt
+        }
       }
       nextToken
+      startedAt
+    }
+  }
+`;
+export const syncNews = /* GraphQL */ `
+  query SyncNews(
+    $filter: ModelNewsFilterInput
+    $limit: Int
+    $nextToken: String
+    $lastSync: AWSTimestamp
+  ) {
+    syncNews(
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      lastSync: $lastSync
+    ) {
+      items {
+        id
+        idNews
+        title
+        titleFR
+        author
+        date
+        content
+        contentFR
+        type
+        typeFR
+        nbComments
+        img
+        _version
+        _deleted
+        _lastChangedAt
+        createdAt
+        updatedAt
+        Comments {
+          nextToken
+          startedAt
+        }
+      }
+      nextToken
+      startedAt
     }
   }
 `;

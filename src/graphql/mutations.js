@@ -1,6 +1,54 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
+export const createNotes = /* GraphQL */ `
+  mutation CreateNotes(
+    $input: CreateNotesInput!
+    $condition: ModelNotesConditionInput
+  ) {
+    createNotes(input: $input, condition: $condition) {
+      id
+      content
+      _version
+      _deleted
+      _lastChangedAt
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const updateNotes = /* GraphQL */ `
+  mutation UpdateNotes(
+    $input: UpdateNotesInput!
+    $condition: ModelNotesConditionInput
+  ) {
+    updateNotes(input: $input, condition: $condition) {
+      id
+      content
+      _version
+      _deleted
+      _lastChangedAt
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const deleteNotes = /* GraphQL */ `
+  mutation DeleteNotes(
+    $input: DeleteNotesInput!
+    $condition: ModelNotesConditionInput
+  ) {
+    deleteNotes(input: $input, condition: $condition) {
+      id
+      content
+      _version
+      _deleted
+      _lastChangedAt
+      createdAt
+      updatedAt
+    }
+  }
+`;
 export const createComments = /* GraphQL */ `
   mutation CreateComments(
     $input: CreateCommentsInput!
@@ -11,8 +59,10 @@ export const createComments = /* GraphQL */ `
       idNews
       author
       content
-      language
       date
+      _version
+      _deleted
+      _lastChangedAt
       createdAt
       updatedAt
     }
@@ -28,8 +78,10 @@ export const updateComments = /* GraphQL */ `
       idNews
       author
       content
-      language
       date
+      _version
+      _deleted
+      _lastChangedAt
       createdAt
       updatedAt
     }
@@ -45,8 +97,10 @@ export const deleteComments = /* GraphQL */ `
       idNews
       author
       content
-      language
       date
+      _version
+      _deleted
+      _lastChangedAt
       createdAt
       updatedAt
     }
@@ -70,21 +124,27 @@ export const createNews = /* GraphQL */ `
       typeFR
       nbComments
       img
+      _version
+      _deleted
+      _lastChangedAt
+      createdAt
+      updatedAt
       Comments {
         items {
           id
           idNews
           author
           content
-          language
           date
+          _version
+          _deleted
+          _lastChangedAt
           createdAt
           updatedAt
         }
         nextToken
+        startedAt
       }
-      createdAt
-      updatedAt
     }
   }
 `;
@@ -106,21 +166,27 @@ export const updateNews = /* GraphQL */ `
       typeFR
       nbComments
       img
+      _version
+      _deleted
+      _lastChangedAt
+      createdAt
+      updatedAt
       Comments {
         items {
           id
           idNews
           author
           content
-          language
           date
+          _version
+          _deleted
+          _lastChangedAt
           createdAt
           updatedAt
         }
         nextToken
+        startedAt
       }
-      createdAt
-      updatedAt
     }
   }
 `;
@@ -142,21 +208,27 @@ export const deleteNews = /* GraphQL */ `
       typeFR
       nbComments
       img
+      _version
+      _deleted
+      _lastChangedAt
+      createdAt
+      updatedAt
       Comments {
         items {
           id
           idNews
           author
           content
-          language
           date
+          _version
+          _deleted
+          _lastChangedAt
           createdAt
           updatedAt
         }
         nextToken
+        startedAt
       }
-      createdAt
-      updatedAt
     }
   }
 `;

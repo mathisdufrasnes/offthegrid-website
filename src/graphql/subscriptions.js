@@ -1,6 +1,45 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
+export const onCreateNotes = /* GraphQL */ `
+  subscription OnCreateNotes {
+    onCreateNotes {
+      id
+      content
+      _version
+      _deleted
+      _lastChangedAt
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onUpdateNotes = /* GraphQL */ `
+  subscription OnUpdateNotes {
+    onUpdateNotes {
+      id
+      content
+      _version
+      _deleted
+      _lastChangedAt
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onDeleteNotes = /* GraphQL */ `
+  subscription OnDeleteNotes {
+    onDeleteNotes {
+      id
+      content
+      _version
+      _deleted
+      _lastChangedAt
+      createdAt
+      updatedAt
+    }
+  }
+`;
 export const onCreateComments = /* GraphQL */ `
   subscription OnCreateComments {
     onCreateComments {
@@ -8,8 +47,10 @@ export const onCreateComments = /* GraphQL */ `
       idNews
       author
       content
-      language
       date
+      _version
+      _deleted
+      _lastChangedAt
       createdAt
       updatedAt
     }
@@ -22,8 +63,10 @@ export const onUpdateComments = /* GraphQL */ `
       idNews
       author
       content
-      language
       date
+      _version
+      _deleted
+      _lastChangedAt
       createdAt
       updatedAt
     }
@@ -36,8 +79,10 @@ export const onDeleteComments = /* GraphQL */ `
       idNews
       author
       content
-      language
       date
+      _version
+      _deleted
+      _lastChangedAt
       createdAt
       updatedAt
     }
@@ -58,21 +103,27 @@ export const onCreateNews = /* GraphQL */ `
       typeFR
       nbComments
       img
+      _version
+      _deleted
+      _lastChangedAt
+      createdAt
+      updatedAt
       Comments {
         items {
           id
           idNews
           author
           content
-          language
           date
+          _version
+          _deleted
+          _lastChangedAt
           createdAt
           updatedAt
         }
         nextToken
+        startedAt
       }
-      createdAt
-      updatedAt
     }
   }
 `;
@@ -91,21 +142,27 @@ export const onUpdateNews = /* GraphQL */ `
       typeFR
       nbComments
       img
+      _version
+      _deleted
+      _lastChangedAt
+      createdAt
+      updatedAt
       Comments {
         items {
           id
           idNews
           author
           content
-          language
           date
+          _version
+          _deleted
+          _lastChangedAt
           createdAt
           updatedAt
         }
         nextToken
+        startedAt
       }
-      createdAt
-      updatedAt
     }
   }
 `;
@@ -124,21 +181,27 @@ export const onDeleteNews = /* GraphQL */ `
       typeFR
       nbComments
       img
+      _version
+      _deleted
+      _lastChangedAt
+      createdAt
+      updatedAt
       Comments {
         items {
           id
           idNews
           author
           content
-          language
           date
+          _version
+          _deleted
+          _lastChangedAt
           createdAt
           updatedAt
         }
         nextToken
+        startedAt
       }
-      createdAt
-      updatedAt
     }
   }
 `;
