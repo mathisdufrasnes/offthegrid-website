@@ -217,26 +217,18 @@ export default function Accueil() {
     const onSubmit = (data) => console.log(data);
     console.log("Errors:", errors);
 
-    const textFieldValidation = (textFieldValue, radioValue) =>
-    {
-        if(radioValue==="Autre")
-        {
-            if(textFieldValue)
-            {
-                if(textFieldValue==="")
-                {
+    const textFieldValidation = (textFieldValue, radioValue) => {
+        if (radioValue === "Autre") {
+            if (textFieldValue) {
+                if (textFieldValue === "") {
                     return false;
-                }
-                else{
+                } else {
                     return true;
                 }
-            }
-            else {
+            } else {
                 return false;
             }
-        }
-        else
-        {
+        } else {
             return true
         }
     }

@@ -1,20 +1,18 @@
 import React, {Fragment, useEffect, useState} from "react"
-import imgActu1 from '../media/actu1.png'
-import imgActu4 from '../media/actu2.jpg'
-import imgActu5 from '../media/actu3.png'
-import imgActu6 from '../media/actu4.png'
-import imgActu7 from '../media/actu5.png'
 import FeedOutlinedIcon from '@mui/icons-material/FeedOutlined';
 import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
 import AddCommentOutlinedIcon from '@mui/icons-material/AddCommentOutlined';
 import CommentOutlinedIcon from '@mui/icons-material/CommentOutlined';
 import Timeline from '@mui/lab/Timeline';
 import TimelineItem from '@mui/lab/TimelineItem';
+import {DataStore, Predicates, SortDirection} from '@aws-amplify/datastore';
+import {API, Storage} from 'aws-amplify';
+import {News} from '../models';
 import TimelineSeparator from '@mui/lab/TimelineSeparator';
 import TimelineConnector from '@mui/lab/TimelineConnector';
 import TimelineContent from '@mui/lab/TimelineContent';
 import TimelineDot from '@mui/lab/TimelineDot';
-import { createTheme, ThemeProvider, styled } from '@mui/material/styles';
+import {createTheme, ThemeProvider, styled} from '@mui/material/styles';
 import {makeStyles} from "@material-ui/core/styles"
 import "./Actus.css"
 import {
@@ -35,81 +33,8 @@ import {TimelineOppositeContent} from "@mui/lab";
 import {Route, Switch, useHistory, useLocation} from "react-router-dom";
 import ZoomActu from "./ZoomActu";
 import Accueil from "./Accueil";
-import {DataStore, Predicates, SortDirection} from "@aws-amplify/datastore";
-import {News} from "../models";
-import {Storage} from "aws-amplify";
 
-const actu1 = {
-    id: 1,
-    titre: 'Startupfest 2019 – PME Montréal',
-    img: imgActu1,
-    auteur: 'Charles',
-    date: 'july 12, 2019',
-    preview: 'Startupfest 2019 – PME Montréal   Off The Grid get a 1000$ subvention at a pitch contest during Startupfest 2019.',
-    type: 'News',
-    nbComments: '0'
-}
-const actu2 = {
-    id: 2,
-    titre: 'Our team',
-    img: '',
-    auteur: 'Charles',
-    date: 'september 4, 2019',
-    preview: 'About Equipement Off the Grid inc. Here at Off The Grid, we believe physical training is an untapped power source. We started this business for one purpose : reduce the ecological footprint of each traning. With this goal, our team pushes boundaries...',
-    type: 'Section',
-    nbComments: ''
-}
-const actu3 = {
-    id: 3,
-    titre: 'Home',
-    img: '',
-    auteur: 'Charles',
-    date: 'september 26, 2019',
-    preview: 'Reduce the ecological footprint of each training with the Off the Grid inc. spinning bike. We are a quebec-based company dedicated to propose ecofriendly training equipments...',
-    type: 'Section',
-    nbComments: ''
-}
-const actu4 = {
-    id: 4,
-    titre: 'Entrepreneurship grant - HEC',
-    img: imgActu4,
-    auteur: 'Charles',
-    date: 'december 15, 2019',
-    preview: 'Entrepreneurship grant – HEC Montréal   In winter 2019, Off the Grid wins an entrepreneurship grant of 10 000$',
-    type: 'News',
-    nbComments: '0'
-}
-const actu5 = {
-    id: 5,
-    titre: 'Two first employees hired',
-    img: imgActu5,
-    auteur: 'Charles',
-    date: 'august 30, 2020',
-    preview: 'Off the Grid hires its first two members :  Véronique St-Louis and Kevin Donnithorne. As marketing specialists, they will manage all the marketing-related tasks as well as many other similar tasks...',
-    type: 'News',
-    nbComments: '0'
-}
-const actu6 = {
-    id: 6,
-    titre: 'Charles and Sébastien present the startup in 60 seconds.',
-    img: imgActu6,
-    auteur: 'Charles',
-    date: 'september 22, 2020',
-    preview: 'Our two co-founders present Off The Grid in 60 secondes.',
-    type: 'Video',
-    nbComments: '0'
-}
-const actu7 = {
-    id: 7,
-    titre: 'Finalists at the MTL Tech Awards 2020',
-    img: imgActu7,
-    auteur: 'Charles',
-    date: 'october 13, 2020',
-    preview: 'Off The Grid is finalist at the MTL Tech Awards 2020',
-    type: 'News',
-    nbComments: '0'
-}
-export const actus = [actu1, actu2, actu3, actu4, actu5, actu6, actu7]
+
 const MenuProps = {
     PaperProps: {
         style: {
@@ -159,8 +84,6 @@ const useStyles = makeStyles((theme) => ({
         },
     box1: {
         backgroundColor: "#ffffff",
-
-        minHeight: '100vh',
         display: "flex",
         justifyContent: 'center',
         alignItems: 'center',
@@ -248,9 +171,10 @@ export default function Actus() {
     }, []);
 
     async function fetchNews() {
-        let news = await DataStore.query(News,Predicates.ALL, {
-            sort: s => s.idNews(SortDirection.ASCENDING)});
-        let actus=[];
+        let news = await DataStore.query(News, Predicates.ALL, {
+            sort: s => s.idNews(SortDirection.ASCENDING)
+        });
+        let actus = [];
         await Promise.all(news.map(async newsItem => {
             let actu = {
                 id: newsItem.id,
@@ -267,11 +191,44 @@ export default function Actus() {
                 img: newsItem.img,
                 imgFile: '',
             };
-            if (actu.img!== '' && actu.img!== null) {
+            if (actu.img !== '' && actu.img !== null) {
                 const image = await Storage.get(actu.img);
                 actu.imgFile = image;
+            } else {
+                actu.imgFile = null;
             }
-            else{
+            actus.push(actu);
+        }))
+        setActualites(actus);
+    }
+
+    async function fetchNewsSearch(search) {
+        let news = await DataStore.query(News, c => c.or(
+            c => c.title("contains", search).titleFR("contains", search).content("contains", search).contentFR("contains", search).title("contains", search.toLowerCase()).titleFR("contains", search.toLowerCase()).content("contains", search.toLowerCase()).contentFR("contains", search.toLowerCase())
+        ), {
+            sort: s => s.idNews(SortDirection.ASCENDING)
+        });
+        let actus = [];
+        await Promise.all(news.map(async newsItem => {
+            let actu = {
+                id: newsItem.id,
+                idNews: newsItem.idNews,
+                title: newsItem.title,
+                titleFR: newsItem.titleFR,
+                author: newsItem.author,
+                date: newsItem.date,
+                content: newsItem.content,
+                contentFR: newsItem.contentFR,
+                type: newsItem.type,
+                typeFR: newsItem.typeFR,
+                nbComments: newsItem.nbComments,
+                img: newsItem.img,
+                imgFile: '',
+            };
+            if (actu.img !== '' && actu.img !== null) {
+                const image = await Storage.get(actu.img);
+                actu.imgFile = image;
+            } else {
                 actu.imgFile = null;
             }
             actus.push(actu);
@@ -281,14 +238,13 @@ export default function Actus() {
 
     const history = useHistory();
     const location = useLocation();
-
+    const [search, setSearch] = React.useState('')
     const [category, setCategory] = React.useState([]);
     const [auteur, setAuteur] = React.useState([]);
 
-
-    const [minDate, setMinDate]=React.useState([2019,7]);
-    const [maxDate, setMaxDate]=React.useState([2022,1]);
-    const [maxDateInterval, setMaxDateInterval]=React.useState(((maxDate[0]-minDate[0])* 12)+(maxDate[1]-minDate[1])+1);
+    const [minDate, setMinDate] = React.useState([2019, 7]);
+    const [maxDate, setMaxDate] = React.useState([2022, 1]);
+    const [maxDateInterval, setMaxDateInterval] = React.useState(((maxDate[0] - minDate[0]) * 12) + (maxDate[1] - minDate[1]) + 1);
     const [value2, setValue2] = React.useState([1, 100]);
     const minDistance = 1;
     const handleChangeDate = (event, newValue, activeThumb) => {
@@ -308,9 +264,23 @@ export default function Actus() {
             setValue2(newValue);
         }
     };
+    const handleSearch = (search) => {
+        setSearch(search.target.value);
+        console.log(search.target.value);
+    }
+    const handleSubmit = (values) => {
+        console.log(values.target[0].value);
+        fetchNewsSearch(values.target[0].value)
+        values.preventDefault()
+    }
+    const formatDate = (date) => {
+        const month = mois[parseInt(date.substring(5, 7)) - 1]
+        return date.substring(8, 10) + ' ' + month + ' ' + date.substring(0, 4);
+    };
+
     const handleChangeCateg = (event) => {
         const {
-            target: { value },
+            target: {value},
         } = event;
         setCategory(
             // On autofill we get a the stringified value.
@@ -319,28 +289,26 @@ export default function Actus() {
     };
     const handleChangeAuteur = (event) => {
         const {
-            target: { value },
+            target: {value},
         } = event;
         setAuteur(
             // On autofill we get a the stringified value.
             typeof value === 'string' ? value.split(',') : value,
         );
     };
-    const formatDateSlider=(value) => {
-        const yearSurplus= Math.floor(value / 12)
+    const formatDateSlider = (value) => {
+        const yearSurplus = Math.floor(value / 12)
         let year = minDate[0] + yearSurplus
-        value= value - (yearSurplus*12)
-        if(value > (12 - minDate[1]))
-        {
-            value = value+ minDate[1] - 12
-            year+=1
-        }
-        else{
+        value = value - (yearSurplus * 12)
+        if (value > (12 - minDate[1])) {
+            value = value + minDate[1] - 12
+            year += 1
+        } else {
             value = value + minDate[1]
         }
 
-        let month = mois[(value)-1]
-        return month+ ' '+year.toString()
+        let month = mois[(value) - 1]
+        return month + ' ' + year.toString()
     }
 
     function CategoryIcon(props) {
@@ -366,12 +334,12 @@ export default function Actus() {
                         <Typography variant={'h2'}>News</Typography>
                     </Grid>
                     <Grid item>
-                        <form>
+                        <form onSubmit={handleSubmit}>
                             <Grid container direction={'row'} spacing={2}>
                                 <Grid item xs>
                                     <TextField label="Search"  fullWidth/>
                                 </Grid>
-                                <Grid item xs={2}>
+                                {/*<Grid item xs={2}>
                                     <FormControl fullWidth>
                                         <InputLabel id="demo-multiple-checkbox-label" >Categories</InputLabel>
                                         <Select
@@ -417,17 +385,20 @@ export default function Actus() {
                                 </Grid>
                                 <Grid item xs={2}>
                                     <FormControl fullWidth>
-                                        <Slider
-                                            value={value2}
-                                            onChange={handleChangeDate}
-                                            valueLabelDisplay="auto"
-                                            disableSwap
-                                            min={0}
-                                            max={maxDateInterval}
-                                            valueLabelFormat={val => formatDateSlider(val)}
-                                        />
+                                    <Slider
+                                        value={value2}
+                                        onChange={handleChangeDate}
+                                        valueLabelDisplay="auto"
+                                        disableSwap
+                                        min={0}
+                                        max={maxDateInterval}
+                                        valueLabelFormat={val => formatDateSlider(val)}
+                                    />
                                     </FormControl>
-                                </Grid>
+                                </Grid>*/}
+                                <Button type={'submit'}>
+                                    Search
+                                </Button>
                             </Grid>
                         </form>
                     </Grid>
@@ -435,69 +406,89 @@ export default function Actus() {
             </Box>
             <Box className={classes.box1}>
                 <Grid className={classes.box1Content} container spacing={3}>
-                    <Timeline position="alternate">
-                        {actualites.sort((a,b) => (a.idNews > b.idNews) ? -1 : ((b.idNews > a.idNews) ? 1 : 0)).map(actualite=>
-                            <Fragment>
-                                <TimelineItem>
-                                    <TimelineOppositeContent className={classes.TLOppositeContent}>
-                                        <Typography variant={'h4'} color={'primary'}
-                                                    style={{marginLeft: '10%', marginRight: '10%'}}>
-                                            {actualite.date}
-                                        </Typography>
-                                    </TimelineOppositeContent>
-                                    <TimelineSeparator>
-                                        <TimelineConnector className={classes.TLSep}/>
-                                        <TimelineDot/>
-                                        <TimelineConnector className={classes.TLSep}/>
-                                    </TimelineSeparator>
-                                    <TimelineContent className={classes.TLContent}>
-                                        <Card className={classes.card} onClick={() => history.push('/actus/' + actualite.idNews)}>
-                                            <CardContent className={classes.cardContent}>
+                    {actualites.length === 0 ?
+                        <Fragment>
+                            <Grid container direction={'column'} spacing={4} display={'flex'} alignItems={'center'}>
+                                <Grid item>
+                                    <Typography variant={'h4'} color={'primary'}>
+                                        No results match your search...
+                                    </Typography>
+                                </Grid>
+                                <Grid item>
+                                    <Button color={'primary'} variant={'contained'} onClick={() => history.go(0)}>
+                                        Back to the news list
+                                    </Button>
+                                </Grid>
+                            </Grid>
+                        </Fragment>
+                        :
+                        <Timeline position="alternate">
 
-                                                {<img src={actualite.imgFile} className={classes.cardImg}/>}
+                            {actualites.sort((a, b) => (a.idNews > b.idNews) ? -1 : ((b.idNews > a.idNews) ? 1 : 0)).map(actualite =>
+                                <Fragment>
+                                    <TimelineItem>
+                                        <TimelineOppositeContent className={classes.TLOppositeContent}>
+                                            <Typography variant={'h4'} color={'primary'}
+                                                        style={{marginLeft: '10%', marginRight: '10%'}}>
+                                                {formatDate(actualite.date)}
+                                            </Typography>
+                                        </TimelineOppositeContent>
+                                        <TimelineSeparator>
+                                            <TimelineConnector className={classes.TLSep}/>
+                                            <TimelineDot/>
+                                            <TimelineConnector className={classes.TLSep}/>
+                                        </TimelineSeparator>
+                                        <TimelineContent className={classes.TLContent}>
+                                            <Card className={classes.card}
+                                                  onClick={() => history.push('/en/actus/' + actualite.idNews)}>
+                                                <CardContent className={classes.cardContent}>
 
-                                                <Typography className={classes.titleText}>
-                                                    {actualite.title}
-                                                </Typography>
-                                                <Grid item container direction={'row'} spacing={1}>
-                                                    <Grid item>
-                                                        <Typography className={classes.contentText}>
-                                                            by
-                                                        </Typography>
+                                                    {<img src={actualite.imgFile} className={classes.cardImg}/>}
+
+                                                    <Typography className={classes.titleText}>
+                                                        {actualite.title}
+                                                    </Typography>
+                                                    <Grid item container direction={'row'} spacing={1}>
+                                                        <Grid item>
+                                                            <Typography className={classes.contentText}>
+                                                                by
+                                                            </Typography>
+                                                        </Grid>
+                                                        <Grid item>
+                                                            <Typography className={classes.authorText}>
+                                                                {actualite.author}
+                                                            </Typography>
+                                                        </Grid>
                                                     </Grid>
-                                                    <Grid item>
-                                                        <Typography className={classes.authorText}>
-                                                            {actualite.author}
-                                                        </Typography>
-                                                    </Grid>
-                                                </Grid>
-                                                <Typography className={classes.contentText}>
-                                                    {actualite.content}
-                                                </Typography>
-                                            </CardContent>
-                                            <CardActions className={classes.cardActions}>
-                                                {(actualite.type === '' || actualite.type === null) ? '' : (
-                                                    <Button>
-                                                        <CategoryIcon type={actualite.type}/>
-                                                        <Typography className={classes.contentText}>{actualite.type}</Typography>
-                                                    </Button>)
-                                                }
-                                                {(actualite.nbComments === '' || actualite.nbComments === null) ? '' : (
-                                                    <Button>
-                                                        <CommentOutlinedIcon className={classes.typeIcon}/>
-                                                        <Typography
-                                                            className={classes.contentText}>{actualite.nbComments}</Typography>
-                                                    </Button>)
-                                                }
-                                            </CardActions>
-                                        </Card>
-                                    </TimelineContent>
-                                </TimelineItem>
-                            </Fragment>
-                        )}
-                    </Timeline>
+                                                    <Typography className={classes.contentText}>
+                                                        {actualite.content}
+                                                    </Typography>
+                                                </CardContent>
+                                                <CardActions className={classes.cardActions}>
+                                                    {(actualite.type === '' || actualite.type === null) ? '' : (
+                                                        <Button>
+                                                            <CategoryIcon type={actualite.type}/>
+                                                            <Typography
+                                                                className={classes.contentText}>{actualite.type}</Typography>
+                                                        </Button>)
+                                                    }
+                                                    {(actualite.nbComments === '' || actualite.nbComments === null) ? '' : (
+                                                        <Button>
+                                                            <CommentOutlinedIcon className={classes.typeIcon}/>
+                                                            <Typography
+                                                                className={classes.contentText}>{actualite.nbComments}</Typography>
+                                                        </Button>)
+                                                    }
+                                                </CardActions>
+                                            </Card>
+                                        </TimelineContent>
+                                    </TimelineItem>
+                                </Fragment>
+                            )}
+                        </Timeline>}
                 </Grid>
             </Box>
         </Fragment>
     );
 }
+

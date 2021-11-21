@@ -1,5 +1,5 @@
 import React, {Fragment, useState} from "react"
-
+import { Fade, Slide } from "react-awesome-reveal";
 import {makeStyles, ThemeProvider, createTheme} from "@material-ui/core/styles"
 import {
     Box,
@@ -257,6 +257,7 @@ export default function AccueilEN() {
             <Box className={classes.box1}>
                 <Grid container className={classes.offset}>
                     <Grid container direction="column" spacing={3} className={classes.boxContent}>
+                        <Slide triggerOnce duration={1500} direction={'left'}>
                         <Grid item>
                             <Typography variant={'h5'} color={'primary'}>
                                 Reducing the ecological footprint of every workout
@@ -266,6 +267,7 @@ export default function AccueilEN() {
                             <Typography variant={'h1'}>Off The Grid</Typography>
                             <Typography variant={'h1'}>Eco-friendly spin bikes</Typography>
                         </Grid>
+                        </Slide>
                         <Grid item>
                             <Typography variant={'body1'}>
                                 We are a Quebec-based company entirely dedicated to offering eco-friendly training
@@ -281,12 +283,14 @@ export default function AccueilEN() {
                                 for your well-being, for fun and for the planet.
                             </Typography>
                         </Grid>
+                        <Fade duration={3000} triggerOnce>
                         <Grid item>
                             <Button color={'primary'} variant={'contained'} className={classes.bigButton}
                                     onClick={() => handleScrollTo()}>
                                 Subscribe to our newsletter
                             </Button>
                         </Grid>
+                        </Fade>
                     </Grid>
                 </Grid>
             </Box>
@@ -297,9 +301,11 @@ export default function AccueilEN() {
             <Box className={classes.box3}>
                 <Grid container direction="row">
                     <Grid item container xs spacing={3} direction={'column'}>
+                        <Slide direction={'up'} duration={1000} triggerOnce>
                         <Grid item>
                             <Typography variant={'h1'}>Our bikes</Typography>
                         </Grid>
+                        </Slide>
                         <Grid item>
                             <Typography variant={'body1'}>
                                 Our eco-friendly spinning bikes are among the most technologically advanced in the
@@ -356,9 +362,11 @@ export default function AccueilEN() {
                         </Grid>
                     </Grid>
                     <Grid item container xs spacing={3} direction={'column'} alignItems={"center"}>
+                        <Slide duration={1000} direction={'up'} triggerOnce>
                         <Grid item xs display={"flex"} justifyContent={'center'}>
                             <img xs className={classes.img} src={bikePhoto}/>
                         </Grid>
+                        </Slide>
                         <Grid item xs display={"flex"} justifyContent={'center'}>
                             <img xs src={solarImpulse} width={'150px'}/>
                         </Grid>
@@ -550,7 +558,6 @@ export default function AccueilEN() {
                                                             href={'mailto:info@getoffthegrid.ca'}>info@getoffthegrid.ca</Link>
                                 </Typography>
                             </Grid>
-
                         </Grid>
                         <Grid item container className={classes.boxNewsletter} xs>
                             <Grid container direction={'column'} className={classes.newsletterContent}>

@@ -9,10 +9,10 @@ import equi2 from '../media/equi2.png'
 import equi3 from '../media/equi3.png'
 import equi4 from '../media/equi4.png'
 import equi5 from '../media/equi5.png'
-import Accordion from "@mui/material/Accordion";
-import AccordionSummary from "@mui/material/AccordionSummary";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import AccordionDetails from "@mui/material/AccordionDetails";
+import Accordion from '@mui/material/Accordion';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import AccordionDetails from '@mui/material/AccordionDetails';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 const useStyles = makeStyles((theme) => ({
     root:
@@ -26,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
         paddingTop: '75px',
         display: "flex",
         justifyContent: 'center',
-        alignItems: 'center',
+        alignItems: 'center' ,
     },
     box1Content: {
         width: '66vw',

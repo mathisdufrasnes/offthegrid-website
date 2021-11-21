@@ -2,18 +2,23 @@ import React, {Fragment} from "react"
 import background1 from "../media/backgroundTeam.jpg"
 import {makeStyles} from "@material-ui/core/styles"
 import {Box, Divider, Grid, Modal, Typography} from "@material-ui/core";
+import Carousel from 'react-material-ui-carousel'
 import img1 from '../media/Profil_Charles.jpg'
 import img2 from '../media/Profil_Seb.png'
 import img3 from '../media/Profil_Simon.png'
 import img4 from '../media/Profil_Audrey.png'
 import img5 from '../media/Profil_Mathis.png'
+import part1 from '../media/part1.svg'
+import part2 from '../media/part2.png'
+import part3 from '../media/part3.webp'
+import part4 from '../media/part4.svg'
 
-import p1 from '../media/p1.png'
-import p2 from '../media/p2.gif'
-import p3 from '../media/p3.png'
-import p4 from '../media/p4.png'
-import p5 from '../media/p5.png'
-import p6 from '../media/p6.png'
+import client1 from '../media/part1.svg'
+import client2 from '../media/client2.svg'
+import client3 from '../media/client3.svg'
+import client4 from '../media/client4.png'
+import client5 from '../media/client5.png'
+import client6 from '../media/client6.png'
 
 import c1 from '../media/c1.jpg'
 import c2 from '../media/c2.jpg'
@@ -52,8 +57,15 @@ const useStyles = makeStyles((theme) => ({
         marginBottom: '5%'
     },
     customDiv2: {
-        paddingTop: '5px',
+        paddingTop:'5px',
         backgroundColor: '#000000',
+        width: '20%',
+        borderRadius: '15px',
+        marginBottom: '5%'
+    },
+    customDiv2White: {
+        paddingTop:'5px',
+        backgroundColor: '#ffffff',
         width: '20%',
         borderRadius: '15px',
         marginBottom: '5%'
@@ -77,15 +89,19 @@ const useStyles = makeStyles((theme) => ({
         textAlign: 'center',
         lineHeight: 3,
     },
+    carousel: {
+        backgroundColor: "#494949",
+        padding: "0% 0% 1% 0%",
+    },
     box3: {
-        backgroundColor: "#f2f2f2",
+        backgroundColor: "#494949",
         padding: "6% 0% 2% 0%",
         display: "flex",
         justifyContent: 'center',
         alignItems: 'center',
     },
     box3Content: {
-        width:'80%',
+        width: '80%',
         display: "flex",
         justifyContent: 'center',
         alignItems: 'center',
@@ -98,7 +114,7 @@ const useStyles = makeStyles((theme) => ({
         alignItems: 'center',
     },
     box4Content: {
-        width:'90%',
+        width: '90%',
         display: "flex",
         justifyContent: 'center',
         alignItems: 'center',
@@ -107,31 +123,31 @@ const useStyles = makeStyles((theme) => ({
         fontFamily: 'Montserrat-SemiBold'
     },
 
-    profileImg:{
-        width:'65%',
+    profileImg: {
+        width: '65%',
     },
-    partnerImg:{
+    partnerImg: {
         objectFit: 'contain',
-        maxWidth:'60%',
+        maxWidth: '60%',
     },
-    textNom:{
-        fontFamily:'Montserrat-Bold',
-        fontSize:'16px',
+    textNom: {
+        fontFamily: 'Montserrat-Bold',
+        fontSize: '16px',
     },
-    textRole:{
-        fontFamily:'Montserrat-Regular',
-        fontSize:'18px',
+    textRole: {
+        fontFamily: 'Montserrat-Regular',
+        fontSize: '18px',
     },
-    textFormation:{
-        fontFamily:'Montserrat-Regular',
-        fontSize:'15px',
+    textFormation: {
+        fontFamily: 'Montserrat-Regular',
+        fontSize: '15px',
     },
-    profileGrid:{
-        display:'flex',
-        justifyContent:'center',
+    profileGrid: {
+        display: 'flex',
+        justifyContent: 'center',
     },
-    comiteImg:{
-        maxWidth:'25vh',
+    comiteImg: {
+        maxWidth: '25vh',
     }
 }));
 
@@ -165,8 +181,8 @@ export default function EquipeEN() {
         linkedin: 'https://www.linkedin.com/in/simon-tousignant-60abb595/',
     }
     const profil4 = {
-        prenom: 'Boies ',
-        nom: 'Florence',
+        prenom: 'Florence ',
+        nom: 'Boies',
         poste: 'Logistics & Supply Chain Manager',
         formation: 'xxxxxxxxxxxxxxxxxxxxxxxxxxx',
         img: img4,
@@ -209,8 +225,9 @@ export default function EquipeEN() {
         img: c4,
     }
     const profils = [profil1, profil2, profil3, profil4, profil5]
-    const partenaires=[p1,p2,p3,p4,p5,p6]
-    const comiteAdviseurs = [comite1,comite2,comite3,comite4]
+    const partenaires = [part1, part2, part3, part4]
+    const clients = [client1,client2,client3,client4,client5,client6]
+    const comiteAdviseurs = [comite1, comite2, comite3, comite4]
     return (
         <Fragment>
             <Box className={classes.box1}>
@@ -238,18 +255,22 @@ export default function EquipeEN() {
                     <Divider classes={{root: classes.customDiv}}/>
                     <Grid item container justifyContent={'center'} spacing={8}>
                         {profils.map(profil =>
-                            <Grid item container direction={'column'} xs={6} display={'flex'} justifyContent={'center'} alignItems={'center'} spacing={1}>
+                            <Grid item container direction={'column'} xs={6} display={'flex'} justifyContent={'center'}
+                                  alignItems={'center'} spacing={1}>
                                 <Grid item className={classes.profileGrid}>
                                     <img src={profil.img} className={classes.profileImg}/>
                                 </Grid>
                                 <Grid item>
-                                    <Typography className={classes.textNom} align={'center'}>{profil.prenom} {profil.nom}</Typography>
+                                    <Typography className={classes.textNom}
+                                                align={'center'}>{profil.prenom} {profil.nom}</Typography>
                                 </Grid>
                                 <Grid item>
-                                    <Typography className={classes.textFormation} align={'center'}>{profil.poste}</Typography>
+                                    <Typography className={classes.textFormation}
+                                                align={'center'}>{profil.poste}</Typography>
                                 </Grid>
                                 <Grid item>
-                                    <Typography className={classes.textFormation} align={'center'}>{profil.formation}</Typography>
+                                    <Typography className={classes.textFormation}
+                                                align={'center'}>{profil.formation}</Typography>
                                 </Grid>
                                 <Grid item>
                                     <i className="fab fa-linkedin"></i>
@@ -260,23 +281,43 @@ export default function EquipeEN() {
 
                 </Grid>
             </Box>
-            <Box className={classes.box3}>
-                <Grid container direction={'column'} spacing={8} className={classes.box3Content}>
-                    <Grid item>
-                        <Typography variant={'h1'}>
-                            Our partners
-                        </Typography>
+            <Carousel autoPlay interval={5000} animation={"slide"} duration={500} navButtonsAlwaysVisible
+                      cycleNavigation stopAutoPlayOnHover={false} className={classes.carousel}>
+                <Box className={classes.box3}>
+                    <Grid container direction={'column'} spacing={8} className={classes.box3Content}>
+                        <Grid item>
+                            <Typography variant={'h1'} color={'secondary'}>
+                                Our partners
+                            </Typography>
+                        </Grid>
+                        <Divider classes={{root: classes.customDiv2White}}/>
+                        <Grid item container direction={'row'}>
+                            {partenaires.map(partenaire =>
+                                <Grid item className={classes.profileGrid} xs>
+                                    <img src={partenaire} className={classes.partnerImg}/>
+                                </Grid>
+                            )}
+                        </Grid>
                     </Grid>
-                    <Divider classes={{root: classes.customDiv2}}/>
-                    <Grid item container direction={'row'}>
-                        {partenaires.map(partenaire =>
-                            <Grid item className={classes.profileGrid} xs>
-                                <img src={partenaire} className={classes.partnerImg}/>
-                            </Grid>
-                        )}
+                </Box>
+                <Box className={classes.box3}>
+                    <Grid container direction={'column'} spacing={8} className={classes.box3Content}>
+                        <Grid item>
+                            <Typography variant={'h1'} color={'secondary'}>
+                                Our clients
+                            </Typography>
+                        </Grid>
+                        <Divider classes={{root: classes.customDiv2White}}/>
+                        <Grid item container direction={'row'}>
+                            {clients.map(client =>
+                                <Grid item className={classes.profileGrid} xs>
+                                    <img src={client} className={classes.partnerImg}/>
+                                </Grid>
+                            )}
+                        </Grid>
                     </Grid>
-                </Grid>
-            </Box>
+                </Box>
+            </Carousel>
             <Box className={classes.box4}>
                 <Grid container direction={'column'} spacing={8} className={classes.box4Content}>
                     <Grid item>
@@ -287,18 +328,22 @@ export default function EquipeEN() {
                     <Divider classes={{root: classes.customDiv2}}/>
                     <Grid item container className={classes.profileGrid} direction={'row'} spacing={8}>
                         {comiteAdviseurs.map(comiteAdviseur =>
-                            <Grid item container className={classes.profileGrid} xs={3} direction={'column'} spacing={2}>
+                            <Grid item container className={classes.profileGrid} xs={3} direction={'column'}
+                                  spacing={2}>
                                 <Grid item className={classes.profileGrid}>
                                     <img src={comiteAdviseur.img} className={classes.comiteImg}/>
                                 </Grid>
                                 <Grid item className={classes.profileGrid}>
-                                    <Typography variant={'h5'} align={'center'}>{comiteAdviseur.nom} {comiteAdviseur.prenom}</Typography>
+                                    <Typography variant={'h5'}
+                                                align={'center'}>{comiteAdviseur.nom} {comiteAdviseur.prenom}</Typography>
                                 </Grid>
                                 <Grid item className={classes.profileGrid}>
-                                    <Typography className={classes.textFormation} align={'center'}>{comiteAdviseur.poste}</Typography>
+                                    <Typography className={classes.textFormation}
+                                                align={'center'}>{comiteAdviseur.poste}</Typography>
                                 </Grid>
                                 <Grid item className={classes.profileGrid}>
-                                    <Typography className={classes.textFormation} align={'center'}>{comiteAdviseur.organisation}</Typography>
+                                    <Typography className={classes.textFormation}
+                                                align={'center'}>{comiteAdviseur.organisation}</Typography>
                                 </Grid>
                             </Grid>
                         )}

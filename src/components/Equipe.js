@@ -8,13 +8,6 @@ import img2 from '../media/Profil_Seb.png'
 import img3 from '../media/Profil_Simon.png'
 import img4 from '../media/Profil_Audrey.png'
 import img5 from '../media/Profil_Mathis.png'
-import p1 from '../media/p1.png'
-import p2 from '../media/p2.gif'
-import p3 from '../media/p3.png'
-import p4 from '../media/p4.png'
-import p5 from '../media/p5.png'
-import p6 from '../media/p6.png'
-
 import part1 from '../media/part1.svg'
 import part2 from '../media/part2.png'
 import part3 from '../media/part3.webp'
@@ -161,7 +154,6 @@ const useStyles = makeStyles((theme) => ({
 export default function Equipe() {
     const classes = useStyles()
     const [openPopup, setOpenPopup] = React.useState(false);
-
     const handleOpenPopup = () => setOpenPopup(true);
     const handleClosePopup = () => setOpenPopup(false);
     const profil1 = {
@@ -189,8 +181,8 @@ export default function Equipe() {
         linkedin: 'https://www.linkedin.com/in/simon-tousignant-60abb595/',
     }
     const profil4 = {
-        prenom: 'Boies ',
-        nom: 'Florence',
+        prenom: 'Florence ',
+        nom: 'Boies',
         poste: 'Responsable Logistique & Chaîne d\'approvisionnement',
         formation: 'xxxxxxxxxxxxxxxxxxxxxxxxxxx',
         img: img4,

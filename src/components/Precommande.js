@@ -124,7 +124,7 @@ export default function Precommande() {
                                 onClose={handleClosePopup}
                             >
                                 <Box className={classes.modalBox}>
-                                <img src={bikeImg} className={classes.bikeImg2}/>
+                                    <img src={bikeImg} className={classes.bikeImg2}/>
                                 </Box>
                             </Modal>
                         </Grid>

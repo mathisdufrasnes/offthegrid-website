@@ -484,13 +484,6 @@ export default function ZoomActu() {
                                             {'Commentaires (' + actualite.nbComments + ')'}
                                         </Typography>
                                     </Grid>
-                                    <Grid item>
-                                        <Button variant={"text"} color={'primary'}>
-                                            <Typography variant={'body1'}>
-                                                Ecrire un commentaire
-                                            </Typography>
-                                        </Button>
-                                    </Grid>
                                 </Grid>
                                 <Grid item className={classes.gridElements}>
                                     <Divider/>
