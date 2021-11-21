@@ -26,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
         paddingTop: '75px',
         display: "flex",
         justifyContent: 'center',
-        alignItems: 'center',
+        alignItems: 'center' ,
     },
     box1Content: {
         width: '66vw',
