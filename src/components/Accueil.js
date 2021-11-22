@@ -37,6 +37,7 @@ import {Document, Page, pdfjs} from "react-pdf";
 import {Carousel} from "react-responsive-carousel";
 import {Element, animateScroll as scroll, scroller} from 'react-scroll'
 import {useForm, Controller} from "react-hook-form";
+import HubspotForm from "react-hubspot-form";
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
@@ -567,7 +568,14 @@ export default function Accueil() {
                                     </Typography>
                                 </Grid>
                                 <Grid item>
-                                    <form className={classes.root} autoComplete="off" onSubmit={handleSubmit(onSubmit)}>
+                                    <HubspotForm
+                                        portalId='8730883'
+                                        formId='32ea94cd-5204-4920-b9f0-bd302299d403'
+                                        onSubmit={() => console.log('Submit!')}
+                                        onReady={(form) => console.log('Form ready!')}
+                                        loading={<div>Chargement du formulaire</div>}
+                                    />
+                                    {/*<form className={classes.root} autoComplete="off" onSubmit={handleSubmit(onSubmit)}>
                                         <Grid container direction={'column'} className={classes.newsletterForm}
                                               spacing={5}>
                                             <Grid item>
@@ -713,7 +721,7 @@ export default function Accueil() {
                                                 </Button>
                                             </Grid>
                                         </Grid>
-                                    </form>
+                                    </form>*/}
                                 </Grid>
                             </Grid>
                         </Grid>
