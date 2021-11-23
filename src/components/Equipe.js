@@ -6,7 +6,7 @@ import Carousel from 'react-material-ui-carousel'
 import img1 from '../media/Profil_Charles.jpg'
 import img2 from '../media/Profil_Seb.png'
 import img3 from '../media/Profil_Simon.png'
-import img4 from '../media/Profil_Audrey.png'
+import img4 from '../media/Profil_Flo.png'
 import img5 from '../media/Profil_Mathis.png'
 import part1 from '../media/part1.svg'
 import part2 from '../media/part2.png'
@@ -184,7 +184,7 @@ export default function Equipe() {
         prenom: 'Florence ',
         nom: 'Boies',
         poste: 'Responsable Logistique & Chaîne d\'approvisionnement',
-        formation: 'xxxxxxxxxxxxxxxxxxxxxxxxxxx',
+        formation: 'BAA, Gestion des opérations',
         img: img4,
         linkedin: 'https://www.linkedin.com/in/florence-boies-69a746211/',
     }

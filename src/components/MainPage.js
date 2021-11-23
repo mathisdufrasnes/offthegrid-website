@@ -154,8 +154,8 @@ styleLink.rel = "stylesheet";
 styleLink.href = "https://cdn.jsdelivr.net/npm/semantic-ui/dist/semantic.min.css";
 document.head.appendChild(styleLink);
 
-
 export default function MainPage() {
+
 
 
     const dispatch = useDispatch()
@@ -219,7 +219,6 @@ export default function MainPage() {
                                                         color="inherit" onClick={() => {
                                                     history.push('/');
                                                     history.go(0);
-                                                    window.scrollTo(0, 0);
                                                 }}>
                                                     <img className={classes.logo} src={logo}></img>
                                                 </Button>
@@ -230,7 +229,6 @@ export default function MainPage() {
                                                         onClick={() => {
                                                             history.push('/');
                                                             history.go(0);
-                                                            window.scrollTo(0, 0);
                                                         }}>
                                                     <Typography className={classes.menuText}>Accueil</Typography>
                                                 </Button>
@@ -242,7 +240,6 @@ export default function MainPage() {
                                                         onClick={() => {
                                                             history.push('/actus');
                                                             history.go(0);
-                                                            window.scrollTo(0, 0);
                                                         }}>
                                                     <Typography className={classes.menuText}>Actualité</Typography>
                                                 </Button>
@@ -253,7 +250,6 @@ export default function MainPage() {
                                                         onClick={() => {
                                                             history.push('/equipe');
                                                             history.go(0);
-                                                            window.scrollTo(0, 0);
                                                         }}>
                                                     <Typography className={classes.menuText}>Notre équipe</Typography>
                                                 </Button>
@@ -265,7 +261,6 @@ export default function MainPage() {
                                                         onClick={() => {
                                                             history.push('/FAQ');
                                                             history.go(0);
-                                                            window.scrollTo(0, 0);
                                                         }}>
                                                     <Typography className={classes.menuText}>F.A.Q.</Typography>
                                                 </Button>
@@ -276,7 +271,6 @@ export default function MainPage() {
                                                         onClick={() => {
                                                             history.push('/precommande');
                                                             history.go(0);
-                                                            window.scrollTo(0, 0);
                                                         }}>
                                                     <Typography className={classes.menuText}>Précommande</Typography>
                                                 </Button>
@@ -300,7 +294,6 @@ export default function MainPage() {
                                                         color="inherit" onClick={() => {
                                                     history.push('/en');
                                                     history.go(0);
-                                                    window.scrollTo(0, 0);
                                                 }}>
                                                     <img className={classes.logo} src={logo}></img>
                                                 </Button>
@@ -311,7 +304,6 @@ export default function MainPage() {
                                                         onClick={() => {
                                                             history.push('/en');
                                                             history.go(0);
-                                                            window.scrollTo(0, 0);
                                                         }}>
                                                     <Typography className={classes.menuText}>Home</Typography>
                                                 </Button>
@@ -323,7 +315,6 @@ export default function MainPage() {
                                                         onClick={() => {
                                                             history.push('/en/actus');
                                                             history.go(0);
-                                                            window.scrollTo(0, 0);
                                                         }}>
                                                     <Typography className={classes.menuText}>News</Typography>
                                                 </Button>
@@ -334,7 +325,6 @@ export default function MainPage() {
                                                         onClick={() => {
                                                             history.push('/en/equipe');
                                                             history.go(0);
-                                                            window.scrollTo(0, 0);
                                                         }}>
                                                     <Typography className={classes.menuText}>Our team</Typography>
                                                 </Button>
@@ -346,7 +336,6 @@ export default function MainPage() {
                                                         onClick={() => {
                                                             history.push('/en/FAQ');
                                                             history.go(0);
-                                                            window.scrollTo(0, 0);
                                                         }}>
                                                     <Typography className={classes.menuText}>F.A.Q.</Typography>
                                                 </Button>
@@ -357,7 +346,6 @@ export default function MainPage() {
                                                         onClick={() => {
                                                             history.push('/en/precommande');
                                                             history.go(0);
-                                                            window.scrollTo(0, 0);
                                                         }}>
                                                     <Typography className={classes.menuText}>Preorder</Typography>
                                                 </Button>

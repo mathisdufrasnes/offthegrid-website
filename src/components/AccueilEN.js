@@ -325,7 +325,7 @@ export default function AccueilEN() {
                                 label="Preorder now"
                                 clickable
                                 color={'primary'}
-                                onClick={() => {history.push('/en/precommande');window.scrollTo(0, 0);}}
+                                onClick={() => {history.push('/en/precommande');}}
                             />
                         </Grid>
                         <Grid item>

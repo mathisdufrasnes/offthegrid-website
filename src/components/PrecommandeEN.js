@@ -37,7 +37,7 @@ const useStyles = makeStyles((theme) => ({
     },
     box2: {
         minHeight: "100vh",
-        backgroundColor: "#242424",
+        backgroundColor: "#000000",
         padding: "5%"
     },
     boxForm: {
