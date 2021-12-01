@@ -3,6 +3,8 @@ import FeedOutlinedIcon from '@mui/icons-material/FeedOutlined';
 import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
 import AddCommentOutlinedIcon from '@mui/icons-material/AddCommentOutlined';
 import CommentOutlinedIcon from '@mui/icons-material/CommentOutlined';
+import CheckIcon from '@mui/icons-material/Check';
+import CloseIcon from '@mui/icons-material/Close';
 import Timeline from '@mui/lab/Timeline';
 import TimelineItem from '@mui/lab/TimelineItem';
 import {DataStore, Predicates, SortDirection} from '@aws-amplify/datastore';
@@ -12,6 +14,9 @@ import TimelineSeparator from '@mui/lab/TimelineSeparator';
 import TimelineConnector from '@mui/lab/TimelineConnector';
 import TimelineContent from '@mui/lab/TimelineContent';
 import TimelineDot from '@mui/lab/TimelineDot';
+import AdapterDateFns from '@mui/lab/AdapterDateFns';
+import LocalizationProvider from '@mui/lab/LocalizationProvider';
+import DatePicker from '@mui/lab/DatePicker';
 import {createTheme, ThemeProvider, styled} from '@mui/material/styles';
 import {makeStyles} from "@material-ui/core/styles"
 import "./Actus.css"
@@ -23,7 +28,7 @@ import {
     FormControl,
     Grid,
     InputLabel, ListItemText,
-    MenuItem, OutlinedInput,
+    MenuItem, Modal, OutlinedInput,
     Select, Slider,
     TextField
 } from "@material-ui/core";
@@ -33,6 +38,7 @@ import {TimelineOppositeContent} from "@mui/lab";
 import {Route, Switch, useHistory, useLocation} from "react-router-dom";
 import ZoomActu from "./ZoomActu";
 import Accueil from "./Accueil";
+import useAuth from "../hooks/useAuth";
 
 
 const MenuProps = {
@@ -116,6 +122,10 @@ const useStyles = makeStyles((theme) => ({
             cursor: 'pointer',
         }
     },
+    smallCard: {
+        borderRadius: '0px',
+        width: '80%',
+    },
     cardContent: {
         textAlign: 'start',
         display: "flex",
@@ -135,6 +145,10 @@ const useStyles = makeStyles((theme) => ({
         fontFamily: 'Montserrat-Bold',
         fontSize: '24px',
     },
+    smallTitleText: {
+        fontFamily: 'Montserrat-Bold',
+        fontSize: '18px',
+    },
     authorText: {
         fontSize: '14px',
         fontFamily: 'Montserrat-Medium',
@@ -149,6 +163,12 @@ const useStyles = makeStyles((theme) => ({
         maxHeight: '30vh',
         objectFit: 'contain'
     },
+    smallCardImg: {
+        minWidth: '35%',
+        maxWidth: '50%',
+        maxHeight: '15vh',
+        objectFit: 'contain'
+    },
     TLSep: {
         height: '50%'
     },
@@ -159,11 +179,120 @@ const useStyles = makeStyles((theme) => ({
         display: "flex",
         justifyContent: 'space-between',
     },
-
+    adminButtons: {
+        borderRadius: '15px',
+        padding: '5px',
+        fontSize: '18px',
+    },
+    adminButtonsGrid: {
+        paddingTop: '5px',
+        paddingBottom: '5px',
+    },
+    modal: {
+        backgroundColor: '#f2f2f2',
+        minHeight: '10vh',
+        padding: '2%',
+        border: '2px solid #000',
+        boxShadow: 24,
+        width: 'auto',
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+    },
+    modalEdit: {
+        backgroundColor: '#f2f2f2',
+        padding: '1% 0.5% 4% 2% ',
+        border: '2px solid #000',
+        boxShadow: 24,
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+        width: '60vw',
+        height: '80vh',
+        overflow:'hidden',
+    },
+    modalScrollable: {
+        paddingRight:'30px',
+        overflowY: 'scroll',
+        overflowX:'hidden',
+        height:'60vh',
+    },
+    modalHeader:{
+        paddingBottom:'20px',
+    },
+    modalButtons:{
+        paddingTop:'20px',
+    },
+    modalValidateButton: {
+        backgroundColor: '#32a823',
+        color: '#ffffff'
+    },
+    modalCancelButton: {
+        backgroundColor: '#ab1616',
+        color: '#ffffff'
+    },
+    modalSmallValidateButton: {
+        backgroundColor: '#32a823',
+        color: '#ffffff',
+        fontSize: '17px',
+    },
+    modalSmallCancelButton: {
+        backgroundColor: '#ab1616',
+        color: '#ffffff',
+        fontSize: '17px',
+    },
+    textField: {
+        fontSize: '15px',
+        margin: '-5px',
+    }
 }));
 
 export default function Actus() {
     const [offset, setOffset] = useState(0);
+    const [admin, setAdmin] = useState(false);
+    const {currentUser} = useAuth()
+    useEffect(() => {
+        if (currentUser !== null) {
+            if (currentUser.hasOwnProperty('username')) {
+                setAdmin(true);
+                console.log("Admin logged in")
+            }
+        }
+    });
+
+    const [modalIndex, setModalIndex] = useState('');
+    const handleChangeModalIndex = (value) => {
+        setModalIndex(value);
+    }
+    const [openModal, setOpenModal] = useState(false);
+    const handleOpenModal = () => {
+        setOpenModal(true);
+    }
+    const handleCloseModal = () => {
+        setOpenModal(false);
+    }
+    const [modalIndex2, setModalIndex2] = useState('');
+    const handleChangeModalIndex2 = (value) => {
+        setDatePickerValue(formatDateAWSToDatePicker(value.date));
+        setModalIndex2(value);
+    }
+    const [openModal2, setOpenModal2] = useState(false);
+    const handleOpenModal2 = () => {
+        setOpenModal2(true);
+    }
+    const handleCloseModal2 = () => {
+        setOpenModal2(false);
+    }
+
+    const [openModal3, setOpenModal3] = useState(false);
+    const handleOpenModal3 = () => {
+        setOpenModal3(true);
+    }
+    const handleCloseModal3 = () => {
+        setOpenModal3(false);
+    }
 
     const [actualites, setActualites] = useState([]);
     useEffect(() => {
@@ -188,6 +317,7 @@ export default function Actus() {
                 type: newsItem.type,
                 typeFR: newsItem.typeFR,
                 nbComments: newsItem.nbComments,
+                nbCommentsFR: newsItem.nbCommentsFR,
                 img: newsItem.img,
                 imgFile: '',
             };
@@ -202,6 +332,46 @@ export default function Actus() {
         setActualites(actus);
     }
 
+    async function deleteNews(actualite) {
+        const todelete = await DataStore.query(News, actualite.id);
+        DataStore.delete(todelete);
+        window.location.reload();
+    }
+
+    async function editNews(actualite) {
+        const toEdit = await DataStore.query(News, actualite.id);
+        await DataStore.save(
+            News.copyOf(toEdit, updated => {
+                updated.title = actualite.title;
+                updated.titleFR = actualite.titleFR;
+                updated.content = actualite.content;
+                updated.contentFR = actualite.contentFR;
+                updated.author = actualite.author;
+                updated.date = actualite.date;
+                updated.type = actualite.type;
+                updated.typeFR = actualite.typeFR;
+                updated.img = actualite.img;
+            })
+        );
+    }
+    async function createNews(actualite) {
+        await DataStore.save(
+            new News({
+                idNews : (Math.max.apply(Math, actualites.map(function(actu) { return actu.idNews; })))+1,
+                title : actualite.title,
+                titleFR : actualite.titleFR,
+                content : actualite.content,
+                contentFR : actualite.contentFR,
+                author : actualite.author,
+                date : actualite.date,
+                type : actualite.type,
+                typeFR : actualite.typeFR,
+                img : actualite.img,
+                nbCommentsFR : 0,
+                nbComments : 0,
+            })
+        );
+    }
     async function fetchNewsSearch(search) {
         let news = await DataStore.query(News, c => c.or(
             c => c.title("contains", search).titleFR("contains", search).content("contains", search).contentFR("contains", search).title("contains", search.toLowerCase()).titleFR("contains", search.toLowerCase()).content("contains", search.toLowerCase()).contentFR("contains", search.toLowerCase())
@@ -222,6 +392,7 @@ export default function Actus() {
                 type: newsItem.type,
                 typeFR: newsItem.typeFR,
                 nbComments: newsItem.nbComments,
+                nbCommentsFR: newsItem.nbCommentsFR,
                 img: newsItem.img,
                 imgFile: '',
             };
@@ -277,7 +448,62 @@ export default function Actus() {
         const month = mois[parseInt(date.substring(5, 7)) - 1]
         return date.substring(8, 10) + ' ' + month + ' ' + date.substring(0, 4);
     };
-
+    const formatDateAWSToDatePicker= (date) => {
+        return  date.substring(5, 7) + '/' + date.substring(8, 10) + '/' + date.substring(0, 4);
+    }
+    const formatDateDatePickerToAWS= (date) => {
+        return  date.substring(6, 10) + '-' + date.substring(0, 2) + '-' + date.substring(3, 5);
+    }
+    const handleEdit = (values) => {
+        console.log(values.target[0].value + ' \n'
+            + values.target[3].value + ' \n' +
+            values.target[6].value + ' \n' +
+            values.target[9].value + ' \n' +
+            values.target[12].value + ' \n' +
+            formatDateDatePickerToAWS(values.target[15].value) + ' \n' +
+            values.target[17].value + ' \n' +
+            values.target[20].value + ' \n' +
+            values.target[23].value);
+        const news = {
+            id: modalIndex2.id,
+            title: values.target[0].value,
+            titleFR: values.target[3].value,
+            content: values.target[6].value,
+            contentFR: values.target[9].value,
+            author: values.target[12].value,
+            date: formatDateDatePickerToAWS(values.target[15].value),
+            type: values.target[17].value,
+            typeFR: values.target[20].value,
+            img: values.target[23].value,
+        }
+        editNews(news).then(window.location.reload());
+    }
+    const handleDelete = (actu) => {
+        deleteNews(actu);
+    }
+    const handleCreate = (values) =>{
+        console.log(values.target[0].value + ' \n'
+            + values.target[3].value + ' \n' +
+            values.target[6].value + ' \n' +
+            values.target[9].value + ' \n' +
+            values.target[12].value + ' \n' +
+            formatDateDatePickerToAWS(values.target[15].value) + ' \n' +
+            values.target[17].value + ' \n' +
+            values.target[20].value + ' \n' +
+            values.target[23].value);
+        const news = {
+            title: values.target[0].value,
+            titleFR: values.target[3].value,
+            content: values.target[6].value,
+            contentFR: values.target[9].value,
+            author: values.target[12].value,
+            date: formatDateDatePickerToAWS(values.target[15].value),
+            type: values.target[17].value,
+            typeFR: values.target[20].value,
+            img: values.target[23].value,
+        }
+        createNews(news).then(values.preventDefault());
+    }
     const handleChangeCateg = (event) => {
         const {
             target: {value},
@@ -310,7 +536,8 @@ export default function Actus() {
         let month = mois[(value) - 1]
         return month + ' ' + year.toString()
     }
-
+    const [datePickerValue, setDatePickerValue] = React.useState(null);
+    const [datePickerValue2, setDatePickerValue2] = React.useState(null);
     function CategoryIcon(props) {
         switch (props.type) {
             case "Actualité":
@@ -329,7 +556,7 @@ export default function Actus() {
     return (
         <Fragment>
             <Box className={classes.header}>
-                <Grid container className={classes.headerContent} direction={'column'}>
+                <Grid container className={classes.headerContent} direction={'column'} spacing={3}>
                     <Grid item>
                         <Typography variant={'h2'}>Actualités</Typography>
                     </Grid>
@@ -339,69 +566,22 @@ export default function Actus() {
                                 <Grid item xs>
                                     <TextField label="Effectuer une recherche" fullWidth/>
                                 </Grid>
-                                {/*<Grid item xs={2}>
-                                    <FormControl fullWidth>
-                                        <InputLabel id="demo-multiple-checkbox-label" >Catégories</InputLabel>
-                                        <Select
-                                            fullWidth
-                                            labelId="demo-multiple-checkbox-label"
-                                            id="demo-multiple-checkbox"
-                                            multiple
-                                            value={category}
-                                            onChange={handleChangeCateg}
-                                            renderValue={(selected) => selected.join(', ')}
-                                            MenuProps={MenuProps}
-                                        >
-                                            {categories.map((categ) => (
-                                                <MenuItem key={categ} value={categ}>
-                                                    <Checkbox checked={category.indexOf(categ) > -1} />
-                                                    <ListItemText primary={categ} />
-                                                </MenuItem>
-                                            ))}
-                                        </Select>
-                                    </FormControl>
-                                </Grid>
-                                <Grid item xs={2}>
-                                    <FormControl fullWidth>
-                                        <InputLabel id="demo-multiple-checkbox-label" >Auteur</InputLabel>
-                                        <Select
-                                            fullWidth
-                                            labelId="demo-multiple-checkbox-label"
-                                            id="demo-multiple-checkbox"
-                                            multiple
-                                            value={auteur}
-                                            onChange={handleChangeAuteur}
-                                            renderValue={(selected) => selected.join(', ')}
-                                            MenuProps={MenuProps}
-                                        >
-                                            {auteurs.map((aut) => (
-                                                <MenuItem key={aut} value={aut}>
-                                                    <Checkbox checked={auteur.indexOf(aut) > -1} />
-                                                    <ListItemText primary={aut} />
-                                                </MenuItem>
-                                            ))}
-                                        </Select>
-                                    </FormControl>
-                                </Grid>
-                                <Grid item xs={2}>
-                                    <FormControl fullWidth>
-                                    <Slider
-                                        value={value2}
-                                        onChange={handleChangeDate}
-                                        valueLabelDisplay="auto"
-                                        disableSwap
-                                        min={0}
-                                        max={maxDateInterval}
-                                        valueLabelFormat={val => formatDateSlider(val)}
-                                    />
-                                    </FormControl>
-                                </Grid>*/}
                                 <Button type={'submit'}>
                                     Rechercher
                                 </Button>
                             </Grid>
                         </form>
                     </Grid>
+                    {admin === true ?
+                            <Grid item>
+                                <Button className={classes.adminButtons}
+                                        variant={"contained"} color={'primary'}
+                                        onClick={() => {
+                                            handleOpenModal3();
+                                        }}>
+                                    Ajouter une actualité
+                                </Button>
+                            </Grid> : ''}
                 </Grid>
             </Box>
             <Box className={classes.box1}>
@@ -442,8 +622,33 @@ export default function Actus() {
                                             <Card className={classes.card}
                                                   onClick={() => history.push('/actus/' + actualite.idNews)}>
                                                 <CardContent className={classes.cardContent}>
-
-                                                    {<img src={actualite.imgFile} className={classes.cardImg}/>}
+                                                    {admin === true ?
+                                                        <Grid container direction={'row'}
+                                                              className={classes.adminButtonsGrid} spacing={2}>
+                                                            <Grid item>
+                                                                <Button className={classes.adminButtons}
+                                                                        variant={"contained"} color={'primary'}
+                                                                        onClick={(event) => {
+                                                                            handleOpenModal2();
+                                                                            handleChangeModalIndex2(actualite);
+                                                                            event.stopPropagation();
+                                                                        }}>
+                                                                    Editer
+                                                                </Button>
+                                                            </Grid>
+                                                            <Grid item>
+                                                                <Button className={classes.adminButtons}
+                                                                        variant={"contained"} color={'primary'}
+                                                                        onClick={(event) => {
+                                                                            handleOpenModal();
+                                                                            handleChangeModalIndex(actualite);
+                                                                            event.stopPropagation();
+                                                                        }}>
+                                                                    Supprimer
+                                                                </Button>
+                                                            </Grid>
+                                                        </Grid> : ''}
+                                                    <img src={actualite.imgFile} className={classes.cardImg}/>
 
                                                     <Typography className={classes.titleText}>
                                                         {actualite.titleFR}
@@ -472,11 +677,11 @@ export default function Actus() {
                                                                 className={classes.contentText}>{actualite.typeFR}</Typography>
                                                         </Button>)
                                                     }
-                                                    {(actualite.nbComments === '' || actualite.nbComments === null) ? '' : (
+                                                    {(actualite.nbCommentsFR === '' || actualite.nbCommentsFR === null) ? '' : (
                                                         <Button>
                                                             <CommentOutlinedIcon className={classes.typeIcon}/>
                                                             <Typography
-                                                                className={classes.contentText}>{actualite.nbComments}</Typography>
+                                                                className={classes.contentText}>{actualite.nbCommentsFR}</Typography>
                                                         </Button>)
                                                     }
                                                 </CardActions>
@@ -486,6 +691,249 @@ export default function Actus() {
                                 </Fragment>
                             )}
                         </Timeline>}
+                    <Modal open={openModal}
+                           onClose={handleCloseModal}>
+                        <Grid container direction={'column'} className={classes.modal} spacing={4}
+                              justifyContent={'center'} alignItems={'center'}>
+                            <Grid item>
+                                <Typography variant={'h5'} align={'center'}>Êtes-vous sûr de vouloir supprimer cette
+                                    actualité?</Typography>
+                            </Grid>
+                            <Grid item container justifyContent={'center'} alignItems={'center'}>
+                                <Card className={classes.smallCard}>
+                                    <CardContent className={classes.cardContent}>
+                                        <img src={modalIndex.imgFile} className={classes.smallCardImg}/>
+
+                                        <Typography className={classes.smallTitleText}>
+                                            {modalIndex.titleFR}
+                                        </Typography>
+                                        <Grid item container direction={'row'} spacing={1}>
+                                            <Grid item>
+                                                <Typography className={classes.contentText}>
+                                                    par
+                                                </Typography>
+                                            </Grid>
+                                            <Grid item>
+                                                <Typography className={classes.authorText}>
+                                                    {modalIndex.author}
+                                                </Typography>
+                                            </Grid>
+                                        </Grid>
+                                        <Typography className={classes.contentText}>
+                                            {modalIndex.contentFR}
+                                        </Typography>
+                                    </CardContent>
+                                </Card>
+                            </Grid>
+                            <Grid item container direction={'row'} justifyContent={'space-around'}>
+                                <Grid item>
+                                    <Button variant={'contained'} className={classes.modalValidateButton}
+                                            startIcon={<CheckIcon/>}
+                                            onClick={() => handleDelete(modalIndex)}>Oui</Button>
+                                </Grid>
+                                <Grid item>
+                                    <Button variant={'contained'} className={classes.modalCancelButton}
+                                            startIcon={<CloseIcon/>} onClick={() => handleCloseModal()}>Non</Button>
+                                </Grid>
+                            </Grid>
+                        </Grid>
+                    </Modal>
+                    <Modal open={openModal2}
+                           onClose={handleCloseModal2}
+                    >
+                        <div className={classes.modalEdit}>
+                            <div  className={classes.modalHeader}>
+                                <Typography variant={'h5'} align={'center'}>Edition de l'actualité</Typography>
+                            </div>
+                            <div className={classes.modalScrollable}>
+                                <Grid container direction={'column'} spacing={4}>
+                                    <Grid item>
+                                        <form onSubmit={handleEdit} id={'editNews'}>
+                                            <Grid container direction={'column'} spacing={2}>
+                                                <Grid item>
+                                                    <Typography className={classes.contentText}>Titre
+                                                        Anglais</Typography>
+                                                    <TextField fullWidth multiline variant={'outlined'}
+                                                               margin={'normal'} defaultValue={modalIndex2.title}
+                                                               InputProps={{classes: {input: classes.textField}}}/>
+                                                </Grid>
+                                                <Grid item>
+                                                    <Typography className={classes.contentText}>Titre
+                                                        Français</Typography>
+                                                    <TextField fullWidth multiline variant={'outlined'}
+                                                               margin={'normal'} defaultValue={modalIndex2.titleFR}
+                                                               InputProps={{classes: {input: classes.textField}}}/>
+                                                </Grid>
+                                                <Grid item>
+                                                    <Typography className={classes.contentText}>Contenu
+                                                        Anglais</Typography>
+                                                    <TextField fullWidth multiline variant={'outlined'}
+                                                               margin={'normal'} defaultValue={modalIndex2.content}
+                                                               InputProps={{classes: {input: classes.textField}}}/>
+                                                </Grid>
+                                                <Grid item>
+                                                    <Typography className={classes.contentText}>Contenu
+                                                        Français</Typography>
+                                                    <TextField fullWidth multiline variant={'outlined'}
+                                                               margin={'normal'} defaultValue={modalIndex2.contentFR}
+                                                               InputProps={{classes: {input: classes.textField}}}/>
+                                                </Grid>
+                                                <Grid item>
+                                                    <Typography className={classes.contentText}>Auteur</Typography>
+                                                    <TextField fullWidth multiline variant={'outlined'}
+                                                               margin={'normal'} defaultValue={modalIndex2.author}
+                                                               InputProps={{classes: {input: classes.textField}}}/>
+                                                </Grid>
+                                                <Grid item>
+                                                    <Typography className={classes.contentText}>Datepicker</Typography>
+                                                    <LocalizationProvider dateAdapter={AdapterDateFns}>
+                                                        <DatePicker
+                                                            value={datePickerValue}
+                                                            onChange={(newValue) => {
+                                                                setDatePickerValue(newValue);
+                                                            }}
+                                                            renderInput={(params) => <TextField {...params} />}
+                                                        />
+                                                    </LocalizationProvider>
+                                                </Grid>
+                                                <Grid item>
+                                                    <Typography className={classes.contentText}>Type
+                                                        Anglais</Typography>
+                                                    <TextField fullWidth multiline variant={'outlined'}
+                                                               margin={'normal'} defaultValue={modalIndex2.type}
+                                                               InputProps={{classes: {input: classes.textField}}}/>
+                                                </Grid>
+                                                <Grid item>
+                                                    <Typography className={classes.contentText}>Type
+                                                        Français</Typography>
+                                                    <TextField fullWidth multiline variant={'outlined'}
+                                                               margin={'normal'} defaultValue={modalIndex2.typeFR}
+                                                               InputProps={{classes: {input: classes.textField}}}/>
+                                                </Grid>
+                                                <Grid item>
+                                                    <Typography className={classes.contentText}>Image</Typography>
+                                                    <TextField fullWidth multiline variant={'outlined'}
+                                                               margin={'normal'} defaultValue={modalIndex2.img}
+                                                               InputProps={{classes: {input: classes.textField}}}/>
+                                                </Grid>
+                                            </Grid>
+                                        </form>
+                                    </Grid>
+                                </Grid>
+                            </div>
+                            <div className={classes.modalButtons}>
+                                <Grid container direction={'row'} justifyContent={'space-around'}>
+                                    <Grid item>
+                                        <Button variant={'contained'} className={classes.modalSmallValidateButton}
+                                                startIcon={<CheckIcon/>} type={'submit'} form={'editNews'}>Valider les changements</Button>
+                                    </Grid>
+                                    <Grid item>
+                                        <Button variant={'contained'} className={classes.modalSmallCancelButton}
+                                                startIcon={<CloseIcon/>}
+                                                onClick={() => handleCloseModal2()}>Annuler</Button>
+                                    </Grid>
+                                </Grid>
+                            </div>
+                        </div>
+                    </Modal>
+                    <Modal open={openModal3}
+                           onClose={handleCloseModal3}
+                    >
+                        <div className={classes.modalEdit}>
+                            <div  className={classes.modalHeader}>
+                                <Typography variant={'h5'} align={'center'}>Ajouter une actualité</Typography>
+                            </div>
+                            <div className={classes.modalScrollable}>
+                                <Grid container direction={'column'} spacing={4}>
+                                    <Grid item>
+                                        <form onSubmit={handleCreate} id={'createNews'}>
+                                            <Grid container direction={'column'} spacing={2}>
+                                                <Grid item>
+                                                    <Typography className={classes.contentText}>Titre
+                                                        Anglais</Typography>
+                                                    <TextField fullWidth multiline variant={'outlined'}
+                                                               margin={'normal'}
+                                                               InputProps={{classes: {input: classes.textField}}}/>
+                                                </Grid>
+                                                <Grid item>
+                                                    <Typography className={classes.contentText}>Titre
+                                                        Français</Typography>
+                                                    <TextField fullWidth multiline variant={'outlined'}
+                                                               margin={'normal'}
+                                                               InputProps={{classes: {input: classes.textField}}}/>
+                                                </Grid>
+                                                <Grid item>
+                                                    <Typography className={classes.contentText}>Contenu
+                                                        Anglais</Typography>
+                                                    <TextField fullWidth multiline variant={'outlined'}
+                                                               margin={'normal'}
+                                                               InputProps={{classes: {input: classes.textField}}}/>
+                                                </Grid>
+                                                <Grid item>
+                                                    <Typography className={classes.contentText}>Contenu
+                                                        Français</Typography>
+                                                    <TextField fullWidth multiline variant={'outlined'}
+                                                               margin={'normal'}
+                                                               InputProps={{classes: {input: classes.textField}}}/>
+                                                </Grid>
+                                                <Grid item>
+                                                    <Typography className={classes.contentText}>Auteur</Typography>
+                                                    <TextField fullWidth multiline variant={'outlined'}
+                                                               margin={'normal'}
+                                                               InputProps={{classes: {input: classes.textField}}}/>
+                                                </Grid>
+                                                <Grid item>
+                                                    <Typography className={classes.contentText}>Datepicker</Typography>
+                                                    <LocalizationProvider dateAdapter={AdapterDateFns}>
+                                                        <DatePicker
+                                                            value={datePickerValue2}
+                                                            onChange={(newValue) => {
+                                                                setDatePickerValue2(newValue);
+                                                            }}
+                                                            renderInput={(params) => <TextField {...params} />}
+                                                        />
+                                                    </LocalizationProvider>
+                                                </Grid>
+                                                <Grid item>
+                                                    <Typography className={classes.contentText}>Type
+                                                        Anglais</Typography>
+                                                    <TextField fullWidth multiline variant={'outlined'}
+                                                               margin={'normal'}
+                                                               InputProps={{classes: {input: classes.textField}}}/>
+                                                </Grid>
+                                                <Grid item>
+                                                    <Typography className={classes.contentText}>Type
+                                                        Français</Typography>
+                                                    <TextField fullWidth multiline variant={'outlined'}
+                                                               margin={'normal'}
+                                                               InputProps={{classes: {input: classes.textField}}}/>
+                                                </Grid>
+                                                <Grid item>
+                                                    <Typography className={classes.contentText}>Image</Typography>
+                                                    <TextField fullWidth multiline variant={'outlined'}
+                                                               margin={'normal'}
+                                                               InputProps={{classes: {input: classes.textField}}}/>
+                                                </Grid>
+                                            </Grid>
+                                        </form>
+                                    </Grid>
+                                </Grid>
+                            </div>
+                            <div className={classes.modalButtons}>
+                                <Grid container direction={'row'} justifyContent={'space-around'}>
+                                    <Grid item>
+                                        <Button variant={'contained'} className={classes.modalSmallValidateButton}
+                                                startIcon={<CheckIcon/>} type={'submit'} form={'createNews'}>Valider</Button>
+                                    </Grid>
+                                    <Grid item>
+                                        <Button variant={'contained'} className={classes.modalSmallCancelButton}
+                                                startIcon={<CloseIcon/>}
+                                                onClick={() => handleCloseModal3()}>Annuler</Button>
+                                    </Grid>
+                                </Grid>
+                            </div>
+                        </div>
+                    </Modal>
                 </Grid>
             </Box>
         </Fragment>

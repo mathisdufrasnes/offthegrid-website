@@ -1,18 +1,12 @@
-import React, {Fragment, useState} from "react"
+import React, {useEffect, useState} from "react"
 import { Fade, Slide } from "react-awesome-reveal";
-import {makeStyles, ThemeProvider, createTheme} from "@material-ui/core/styles"
+import {makeStyles} from "@material-ui/core/styles"
 import {
     Box,
-    Checkbox,
     Chip, CircularProgress,
     Divider,
-    FormControl, FormControlLabel,
-    FormGroup, FormHelperText,
-    FormLabel,
-    Grid, InputLabel,
-    Link, Modal,
-    Paper, Radio, RadioGroup,
-    TextField
+    Grid,
+    Link, Modal
 } from "@material-ui/core";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
@@ -35,9 +29,9 @@ import phone4 from "../media/phone4.png"
 import FicheTechnique from "../media/FicheTechniqueOTG_EN.pdf"
 import {Document, Page, pdfjs} from "react-pdf";
 import {Carousel} from "react-responsive-carousel";
-import {Element, animateScroll as scroll, scroller} from 'react-scroll'
-import {useForm, Controller} from "react-hook-form";
+import {Element, scroller} from 'react-scroll'
 import HubspotForm from "react-hubspot-form";
+import useAuth from "../hooks/useAuth";
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
@@ -208,32 +202,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function AccueilEN() {
-    const {register, handleSubmit, control, formState: {errors}} = useForm();
-    const [newsLetterCheckbox, setNewsLetterCheckbox] = useState(false)
-    const handleChangeNewsletterCheckbox = (event) => {
-        setNewsLetterCheckbox(event.target.checked)
-    }
     const classes = useStyles()
     const history = useHistory();
-    const onSubmit = (data) => console.log(data);
-    console.log("Errors:", errors);
-
-    const textFieldValidation = (textFieldValue, radioValue) => {
-        if (radioValue === "Autre") {
-            if (textFieldValue) {
-                if (textFieldValue === "") {
-                    return false;
-                } else {
-                    return true;
-                }
-            } else {
-                return false;
-            }
-        } else {
-            return true
-        }
-    }
-
     const [openPopup, setOpenPopup] = React.useState(false);
     const handleOpenPopup = () => setOpenPopup(true);
     const handleClosePopup = () => setOpenPopup(false);
@@ -253,6 +223,16 @@ export default function AccueilEN() {
     const popupItems2 = [
         phone1, phone2, phone3, phone4
     ]
+    const [admin, setAdmin] = useState(false);
+    const {currentUser} = useAuth()
+    useEffect(() => {
+        if (currentUser !== null) {
+            if (currentUser.hasOwnProperty('username')) {
+                setAdmin(true);
+                console.log("Admin logged in")
+            }
+        }
+    });
     return (
         <div>
             <Box className={classes.box1}>
@@ -459,18 +439,11 @@ export default function AccueilEN() {
                                         infiniteLoop={true}
                                         emulateTouch={true}
                                     >
+                                        {popupItems2.map(phone =>
                                         <div>
-                                            <img src={phone1} className={classes.imgPopup2}/>
+                                            <img src={phone} className={classes.imgPopup2}/>
                                         </div>
-                                        <div>
-                                            <img src={phone2} className={classes.imgPopup2}/>
-                                        </div>
-                                        <div>
-                                            <img src={phone3} className={classes.imgPopup2}/>
-                                        </div>
-                                        <div>
-                                            <img src={phone4} className={classes.imgPopup2}/>
-                                        </div>
+                                        )}
                                     </Carousel>
                                 </Box>
                             </Modal>
@@ -575,154 +548,6 @@ export default function AccueilEN() {
                                         onReady={(form) => console.log('Form ready!')}
                                         loading={<div>Chargement du formulaire</div>}
                                     />
-                                    {/*<form className={classes.root} autoComplete="off" onSubmit={handleSubmit(onSubmit)}>
-                                        <Grid container direction={'column'} className={classes.newsletterForm}
-                                              spacing={5}>
-                                            <Grid item>
-                                                <Controller
-                                                    render={({field}) => (
-                                                        <TextField
-                                                            placeholder={'Enter your last name'}
-                                                            id="outlined-required"
-                                                            label="Last Name"
-                                                            variant="outlined"
-                                                            fullWidth
-                                                            value={field.value}
-                                                            onChange={field.onChange}
-                                                            onBlur={field.onBlur}
-                                                            error={errors.Nom}
-                                                            helperText={errors.Nom ? "Required field" : ""}
-                                                        />)}
-                                                    name="Nom"
-                                                    control={control}
-                                                    rules={{
-                                                        required: true
-                                                    }}
-                                                />
-                                            </Grid>
-                                            <Grid item>
-                                                <Controller
-                                                    render={({field}) => (
-                                                        <TextField
-                                                            placeholder={'Enter your first name'}
-                                                            id="outlined-required"
-                                                            label={'First name'}
-                                                            variant="outlined"
-                                                            fullWidth
-                                                            value={field.value}
-                                                            onChange={field.onChange}
-                                                            onBlur={field.onBlur}
-                                                            error={errors.Prénom}
-                                                            helperText={errors.Prénom ? "Required field" : ""}
-                                                        />)}
-                                                    name="Prénom"
-                                                    control={control}
-                                                    rules={{
-                                                        required: true
-                                                    }}
-                                                />
-                                            </Grid>
-                                            <Grid item>
-                                                <Controller
-                                                    render={({field}) => (
-                                                        <TextField
-                                                            placeholder={'Enter your email address'}
-                                                            id="outlined-required"
-                                                            label="Email address"
-                                                            variant="outlined"
-                                                            fullWidth
-                                                            value={field.value}
-                                                            onChange={field.onChange}
-                                                            onBlur={field.onBlur}
-                                                            error={errors.Courriel}
-                                                            helperText={errors.Courriel ? (errors.Courriel.type.toString() === "required" ? "Required field" : (errors.Courriel.type.toString() === "pattern" ? "Invalid format" : "")) : ""}
-                                                        />)}
-                                                    name="Courriel"
-                                                    control={control}
-                                                    rules={{
-                                                        required: true,
-                                                        pattern:
-                                                            {
-                                                                value: /^\S+@\S+$/i,
-                                                                message: 'Invalid format'
-                                                            }
-                                                    }}
-                                                />
-                                            </Grid>
-                                            <Grid item>
-                                                <FormControl component="fieldset"
-                                                             error={errors.Source || errors.AutreSource}>
-                                                    <FormLabel component="legend" required>Where did you first hear from
-                                                        us?</FormLabel>
-                                                    <Controller
-                                                        render={({field}) => (
-                                                            <RadioGroup
-                                                                value={field.value}
-                                                                onChange={field.onChange}
-                                                                onBlur={field.onBlur}
-                                                            >
-                                                                <FormControlLabel className={classes.noSelect}
-                                                                                  control={<Radio
-                                                                                      value="RS"
-                                                                                      color={'primary'}/>}
-                                                                                  value="RS"
-                                                                                  label="Social media"/>
-                                                                <FormControlLabel className={classes.noSelect}
-                                                                                  control={<Radio
-                                                                                      value="BAO"
-                                                                                      color={'primary'}/>}
-                                                                                  value="BAO"
-                                                                                  label="Personal contact"
-                                                                />
-                                                                <FormControlLabel className={classes.noSelect}
-                                                                                  control={<Radio
-                                                                                      value="NJ"
-                                                                                      color={'primary'}/>}
-                                                                                  value="NJ"
-                                                                                  label="News"
-                                                                />
-                                                                <Box sx={{display: 'flex', flexDirection: 'row'}}>
-                                                                    <FormControlLabel
-                                                                        className={classes.noSelect}
-                                                                        control={<Radio
-                                                                            value={"Autre"}
-                                                                            color={'primary'}/>}
-                                                                        label="Other"
-
-                                                                    />
-                                                                    <Box sx={{ml: 3, width: 'fill'}}>
-                                                                        <FormControlLabel
-                                                                            control={<TextField color={'primary'}
-                                                                                                disabled={field.value !== "Autre"}
-                                                                                                placeholder='Please elaborate..'
-                                                                                                error={errors.AutreSource}
-                                                                                                {...register("AutreSource", {
-                                                                                                    validate: {
-                                                                                                        autreSelected: v => textFieldValidation(v, field.value) === true
-
-                                                                                                    }
-                                                                                                })}
-                                                                            />}/>
-                                                                    </Box>
-                                                                </Box>
-                                                            </RadioGroup>)}
-                                                        name="Source"
-                                                        control={control}
-                                                        rules={{
-                                                            required: true,
-                                                        }}
-                                                    />
-                                                    <FormHelperText>{errors.Source ? "Please select at least one option" : (errors.AutreSource ? "Please tell us where you heard from us" : "")}</FormHelperText>
-                                                </FormControl>
-                                            </Grid>
-                                            <Grid item>
-                                                <Button variant={'contained'} color={'primary'}
-                                                        className={classes.smallButton} type={'submit'}>
-                                                    Subscribe
-                                                </Button>
-                                            </Grid>
-                                        </Grid>
-                                    </form>*/}
                                 </Grid>
                             </Grid>
                         </Grid>

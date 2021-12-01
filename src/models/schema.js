@@ -38,6 +38,15 @@ export const schema = {
                     "isRequired": false,
                     "attributes": []
                 },
+                "language": {
+                    "name": "language",
+                    "isArray": false,
+                    "type": {
+                        "enum": "Language"
+                    },
+                    "isRequired": false,
+                    "attributes": []
+                },
                 "createdAt": {
                     "name": "createdAt",
                     "isArray": false,
@@ -169,10 +178,10 @@ export const schema = {
                     "isRequired": false,
                     "attributes": []
                 },
-                "img": {
-                    "name": "img",
+                "nbCommentsFR": {
+                    "name": "nbCommentsFR",
                     "isArray": false,
-                    "type": "String",
+                    "type": "Int",
                     "isRequired": false,
                     "attributes": []
                 },
@@ -189,6 +198,13 @@ export const schema = {
                         "connectionType": "HAS_MANY",
                         "associatedWith": "idNews"
                     }
+                },
+                "img": {
+                    "name": "img",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
                 },
                 "createdAt": {
                     "name": "createdAt",
@@ -233,7 +249,15 @@ export const schema = {
             ]
         }
     },
-    "enums": {},
+    "enums": {
+        "Language": {
+            "name": "Language",
+            "values": [
+                "EN",
+                "FR"
+            ]
+        }
+    },
     "nonModels": {},
-    "version": "5e26f81de0ebbebee5720a02ed2c6fe3"
+    "version": "fa1e47d79e0414215515495147396dff"
 };

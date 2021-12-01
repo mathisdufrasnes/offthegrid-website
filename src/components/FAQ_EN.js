@@ -1,4 +1,4 @@
-import React, {Fragment} from "react"
+import React, {Fragment, useEffect, useState} from "react"
 import background1 from "../media/FAQBackground.jpg"
 
 import {makeStyles} from "@material-ui/core/styles"
@@ -13,6 +13,7 @@ import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import useAuth from "../hooks/useAuth";
 
 const useStyles = makeStyles((theme) => ({
     root:
@@ -101,7 +102,16 @@ export default function FAQ_EN() {
     const [openPopup, setOpenPopup] = React.useState(false);
     const handleOpenPopup = () => setOpenPopup(true);
     const handleClosePopup = () => setOpenPopup(false);
-
+    const [admin, setAdmin] = useState(false);
+    const {currentUser} = useAuth()
+    useEffect(() => {
+        if (currentUser !== null) {
+            if (currentUser.hasOwnProperty('username')) {
+                setAdmin(true);
+                console.log("Admin logged in")
+            }
+        }
+    });
     const imgList = [equi1, equi2, equi3, equi4, equi5]
     return (
         <Fragment>

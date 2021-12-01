@@ -1,6 +1,9 @@
 import { ModelInit, MutableModel, PersistentModelConstructor } from "@aws-amplify/datastore";
 
-
+export enum Language {
+  EN = "EN",
+  FR = "FR"
+}
 
 
 
@@ -18,6 +21,7 @@ export declare class Comments {
   readonly author?: string;
   readonly content?: string;
   readonly date?: string;
+  readonly language?: Language | keyof typeof Language;
   readonly createdAt?: string;
   readonly updatedAt?: string;
   constructor(init: ModelInit<Comments, CommentsMetaData>);
@@ -36,8 +40,9 @@ export declare class News {
   readonly type?: string;
   readonly typeFR?: string;
   readonly nbComments?: number;
-  readonly img?: string;
+  readonly nbCommentsFR?: number;
   readonly Comments?: (Comments | null)[];
+  readonly img?: string;
   readonly createdAt?: string;
   readonly updatedAt?: string;
   constructor(init: ModelInit<News, NewsMetaData>);

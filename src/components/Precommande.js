@@ -1,10 +1,11 @@
-import React, {Fragment} from "react"
+import React, {Fragment, useEffect, useState} from "react"
 import background1 from "../media/backgroundPreorder.jpg"
 import bikeImg from "../media/OTG-14-1-e1628705408390.png"
 
 import {makeStyles} from "@material-ui/core/styles"
 import {Box, Divider, Grid, Modal, Typography} from "@material-ui/core";
 import HubspotForm from 'react-hubspot-form'
+import useAuth from "../hooks/useAuth";
 
 const useStyles = makeStyles((theme) => ({
     root:
@@ -77,7 +78,16 @@ export default function Precommande() {
     const [openPopup, setOpenPopup] = React.useState(false);
     const handleOpenPopup = () => setOpenPopup(true);
     const handleClosePopup = () => setOpenPopup(false);
-
+    const [admin, setAdmin] = useState(false);
+    const {currentUser} = useAuth()
+    useEffect(() => {
+        if (currentUser !== null) {
+            if (currentUser.hasOwnProperty('username')) {
+                setAdmin(true);
+                console.log("Admin logged in")
+            }
+        }
+    });
     return (
         <Fragment>
             <Box className={classes.box1}>
@@ -148,3 +158,4 @@ export default function Precommande() {
         </Fragment>
     );
 }
+

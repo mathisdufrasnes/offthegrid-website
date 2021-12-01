@@ -32,6 +32,7 @@ import {
     WorkplaceShareButton
 } from "react-share";
 import Button from "@material-ui/core/Button";
+import useAuth from "../hooks/useAuth";
 
 const CustomTextField = withStyles({
     root: {
@@ -223,6 +224,7 @@ export default function ZoomActuEN() {
         imgFile: '',
     }
     const [actualite, setActualite] = useState(actuDefault);
+    const [actualiteRaw, setActualiteRaw] = useState();
     const [actusRecentes, setActusRecentes] = useState([]);
     const [comments, setComments] = useState([]);
     const [captchaVerif, setCaptchaVerif] = useState(false);
@@ -250,6 +252,12 @@ export default function ZoomActuEN() {
                 date: date,
             })
         );
+
+        await DataStore.save(
+            News.copyOf(actualiteRaw, updated =>{
+                updated.nbComments = actualiteRaw.nbComments+1;
+            })
+        )
     }
     async function fetchRecentNews() {
         let news = await DataStore.query(News, Predicates.ALL, {
@@ -270,6 +278,7 @@ export default function ZoomActuEN() {
                 type: newsItem.type,
                 typeFR: newsItem.typeFR,
                 nbComments: newsItem.nbComments,
+                nbCommentsFR: newsItem.nbCommentsFR,
                 img: newsItem.img,
                 imgFile: '',
             };
@@ -290,8 +299,9 @@ export default function ZoomActuEN() {
             updateError(true)
             return false;
         }
+        setActualiteRaw(news[0]);
         let newsItem = news[0];
-        let commentsFetch = (await DataStore.query(Comments, c => c.idNews("eq", newsItem.id)));
+        let commentsFetch = (await DataStore.query(Comments, c => c.idNews("eq", newsItem.id).language('eq','EN')));
 
         let a = {
             id: newsItem.id,
@@ -358,7 +368,7 @@ export default function ZoomActuEN() {
     ];
     const formatDate = (date) => {
         const month = mois[parseInt(date.substring(5, 7)) - 1]
-        return date.substring(8, 10) + ' ' + month + ' ' + date.substring(0, 4);
+        return month + ' ' + date.substring(8, 10) + ', ' + date.substring(0, 4);
     };
     const formatHour = (date) => {
         return date.substring(11, 13) + 'h' + date.substring(14, 16);
@@ -368,7 +378,16 @@ export default function ZoomActuEN() {
     const updateError = (data) => {
         setError(data);
     }
-
+    const [admin, setAdmin] = useState(false);
+    const {currentUser} = useAuth()
+    useEffect(() => {
+        if (currentUser !== null) {
+            if (currentUser.hasOwnProperty('username')) {
+                setAdmin(true);
+                console.log("Admin logged in")
+            }
+        }
+    });
     return (
         <Fragment>
             {error ?
@@ -526,7 +545,7 @@ export default function ZoomActuEN() {
                                             )}
                                         </Grid>
                                     }
-                                    {/*<Grid container direction={'column'}>
+                                    <Grid container direction={'column'}>
                                         <Grid item className={classes.gridElements}>
                                             <Typography className={classes.smallBold}>
                                                 Laissez un commentaire :
@@ -560,7 +579,7 @@ export default function ZoomActuEN() {
                                             </form>
                                         </Grid>
 
-                                    </Grid>*/}
+                                    </Grid>
                                 </Grid>
                             </Grid>
                         </Box>

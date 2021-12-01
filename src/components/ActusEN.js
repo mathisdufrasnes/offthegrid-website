@@ -33,13 +33,14 @@ import {TimelineOppositeContent} from "@mui/lab";
 import {Route, Switch, useHistory, useLocation} from "react-router-dom";
 import ZoomActu from "./ZoomActu";
 import Accueil from "./Accueil";
+import useAuth from "../hooks/useAuth";
 
 
 const MenuProps = {
     PaperProps: {
         style: {
             borderRadius: 0,
-            width:'auto'
+            width: 'auto'
         },
     },
     anchorOrigin: {
@@ -50,7 +51,7 @@ const MenuProps = {
         vertical: "top",
         horizontal: "left"
     },
-    width:'auto',
+    width: 'auto',
     getContentAnchorEl: null,
 };
 const categories = [
@@ -164,7 +165,16 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Actus() {
     const [offset, setOffset] = useState(0);
-
+    const [admin, setAdmin] = useState(false);
+    const {currentUser} = useAuth()
+    useEffect(() => {
+        if (currentUser !== null) {
+            if (currentUser.hasOwnProperty('username')) {
+                setAdmin(true);
+                console.log("Admin logged in")
+            }
+        }
+    });
     const [actualites, setActualites] = useState([]);
     useEffect(() => {
         fetchNews();
@@ -188,6 +198,7 @@ export default function Actus() {
                 type: newsItem.type,
                 typeFR: newsItem.typeFR,
                 nbComments: newsItem.nbComments,
+                nbCommentsFR: newsItem.nbCommentsFR,
                 img: newsItem.img,
                 imgFile: '',
             };
@@ -222,6 +233,7 @@ export default function Actus() {
                 type: newsItem.type,
                 typeFR: newsItem.typeFR,
                 nbComments: newsItem.nbComments,
+                nbCommentsFR: newsItem.nbCommentsFR,
                 img: newsItem.img,
                 imgFile: '',
             };
@@ -275,7 +287,7 @@ export default function Actus() {
     }
     const formatDate = (date) => {
         const month = mois[parseInt(date.substring(5, 7)) - 1]
-        return date.substring(8, 10) + ' ' + month + ' ' + date.substring(0, 4);
+        return month + ' ' + date.substring(8, 10) + ', ' + date.substring(0, 4);
     };
 
     const handleChangeCateg = (event) => {

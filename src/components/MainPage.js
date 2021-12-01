@@ -9,7 +9,7 @@ import LanguageIcon from '@material-ui/icons/Language';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import {FormControl, Grid, InputLabel, Select} from "@material-ui/core";
-import {Link, Route, Router, Switch, useHistory, useLocation, useParams} from "react-router-dom";
+import {Link, Redirect, Route, Router, Switch, useHistory, useLocation, useParams} from "react-router-dom";
 import {Fragment} from "react";
 import {Dropdown, Menu} from 'semantic-ui-react'
 import Accueil from "./Accueil";
@@ -27,8 +27,8 @@ import {setLang, toggle} from "../reducers/languageSlice";
 import {ThemeProvider, createTheme} from '@material-ui/core'
 import ScrollButton from "./ScrollTop";
 import ZoomActu from "./ZoomActu";
-import ZoomActuEN from "./ZoomActuEN"
-import {withAuthenticator, AmplifySignOut} from '@aws-amplify/ui-react';
+import ZoomActuEN from "./ZoomActuEN";
+import Admin from "./Admin";
 
 export const customTheme = createTheme({
     palette: {
@@ -92,7 +92,7 @@ export const customTheme = createTheme({
         },
     },
     shape: {
-        borderRadius: 35,
+        borderRadius: 15,
     },
     overrides: {
         MuiAppBar: {
@@ -373,6 +373,8 @@ export default function MainPage() {
                         <Route path="/en/equipe" exact component={EquipeEN}/>
                         <Route path="/en/FAQ" exact component={FAQ_EN}/>
                         <Route path="/en/precommande" exact component={PrecommandeEN}/>
+                        <Route path="/admin" exact component={Admin}/>
+                        <Redirect from="/en/admin" to="/admin"/>
                         <Route
                             render={() => <div><h1>404: page not found</h1><h1>404: page not found</h1><h1>404: page not
                                 found</h1><h1>404: page not found</h1><h1>404: page not found</h1><h1>404: page not

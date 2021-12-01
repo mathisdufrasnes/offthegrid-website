@@ -1,67 +1,6 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
-export const getNotes = /* GraphQL */ `
-  query GetNotes($id: ID!) {
-    getNotes(id: $id) {
-      id
-      content
-      _version
-      _deleted
-      _lastChangedAt
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const listNotess = /* GraphQL */ `
-  query ListNotess(
-    $filter: ModelNotesFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    listNotess(filter: $filter, limit: $limit, nextToken: $nextToken) {
-      items {
-        id
-        content
-        _version
-        _deleted
-        _lastChangedAt
-        createdAt
-        updatedAt
-      }
-      nextToken
-      startedAt
-    }
-  }
-`;
-export const syncNotes = /* GraphQL */ `
-  query SyncNotes(
-    $filter: ModelNotesFilterInput
-    $limit: Int
-    $nextToken: String
-    $lastSync: AWSTimestamp
-  ) {
-    syncNotes(
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-      lastSync: $lastSync
-    ) {
-      items {
-        id
-        content
-        _version
-        _deleted
-        _lastChangedAt
-        createdAt
-        updatedAt
-      }
-      nextToken
-      startedAt
-    }
-  }
-`;
 export const getComments = /* GraphQL */ `
   query GetComments($id: ID!) {
     getComments(id: $id) {
@@ -70,6 +9,7 @@ export const getComments = /* GraphQL */ `
       author
       content
       date
+      language
       _version
       _deleted
       _lastChangedAt
@@ -91,6 +31,7 @@ export const listCommentss = /* GraphQL */ `
         author
         content
         date
+        language
         _version
         _deleted
         _lastChangedAt
@@ -121,6 +62,7 @@ export const syncComments = /* GraphQL */ `
         author
         content
         date
+        language
         _version
         _deleted
         _lastChangedAt
@@ -146,6 +88,7 @@ export const getNews = /* GraphQL */ `
       type
       typeFR
       nbComments
+      nbCommentsFR
       img
       _version
       _deleted
@@ -159,6 +102,7 @@ export const getNews = /* GraphQL */ `
           author
           content
           date
+          language
           _version
           _deleted
           _lastChangedAt
@@ -190,6 +134,7 @@ export const listNewss = /* GraphQL */ `
         type
         typeFR
         nbComments
+        nbCommentsFR
         img
         _version
         _deleted
@@ -231,6 +176,7 @@ export const syncNews = /* GraphQL */ `
         type
         typeFR
         nbComments
+        nbCommentsFR
         img
         _version
         _deleted

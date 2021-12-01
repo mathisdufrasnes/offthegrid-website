@@ -1,45 +1,6 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
-export const onCreateNotes = /* GraphQL */ `
-  subscription OnCreateNotes {
-    onCreateNotes {
-      id
-      content
-      _version
-      _deleted
-      _lastChangedAt
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const onUpdateNotes = /* GraphQL */ `
-  subscription OnUpdateNotes {
-    onUpdateNotes {
-      id
-      content
-      _version
-      _deleted
-      _lastChangedAt
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const onDeleteNotes = /* GraphQL */ `
-  subscription OnDeleteNotes {
-    onDeleteNotes {
-      id
-      content
-      _version
-      _deleted
-      _lastChangedAt
-      createdAt
-      updatedAt
-    }
-  }
-`;
 export const onCreateComments = /* GraphQL */ `
   subscription OnCreateComments {
     onCreateComments {
@@ -48,6 +9,7 @@ export const onCreateComments = /* GraphQL */ `
       author
       content
       date
+      language
       _version
       _deleted
       _lastChangedAt
@@ -64,6 +26,7 @@ export const onUpdateComments = /* GraphQL */ `
       author
       content
       date
+      language
       _version
       _deleted
       _lastChangedAt
@@ -80,6 +43,7 @@ export const onDeleteComments = /* GraphQL */ `
       author
       content
       date
+      language
       _version
       _deleted
       _lastChangedAt
@@ -102,6 +66,7 @@ export const onCreateNews = /* GraphQL */ `
       type
       typeFR
       nbComments
+      nbCommentsFR
       img
       _version
       _deleted
@@ -115,6 +80,7 @@ export const onCreateNews = /* GraphQL */ `
           author
           content
           date
+          language
           _version
           _deleted
           _lastChangedAt
@@ -141,6 +107,7 @@ export const onUpdateNews = /* GraphQL */ `
       type
       typeFR
       nbComments
+      nbCommentsFR
       img
       _version
       _deleted
@@ -154,6 +121,7 @@ export const onUpdateNews = /* GraphQL */ `
           author
           content
           date
+          language
           _version
           _deleted
           _lastChangedAt
@@ -180,6 +148,7 @@ export const onDeleteNews = /* GraphQL */ `
       type
       typeFR
       nbComments
+      nbCommentsFR
       img
       _version
       _deleted
@@ -193,6 +162,7 @@ export const onDeleteNews = /* GraphQL */ `
           author
           content
           date
+          language
           _version
           _deleted
           _lastChangedAt

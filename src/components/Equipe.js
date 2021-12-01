@@ -1,4 +1,4 @@
-import React, {Fragment} from "react"
+import React, {Fragment, useEffect, useState} from "react"
 import background1 from "../media/backgroundTeam.jpg"
 import {makeStyles} from "@material-ui/core/styles"
 import {Box, Divider, Grid, Modal, Typography} from "@material-ui/core";
@@ -24,6 +24,7 @@ import c1 from '../media/c1.jpg'
 import c2 from '../media/c2.jpg'
 import c3 from '../media/c3.png'
 import c4 from '../media/c4.png'
+import useAuth from "../hooks/useAuth";
 
 const useStyles = makeStyles((theme) => ({
     root:
@@ -228,6 +229,16 @@ export default function Equipe() {
     const partenaires = [part1, part2, part3, part4]
     const clients = [client1,client2,client3,client4,client5,client6]
     const comiteAdviseurs = [comite1, comite2, comite3, comite4]
+    const [admin, setAdmin] = useState(false);
+    const {currentUser} = useAuth()
+    useEffect(() => {
+        if (currentUser !== null) {
+            if (currentUser.hasOwnProperty('username')) {
+                setAdmin(true);
+                console.log("Admin logged in")
+            }
+        }
+    });
     return (
         <Fragment>
             <Box className={classes.box1}>

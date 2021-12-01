@@ -1,54 +1,6 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
-export const createNotes = /* GraphQL */ `
-  mutation CreateNotes(
-    $input: CreateNotesInput!
-    $condition: ModelNotesConditionInput
-  ) {
-    createNotes(input: $input, condition: $condition) {
-      id
-      content
-      _version
-      _deleted
-      _lastChangedAt
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const updateNotes = /* GraphQL */ `
-  mutation UpdateNotes(
-    $input: UpdateNotesInput!
-    $condition: ModelNotesConditionInput
-  ) {
-    updateNotes(input: $input, condition: $condition) {
-      id
-      content
-      _version
-      _deleted
-      _lastChangedAt
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const deleteNotes = /* GraphQL */ `
-  mutation DeleteNotes(
-    $input: DeleteNotesInput!
-    $condition: ModelNotesConditionInput
-  ) {
-    deleteNotes(input: $input, condition: $condition) {
-      id
-      content
-      _version
-      _deleted
-      _lastChangedAt
-      createdAt
-      updatedAt
-    }
-  }
-`;
 export const createComments = /* GraphQL */ `
   mutation CreateComments(
     $input: CreateCommentsInput!
@@ -60,6 +12,7 @@ export const createComments = /* GraphQL */ `
       author
       content
       date
+      language
       _version
       _deleted
       _lastChangedAt
@@ -79,6 +32,7 @@ export const updateComments = /* GraphQL */ `
       author
       content
       date
+      language
       _version
       _deleted
       _lastChangedAt
@@ -98,6 +52,7 @@ export const deleteComments = /* GraphQL */ `
       author
       content
       date
+      language
       _version
       _deleted
       _lastChangedAt
@@ -123,6 +78,7 @@ export const createNews = /* GraphQL */ `
       type
       typeFR
       nbComments
+      nbCommentsFR
       img
       _version
       _deleted
@@ -136,6 +92,7 @@ export const createNews = /* GraphQL */ `
           author
           content
           date
+          language
           _version
           _deleted
           _lastChangedAt
@@ -165,6 +122,7 @@ export const updateNews = /* GraphQL */ `
       type
       typeFR
       nbComments
+      nbCommentsFR
       img
       _version
       _deleted
@@ -178,6 +136,7 @@ export const updateNews = /* GraphQL */ `
           author
           content
           date
+          language
           _version
           _deleted
           _lastChangedAt
@@ -207,6 +166,7 @@ export const deleteNews = /* GraphQL */ `
       type
       typeFR
       nbComments
+      nbCommentsFR
       img
       _version
       _deleted
@@ -220,6 +180,7 @@ export const deleteNews = /* GraphQL */ `
           author
           content
           date
+          language
           _version
           _deleted
           _lastChangedAt
