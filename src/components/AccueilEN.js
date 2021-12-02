@@ -229,7 +229,6 @@ export default function AccueilEN() {
         if (currentUser !== null) {
             if (currentUser.hasOwnProperty('username')) {
                 setAdmin(true);
-                console.log("Admin logged in")
             }
         }
     });
@@ -544,8 +543,6 @@ export default function AccueilEN() {
                                     <HubspotForm
                                         portalId='8730883'
                                         formId='e9cb849f-df05-4f10-9f37-10d5bb777c1c'
-                                        onSubmit={() => console.log('Submit!')}
-                                        onReady={(form) => console.log('Form ready!')}
                                         loading={<div>Chargement du formulaire</div>}
                                     />
                                 </Grid>

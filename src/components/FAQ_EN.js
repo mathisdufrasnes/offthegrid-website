@@ -108,7 +108,6 @@ export default function FAQ_EN() {
         if (currentUser !== null) {
             if (currentUser.hasOwnProperty('username')) {
                 setAdmin(true);
-                console.log("Admin logged in")
             }
         }
     });

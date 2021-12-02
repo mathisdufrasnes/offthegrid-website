@@ -235,7 +235,6 @@ export default function Equipe() {
         if (currentUser !== null) {
             if (currentUser.hasOwnProperty('username')) {
                 setAdmin(true);
-                console.log("Admin logged in")
             }
         }
     });

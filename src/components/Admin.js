@@ -10,6 +10,8 @@ import {
 import useAuth from "../hooks/useAuth";
 import {Box, Grid, Typography} from "@material-ui/core";
 import {setLang} from "../reducers/languageSlice";
+import Button from "@material-ui/core/Button";
+import {useHistory} from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
     root:
@@ -33,11 +35,11 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Admin() {
     const classes = useStyles();
+    const history = useHistory();
     const {currentUser} = useAuth()
     useEffect(() => {
         if (currentUser !== null) {
             if (currentUser.hasOwnProperty('username')) {
-                console.log(currentUser.username)
             }
         }
     })
@@ -55,6 +57,7 @@ export default function Admin() {
                             <Typography variant={'h5'} align={'center'}>
                                 Vous êtes connecté au compte Admin.
                             </Typography>
+                            <Button onClick={() => history.push('/actus')} variant={'contained'} color={'primary'}>Voir les actualités</Button>
                             <AmplifySignOut className={classes.signOut}/>
                         </Box>
                     </AmplifyAuthenticator>

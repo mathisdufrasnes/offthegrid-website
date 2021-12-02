@@ -217,10 +217,15 @@ const useStyles = makeStyles((theme) => ({
         paddingRight:'30px',
         overflowY: 'scroll',
         overflowX:'hidden',
-        height:'60vh',
+        height:'55vh',
     },
     modalHeader:{
         paddingBottom:'20px',
+    },
+    miniText:{
+        fontSize:'12px',
+        fontFamily:'Montserrat-Light',
+        color:'#d70000'
     },
     modalButtons:{
         paddingTop:'20px',
@@ -257,7 +262,6 @@ export default function Actus() {
         if (currentUser !== null) {
             if (currentUser.hasOwnProperty('username')) {
                 setAdmin(true);
-                console.log("Admin logged in")
             }
         }
     });
@@ -334,30 +338,67 @@ export default function Actus() {
 
     async function deleteNews(actualite) {
         const todelete = await DataStore.query(News, actualite.id);
-        DataStore.delete(todelete);
-        window.location.reload();
+        DataStore.delete(todelete).then(window.location.reload());
     }
 
     async function editNews(actualite) {
         const toEdit = await DataStore.query(News, actualite.id);
         await DataStore.save(
             News.copyOf(toEdit, updated => {
-                updated.title = actualite.title;
-                updated.titleFR = actualite.titleFR;
-                updated.content = actualite.content;
-                updated.contentFR = actualite.contentFR;
-                updated.author = actualite.author;
-                updated.date = actualite.date;
-                updated.type = actualite.type;
-                updated.typeFR = actualite.typeFR;
-                updated.img = actualite.img;
+                if(actualite.title!=='' && actualite.title !== modalIndex2.title)
+                {
+                    updated.title = actualite.title
+                };
+                if(actualite.titleFR!=='' && actualite.titleFR !== modalIndex2.titleFR)
+                {
+                    updated.titleFR = actualite.titleFR
+                };
+                if(actualite.content!=='' && actualite.content !== modalIndex2.content)
+                {
+                    updated.content = actualite.content
+                };
+                if(actualite.contentFR!=='' && actualite.contentFR !== modalIndex2.contentFR)
+                {
+                    updated.contentFR = actualite.contentFR
+                };
+                if(actualite.author!=='' && actualite.author !== modalIndex2.author)
+                {
+                    updated.author = actualite.author
+                };
+                if(actualite.date!=='' && actualite.date !== modalIndex2.date)
+                {
+                    updated.date = actualite.date
+                };
+                if(actualite.type!=='' && actualite.type !== modalIndex2.type)
+                {
+                    updated.type = actualite.type
+                };
+                if(actualite.typeFR!=='' && actualite.typeFR !== modalIndex2.typeFR)
+                {
+                    updated.typeFR = actualite.typeFR
+                };
+                if(actualite.imgFile !== null && typeof actualite.imgFile !== 'undefined')
+                {
+                    updated.img = 'actu' + (actualite.idNews).toString()+'.png';
+                }
+                else if(actualite.img !=='' && actualite.img !== modalIndex2.img)
+                {
+                    updated.img = actualite.img
+                }
             })
         );
+        if(actualite.imgFile !== null && typeof actualite.imgFile !== 'undefined')
+        {
+            await Storage.put('actu' + (actualite.idNews).toString()+'.png', actualite.imgFile, {
+            resumable: true,
+        });
+        }
     }
     async function createNews(actualite) {
+        const id = (Math.max.apply(Math, actualites.map(function(actu) { return actu.idNews; })))+1;
         await DataStore.save(
             new News({
-                idNews : (Math.max.apply(Math, actualites.map(function(actu) { return actu.idNews; })))+1,
+                idNews : id,
                 title : actualite.title,
                 titleFR : actualite.titleFR,
                 content : actualite.content,
@@ -366,11 +407,17 @@ export default function Actus() {
                 date : actualite.date,
                 type : actualite.type,
                 typeFR : actualite.typeFR,
-                img : actualite.img,
+                img : typeof actualite.imgFile !== "undefined" ? ('actu' + id.toString()+'.png') : (actualite.img !== '' ? actualite.img : ''),
                 nbCommentsFR : 0,
                 nbComments : 0,
             })
         );
+        if(actualite.imgFile !== null && typeof actualite.imgFile !== 'undefined')
+        {
+            await Storage.put('actu' + id.toString()+'.png', actualite.imgFile,{
+                resumable: true,
+            });
+        }
     }
     async function fetchNewsSearch(search) {
         let news = await DataStore.query(News, c => c.or(
@@ -437,70 +484,65 @@ export default function Actus() {
     };
     const handleSearch = (search) => {
         setSearch(search.target.value);
-        console.log(search.target.value);
     }
     const handleSubmit = (values) => {
-        console.log(values.target[0].value);
         fetchNewsSearch(values.target[0].value)
         values.preventDefault()
     }
     const formatDate = (date) => {
+        if(date === null || date ==='' || typeof date === 'undefined')
+        {
+            return ''
+        }
         const month = mois[parseInt(date.substring(5, 7)) - 1]
         return date.substring(8, 10) + ' ' + month + ' ' + date.substring(0, 4);
     };
     const formatDateAWSToDatePicker= (date) => {
+        if(date === null || date ==='' || typeof date === 'undefined')
+        {
+            return ''
+        }
         return  date.substring(5, 7) + '/' + date.substring(8, 10) + '/' + date.substring(0, 4);
     }
     const formatDateDatePickerToAWS= (date) => {
+        if(date === null || date ==='' || typeof date === 'undefined')
+        {
+            return ''
+        }
         return  date.substring(6, 10) + '-' + date.substring(0, 2) + '-' + date.substring(3, 5);
     }
     const handleEdit = (values) => {
-        console.log(values.target[0].value + ' \n'
-            + values.target[3].value + ' \n' +
-            values.target[6].value + ' \n' +
-            values.target[9].value + ' \n' +
-            values.target[12].value + ' \n' +
-            formatDateDatePickerToAWS(values.target[15].value) + ' \n' +
-            values.target[17].value + ' \n' +
-            values.target[20].value + ' \n' +
-            values.target[23].value);
         const news = {
             id: modalIndex2.id,
+            idNews: modalIndex2.idNews,
             title: values.target[0].value,
             titleFR: values.target[3].value,
             content: values.target[6].value,
             contentFR: values.target[9].value,
             author: values.target[12].value,
-            date: formatDateDatePickerToAWS(values.target[15].value),
+            date: values.target[15].value === '' ? null : formatDateDatePickerToAWS(values.target[15].value),
             type: values.target[17].value,
             typeFR: values.target[20].value,
             img: values.target[23].value,
+            imgFile: values.target[26].files[0],
         }
-        editNews(news).then(window.location.reload());
+        editNews(news).then(values.preventDefault());
     }
     const handleDelete = (actu) => {
         deleteNews(actu);
     }
     const handleCreate = (values) =>{
-        console.log(values.target[0].value + ' \n'
-            + values.target[3].value + ' \n' +
-            values.target[6].value + ' \n' +
-            values.target[9].value + ' \n' +
-            values.target[12].value + ' \n' +
-            formatDateDatePickerToAWS(values.target[15].value) + ' \n' +
-            values.target[17].value + ' \n' +
-            values.target[20].value + ' \n' +
-            values.target[23].value);
         const news = {
             title: values.target[0].value,
             titleFR: values.target[3].value,
             content: values.target[6].value,
             contentFR: values.target[9].value,
             author: values.target[12].value,
-            date: formatDateDatePickerToAWS(values.target[15].value),
+            date: values.target[15].value === '' ? null : formatDateDatePickerToAWS(values.target[15].value),
             type: values.target[17].value,
             typeFR: values.target[20].value,
             img: values.target[23].value,
+            imgFile: values.target[26].files[0],
         }
         createNews(news).then(values.preventDefault());
     }
@@ -648,7 +690,7 @@ export default function Actus() {
                                                                 </Button>
                                                             </Grid>
                                                         </Grid> : ''}
-                                                    <img src={actualite.imgFile} className={classes.cardImg}/>
+                                                    {actualite.imgFile === '' ? '' : <img src={actualite.imgFile} className={classes.cardImg}/>}
 
                                                     <Typography className={classes.titleText}>
                                                         {actualite.titleFR}
@@ -744,6 +786,8 @@ export default function Actus() {
                         <div className={classes.modalEdit}>
                             <div  className={classes.modalHeader}>
                                 <Typography variant={'h5'} align={'center'}>Edition de l'actualité</Typography>
+                                <Typography className={classes.miniText} >Attention : si tu upload une image et que tu rentres une valeur pour le champ "Image Existante", seule l'image uploadée sera prise en compte!</Typography>
+                                <Typography className={classes.miniText} >Si tu changes le contenu d'un champ en une valeur vide, celle-ci ne sera pas prise en compte</Typography>
                             </div>
                             <div className={classes.modalScrollable}>
                                 <Grid container direction={'column'} spacing={4}>
@@ -816,6 +860,12 @@ export default function Actus() {
                                                                margin={'normal'} defaultValue={modalIndex2.img}
                                                                InputProps={{classes: {input: classes.textField}}}/>
                                                 </Grid>
+                                                <Grid item>
+                                                    <Typography className={classes.contentText}>Uploader une image</Typography>
+                                                    <input
+                                                        type="file"
+                                                    />
+                                                </Grid>
                                             </Grid>
                                         </form>
                                     </Grid>
@@ -842,6 +892,7 @@ export default function Actus() {
                         <div className={classes.modalEdit}>
                             <div  className={classes.modalHeader}>
                                 <Typography variant={'h5'} align={'center'}>Ajouter une actualité</Typography>
+                                <Typography className={classes.miniText} >Attention : si tu upload une image et que tu rentres une valeur pour le champ "Image Existante", seule l'image uploadée sera prise en compte!</Typography>
                             </div>
                             <div className={classes.modalScrollable}>
                                 <Grid container direction={'column'} spacing={4}>
@@ -909,10 +960,16 @@ export default function Actus() {
                                                                InputProps={{classes: {input: classes.textField}}}/>
                                                 </Grid>
                                                 <Grid item>
-                                                    <Typography className={classes.contentText}>Image</Typography>
+                                                    <Typography className={classes.contentText}>Image existante</Typography>
                                                     <TextField fullWidth multiline variant={'outlined'}
                                                                margin={'normal'}
                                                                InputProps={{classes: {input: classes.textField}}}/>
+                                                </Grid>
+                                                <Grid item>
+                                                    <Typography className={classes.contentText}>Uploader une image</Typography>
+                                                    <input
+                                                        type="file"
+                                                    />
                                                 </Grid>
                                             </Grid>
                                         </form>

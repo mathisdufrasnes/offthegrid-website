@@ -349,7 +349,6 @@ export default function ZoomActuEN() {
         addComment(values.target[0].value, values.target[2].value);
     }
     const handleCaptcha = (value) => {
-        console.log(value);
         setCaptchaVerif(true);
     }
     const mois = [
@@ -384,7 +383,6 @@ export default function ZoomActuEN() {
         if (currentUser !== null) {
             if (currentUser.hasOwnProperty('username')) {
                 setAdmin(true);
-                console.log("Admin logged in")
             }
         }
     });

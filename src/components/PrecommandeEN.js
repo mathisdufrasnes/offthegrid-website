@@ -84,7 +84,6 @@ export default function PrecommandeEN() {
         if (currentUser !== null) {
             if (currentUser.hasOwnProperty('username')) {
                 setAdmin(true);
-                console.log("Admin logged in")
             }
         }
     });
@@ -142,8 +141,6 @@ export default function PrecommandeEN() {
                             <HubspotForm
                                 portalId='8730883'
                                 formId='af1beb56-ad92-4f10-a092-d82b29bf39df'
-                                onSubmit={() => console.log('Submit!')}
-                                onReady={(form) => console.log('Form ready!')}
                                 loading={<div>Form loading...</div>}
                             />
                         </Grid>
