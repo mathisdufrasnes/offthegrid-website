@@ -256,13 +256,11 @@ export default function ZoomActu() {
             },
         }
         const resp = await API.post('captchaapi', '/captcha', data);
-        if (resp.hasOwnProperty('data')) {
-            if (resp.data.hasOwnProperty('success')) {
-                if (resp.data.success === true) {
+            if (resp.hasOwnProperty('success')) {
+                if (resp.success === true) {
                     setCaptchaVerif(true);
                 }
             }
-        }
     }
 
     React.useEffect(() => {

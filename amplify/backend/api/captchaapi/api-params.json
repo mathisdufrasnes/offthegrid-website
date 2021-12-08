@@ -1,0 +1,35 @@
+{
+  "paths": [
+    {
+      "name": "/captcha",
+      "lambdaFunction": "captchafunction",
+      "privacy": {
+        "open": true
+      },
+      "policyResourceName": "/captcha"
+    }
+  ],
+  "resourceName": "captchaapi",
+  "apiName": "captchaapi",
+  "functionArns": [
+    {
+      "lambdaFunction": "captchafunction"
+    }
+  ],
+  "privacy": {
+    "auth": 0,
+    "unauth": 0,
+    "authRoleName": "amplify-amplifyd56af9c02d2b4-staging-225904-authRole",
+    "unAuthRoleName": "amplify-amplifyd56af9c02d2b4-staging-225904-unauthRole"
+  },
+  "dependsOn": [
+    {
+      "category": "function",
+      "resourceName": "captchafunction",
+      "attributes": [
+        "Name",
+        "Arn"
+      ]
+    }
+  ]
+}
