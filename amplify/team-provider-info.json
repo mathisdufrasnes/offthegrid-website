@@ -15,6 +15,12 @@
       "auth": {
         "offthegridwebsite5ace61bc": {},
         "true": {}
+      },
+      "function": {
+        "captchafunction": {
+          "deploymentBucketName": "amplify-amplifyd56af9c02d2b4-staging-225904-deployment",
+          "s3Key": "amplify-builds/captchafunction-536e755637694e624943-build.zip"
+        }
       }
     }
   }

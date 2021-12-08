@@ -6,8 +6,9 @@ import Typography from "@material-ui/core/Typography";
 import {useHistory, useParams} from "react-router-dom";
 import {DataStore, Predicates, SortDirection} from "@aws-amplify/datastore";
 import {News, Comments} from "../models";
-import {Storage} from "aws-amplify";
+import {API, Storage} from "aws-amplify";
 import FeedOutlinedIcon from "@mui/icons-material/FeedOutlined";
+import {useForm, Controller} from "react-hook-form";
 import {blue} from '@mui/material/colors';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import {
@@ -33,6 +34,8 @@ import {
 } from "react-share";
 import Button from "@material-ui/core/Button";
 import useAuth from "../hooks/useAuth";
+import PlayCircleOutlineIcon from "@mui/icons-material/PlayCircleOutline";
+import AddCommentOutlinedIcon from "@mui/icons-material/AddCommentOutlined";
 
 const CustomTextField = withStyles({
     root: {
@@ -200,10 +203,15 @@ const useStyles = makeStyles((theme) => ({
             fontFamily: "Montserrat-Medium",
         }
     },
-    button:{
-      borderRadius:'15px',
-        fontSize:'14px',
+    button: {
+        borderRadius: '15px',
+        fontSize: '14px',
     },
+    required:{
+        fontSize:'12px',
+        fontFamily:'Montserrat-Light',
+        color:'red'
+    }
 }));
 
 export default function ZoomActuEN() {
@@ -228,21 +236,55 @@ export default function ZoomActuEN() {
     const [actusRecentes, setActusRecentes] = useState([]);
     const [comments, setComments] = useState([]);
     const [captchaVerif, setCaptchaVerif] = useState(false);
-
+    const {handleSubmit, control, formState:{errors}} = useForm();
+    function CategoryIcon(props) {
+        switch (props.type) {
+            case "News":
+                return (<Fragment><FeedOutlinedIcon className={classes.typeIcon}/></Fragment>)
+            case "Video":
+                return (<Fragment><PlayCircleOutlineIcon className={classes.typeIcon}/></Fragment>)
+            case "Section":
+                return (<Fragment><AddCommentOutlinedIcon className={classes.typeIcon}/></Fragment>)
+            default:
+                return (<Fragment></Fragment>)
+        }
+    }
+    async function callApi(token) {
+        const data = {
+            body: {
+                captcha: token
+            },
+        }
+        const resp = await API.post('captchaapi', '/captcha', data);
+        if (resp.hasOwnProperty('data')) {
+            if (resp.data.hasOwnProperty('success')) {
+                if (resp.data.success === true) {
+                    setCaptchaVerif(true);
+                }
+            }
+        }
+    }
 
     React.useEffect(() => {
         const err = fetchNews(id.id);
         fetchRecentNews();
-
-        //fetchComments(id.id);
     }, []);
-    async function addComment(author, content){
+    /*const handleDelete = (comment) =>{
+        deleteComment(comment)
+    }
+
+    async function deleteComment(comment){
+        const todelete = await DataStore.query(Comments, comment.id);
+        DataStore.delete(todelete).then(window.location.reload());
+    }*/
+
+    async function addComment(author, content) {
         let today = new Date();
         const date = today.getFullYear() + '-' +
             String(today.getMonth() + 1).padStart(2, '0') + '-' +
-            String(today.getDate()).padStart(2, '0') + 'T'+
-            String(today.getHours()).padStart(2, '0')+':'+
-            String(today.getMinutes()).padStart(2, '0')+'Z';
+            String(today.getDate()).padStart(2, '0') + 'T' +
+            String(today.getHours()).padStart(2, '0') + ':' +
+            String(today.getMinutes()).padStart(2, '0') + 'Z';
         await DataStore.save(
             new Comments({
                 idNews: actualite.id,
@@ -251,14 +293,15 @@ export default function ZoomActuEN() {
                 language: "EN",
                 date: date,
             })
-        );
+        )
 
         await DataStore.save(
             News.copyOf(actualiteRaw, updated =>{
                 updated.nbComments = actualiteRaw.nbComments+1;
             })
-        )
+        ).then(window.location.reload())
     }
+
     async function fetchRecentNews() {
         let news = await DataStore.query(News, Predicates.ALL, {
             sort: s => s.idNews(SortDirection.DESCENDING),
@@ -345,11 +388,11 @@ export default function ZoomActuEN() {
     const history = useHistory();
     const id = useParams()
     const classes = useStyles()
-    const handleSubmit = (values) => {
-        addComment(values.target[0].value, values.target[2].value);
+    const submitForm = (values) => {
+        addComment(values.firstName, values.comment);
     }
     const handleCaptcha = (value) => {
-        setCaptchaVerif(true);
+        callApi(value);
     }
     const mois = [
         'January',
@@ -366,6 +409,9 @@ export default function ZoomActuEN() {
         'December'
     ];
     const formatDate = (date) => {
+        if (date === null || date === '' || typeof date === 'undefined') {
+            return ''
+        }
         const month = mois[parseInt(date.substring(5, 7)) - 1]
         return month + ' ' + date.substring(8, 10) + ', ' + date.substring(0, 4);
     };
@@ -411,9 +457,9 @@ export default function ZoomActuEN() {
                                 <Grid item container direction={'row'} spacing={1} className={classes.gridElements}>
                                     <Grid item>
                                         <Chip
-                                            color={'primary'}
-                                            avatar={<Avatar>C</Avatar>}
-                                            label="Charles"
+                                            color={'secondary'}
+                                            avatar={<Avatar>{actualite.author.charAt(0)}</Avatar>}
+                                            label={actualite.author}
                                             clickable
                                         />
                                     </Grid>
@@ -421,9 +467,9 @@ export default function ZoomActuEN() {
                                         <Chip
                                             color={'primary'}
                                             avatar={<Avatar color={'primary'}>
-                                                <FeedOutlinedIcon sx={{color: "#FFFFFF"}}/>
+                                                <CategoryIcon type={actualite.type}/>
                                             </Avatar>}
-                                            label="News"
+                                            label={actualite.type}
                                             clickable
                                         />
                                     </Grid>
@@ -517,7 +563,7 @@ export default function ZoomActuEN() {
                                                     <Grid className={classes.commentContainer}>
                                                         <Grid item container direction={'column'}
                                                               className={classes.comments}
-                                                              spacing={1}>
+                                                              spacing={1} /*onClick={()=>handleDelete(comment)}*/>
                                                             <Grid item>
                                                                 <Typography className={classes.commentAuthor}>
                                                                     {comment.author}
@@ -550,15 +596,39 @@ export default function ZoomActuEN() {
                                             </Typography>
                                         </Grid>
                                         <Grid item className={classes.gridElements}>
-                                            <form onSubmit={handleSubmit}>
+                                            <form onSubmit={handleSubmit(submitForm)}>
                                                 <Grid container direction={'column'}>
                                                     <Grid item className={classes.gridElements}>
-                                                        <CustomTextField fullWidth variant='outlined'
-                                                                         label={'Votre nom'}/>
+                                                        <Controller
+                                                            control={control}
+                                                            name="firstName"
+                                                            rules={{required: true}}
+                                                            render={({
+                                                                         field: {onChange, value, ref}
+                                                                     }) => (
+                                                                <TextField fullWidth variant='outlined'
+                                                                           label={'Your name'}
+                                                                           id="firstName"
+                                                                           inputRef={ref}
+                                                                           onChange={onChange} value={value} error={!!errors.firstName}/>
+                                                            )}/>
+                                                        {errors.firstName && <span className={classes.required}>Champ requis *</span>}
                                                     </Grid>
                                                     <Grid item className={classes.gridElements}>
-                                                        <CustomTextField fullWidth variant='outlined' rows={4} multiline
-                                                                         label={'Votre commentaire'}/>
+                                                        <Controller
+                                                            control={control}
+                                                            name="comment"
+                                                            rules={{required: true}}
+                                                            render={({
+                                                                         field: {onChange, value, ref}
+                                                                     }) => (
+                                                                <TextField fullWidth variant='outlined'
+                                                                           label={'Your comment'}
+                                                                           id="comment"
+                                                                           inputRef={ref}
+                                                                           onChange={onChange} value={value} error={!!errors.comment}/>
+                                                            )}/>
+                                                        {errors.comment && <span className={classes.required}>Champ requis *</span>}
                                                     </Grid>
                                                     <Grid item className={classes.gridElements}>
                                                         <ReCAPTCHA
@@ -567,7 +637,7 @@ export default function ZoomActuEN() {
                                                         />
                                                     </Grid>
                                                     <Grid item>
-                                                        <Button disabled={captchaVerif} type={'submit'}
+                                                        <Button disabled={!captchaVerif} type={'submit'}
                                                                 color={'primary'} variant={'contained'}
                                                                 className={classes.button}>
                                                             Envoyer votre commentaire

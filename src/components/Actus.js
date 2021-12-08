@@ -59,11 +59,20 @@ const MenuProps = {
     width: 'auto',
     getContentAnchorEl: null,
 };
-const categories = [
+const typesFR = [
     'Actualité',
-    'Rubrique',
+    'Concours',
+    'Vente',
     'Vidéo'
 ];
+
+const typesEN = [
+    'News',
+    'Contest',
+    'Sale',
+    'Video'
+];
+
 const mois = [
     'Janvier',
     'Février',
@@ -257,6 +266,16 @@ const useStyles = makeStyles((theme) => ({
 export default function Actus() {
     const [offset, setOffset] = useState(0);
     const [admin, setAdmin] = useState(false);
+    const [selectTypeFR, setSelectTypeFR]= useState('');
+    const [selectTypeEN, setSelectTypeEN]= useState('');
+
+    const handleSelectTypeFR = (event) => {
+        setSelectTypeFR(event.target.value);
+    };
+    const handleSelectTypeEN = (event) => {
+        setSelectTypeEN(event.target.value);
+    };
+
     const {currentUser} = useAuth()
     useEffect(() => {
         if (currentUser !== null) {
@@ -522,9 +541,9 @@ export default function Actus() {
             author: values.target[12].value,
             date: values.target[15].value === '' ? null : formatDateDatePickerToAWS(values.target[15].value),
             type: values.target[17].value,
-            typeFR: values.target[20].value,
-            img: values.target[23].value,
-            imgFile: values.target[26].files[0],
+            typeFR: values.target[19].value,
+            img: values.target[21].value,
+            imgFile: values.target[24].files[0],
         }
         editNews(news).then(values.preventDefault());
     }
@@ -540,9 +559,9 @@ export default function Actus() {
             author: values.target[12].value,
             date: values.target[15].value === '' ? null : formatDateDatePickerToAWS(values.target[15].value),
             type: values.target[17].value,
-            typeFR: values.target[20].value,
-            img: values.target[23].value,
-            imgFile: values.target[26].files[0],
+            typeFR: values.target[19].value,
+            img: values.target[21].values,
+            imgFile: values.target[24].files[0]
         }
         createNews(news).then(values.preventDefault());
     }
@@ -620,6 +639,8 @@ export default function Actus() {
                                         variant={"contained"} color={'primary'}
                                         onClick={() => {
                                             handleOpenModal3();
+                                            setSelectTypeEN('');
+                                            setSelectTypeFR('');
                                         }}>
                                     Ajouter une actualité
                                 </Button>
@@ -673,6 +694,8 @@ export default function Actus() {
                                                                         onClick={(event) => {
                                                                             handleOpenModal2();
                                                                             handleChangeModalIndex2(actualite);
+                                                                            setSelectTypeEN(actualite.type)
+                                                                            setSelectTypeFR(actualite.typeFR)
                                                                             event.stopPropagation();
                                                                         }}>
                                                                     Editer
@@ -843,16 +866,28 @@ export default function Actus() {
                                                 <Grid item>
                                                     <Typography className={classes.contentText}>Type
                                                         Anglais</Typography>
-                                                    <TextField fullWidth multiline variant={'outlined'}
-                                                               margin={'normal'} defaultValue={modalIndex2.type}
-                                                               InputProps={{classes: {input: classes.textField}}}/>
+                                                    <Select fullWidth variant={'outlined'}
+                                                            margin={'normal'}
+                                                            InputProps={{classes: {input: classes.textField}}}
+                                                            value={selectTypeEN}
+                                                            onChange={handleSelectTypeEN}>
+                                                        {typesEN.map(type =>
+                                                            <MenuItem value={type}>{type}</MenuItem>
+                                                        )}
+                                                    </Select>
                                                 </Grid>
                                                 <Grid item>
                                                     <Typography className={classes.contentText}>Type
                                                         Français</Typography>
-                                                    <TextField fullWidth multiline variant={'outlined'}
-                                                               margin={'normal'} defaultValue={modalIndex2.typeFR}
-                                                               InputProps={{classes: {input: classes.textField}}}/>
+                                                    <Select fullWidth variant={'outlined'}
+                                                            margin={'normal'}
+                                                            InputProps={{classes: {input: classes.textField}}}
+                                                            value={selectTypeFR}
+                                                            onChange={handleSelectTypeFR}>
+                                                        {typesFR.map(type =>
+                                                            <MenuItem value={type}>{type}</MenuItem>
+                                                        )}
+                                                    </Select>
                                                 </Grid>
                                                 <Grid item>
                                                     <Typography className={classes.contentText}>Image</Typography>
@@ -948,16 +983,28 @@ export default function Actus() {
                                                 <Grid item>
                                                     <Typography className={classes.contentText}>Type
                                                         Anglais</Typography>
-                                                    <TextField fullWidth multiline variant={'outlined'}
+                                                    <Select fullWidth variant={'outlined'}
                                                                margin={'normal'}
-                                                               InputProps={{classes: {input: classes.textField}}}/>
+                                                               InputProps={{classes: {input: classes.textField}}}
+                                                            value={selectTypeEN}
+                                                                onChange={handleSelectTypeEN}>
+                                                        {typesEN.map(type =>
+                                                            <MenuItem value={type}>{type}</MenuItem>
+                                                        )}
+                                                    </Select>
                                                 </Grid>
                                                 <Grid item>
                                                     <Typography className={classes.contentText}>Type
                                                         Français</Typography>
-                                                    <TextField fullWidth multiline variant={'outlined'}
-                                                               margin={'normal'}
-                                                               InputProps={{classes: {input: classes.textField}}}/>
+                                                    <Select fullWidth variant={'outlined'}
+                                                            margin={'normal'}
+                                                            InputProps={{classes: {input: classes.textField}}}
+                                                            value={selectTypeFR}
+                                                            onChange={handleSelectTypeFR}>
+                                                        {typesFR.map(type =>
+                                                            <MenuItem value={type}>{type}</MenuItem>
+                                                        )}
+                                                    </Select>
                                                 </Grid>
                                                 <Grid item>
                                                     <Typography className={classes.contentText}>Image existante</Typography>
