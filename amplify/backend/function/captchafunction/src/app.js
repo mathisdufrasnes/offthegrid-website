@@ -65,7 +65,7 @@ app.post('/captcha', async function (req, res) {
         })
     }
 
-    const secretKey = "6LekmF4dAAAAAGzR0sDtD2BZkOduec27XRfhAkJE"
+    const secretKey = process.env.SECRET_KEY_CAPTCHA
     const query = stringify({
         secret: secretKey,
         response: req.body.captcha,

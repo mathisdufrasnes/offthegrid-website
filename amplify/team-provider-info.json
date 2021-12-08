@@ -19,7 +19,7 @@
       "function": {
         "captchafunction": {
           "deploymentBucketName": "amplify-amplifyd56af9c02d2b4-staging-225904-deployment",
-          "s3Key": "amplify-builds/captchafunction-576b2b6a76782b6d392b-build.zip"
+          "s3Key": "amplify-builds/captchafunction-2b4e576a4d7036625334-build.zip"
         }
       }
     }

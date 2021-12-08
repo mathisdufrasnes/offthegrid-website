@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "paths": {
+    "/captcha": {
+      "permissions": {
+        "setting": "open"
+      },
+      "lambdaFunction": "captchafunction"
+    }
+  }
+}
