@@ -36,6 +36,7 @@ import Button from "@material-ui/core/Button";
 import useAuth from "../hooks/useAuth";
 import PlayCircleOutlineIcon from "@mui/icons-material/PlayCircleOutline";
 import AddCommentOutlinedIcon from "@mui/icons-material/AddCommentOutlined";
+import {useMediaQuery} from "react-responsive";
 
 const CustomTextField = withStyles({
     root: {
@@ -59,9 +60,24 @@ const useStyles = makeStyles((theme) => ({
         alignItems: 'center',
         flexDirection: 'column'
     },
+    pageContentMobile: {
+        backgroundColor: "#f2F2F2",
+        paddingTop: "75px",
+        minHeight: '100vh',
+        display: "flex",
+        alignItems: 'center',
+        flexDirection: 'column'
+    },
     box1: {
         backgroundColor: "#ffffff",
         width: '60vw',
+        display: "flex",
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    box1Mobile: {
+        backgroundColor: "#ffffff",
+        width: '90vw',
         display: "flex",
         justifyContent: 'center',
         alignItems: 'center',
@@ -83,6 +99,14 @@ const useStyles = makeStyles((theme) => ({
         justifyContent: 'center',
         alignItems: 'center',
     },
+    box2Mobile: {
+        backgroundColor: "#ffffff",
+        marginTop: '25px',
+        width: '90vw',
+        display: "flex",
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
     box2Content: {
         width: '96%',
         marginTop: '2%',
@@ -96,6 +120,14 @@ const useStyles = makeStyles((theme) => ({
         backgroundColor: "#ffffff",
         marginTop: '25px',
         width: '60vw',
+        display: "flex",
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    box3Mobile: {
+        backgroundColor: "#ffffff",
+        marginTop: '25px',
+        width: '90vw',
         display: "flex",
         justifyContent: 'center',
         alignItems: 'center',
@@ -161,7 +193,10 @@ const useStyles = makeStyles((theme) => ({
             transform: 'scale(1.04)',
             boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)',
             cursor: 'pointer',
-        }
+        },
+        borderStyle:'solid',
+        borderWidth:'1px',
+        borderColor:'#f3f3f3'
     },
     recentNewsTitle: {
         fontFamily: '"Montserrat-Bold"',
@@ -211,7 +246,48 @@ const useStyles = makeStyles((theme) => ({
         fontSize:'12px',
         fontFamily:'Montserrat-Light',
         color:'red'
-    }
+    },
+    h1Mobile: {
+        fontSize: '5vmax',
+        fontFamily: 'Montserrat-Bold',
+    },
+
+    h2Mobile: {
+        fontSize: '4.5vmax',
+        fontFamily: 'Montserrat-Bold',
+    },
+
+    h3Mobile: {
+        fontSize: '4vmax',
+        fontFamily: 'Montserrat-Bold',
+    },
+
+    h4Mobile: {
+        fontSize: '3.5vmax',
+        fontFamily: 'Montserrat-Bold',
+    },
+    h5Mobile: {
+        fontSize: '3vmax',
+        fontFamily: 'Montserrat-Bold',
+    },
+
+    h6Mobile: {
+        fontSize: '2.5vmax',
+        fontFamily: 'Montserrat-Bold',
+    },
+    body1Mobile: {
+        fontSize: '2vmax',
+        fontFamily: 'Montserrat-Regular',
+    },
+
+    body2Mobile: {
+        fontSize: '2vmax',
+        fontFamily: 'Montserrat-Light',
+    },
+    body3Mobile: {
+        fontSize: '2.5vmax',
+        fontFamily: 'Montserrat-Medium',
+    },
 }));
 
 export default function ZoomActu() {
@@ -430,6 +506,8 @@ export default function ZoomActu() {
             }
         }
     });
+
+    const isTabletOrMobile = useMediaQuery({query: '(max-width: 1224px)'})
     return (
         <Fragment>
             {error ?
@@ -437,219 +515,441 @@ export default function ZoomActu() {
                     not found</h1><h1>404: page not found</h1><h1>404: page not found</h1><h1>404: page not found</h1>
                 </div> :
                 <Fragment>
-                    <Box className={classes.pageContent}>
-                        <Box className={classes.box1}>
-                            <Grid container item direction={'column'} className={classes.box1Content}>
-                                <Grid item container direction={'row'} className={classes.returnButton} spacing={1}
-                                      alignItems={'center'} onClick={() => history.push('/actus/')}>
-                                    <Grid item>
-                                        <ArrowBackIcon style={{display: "block"}}/>
+                {isTabletOrMobile ?
+                    <Fragment>
+                        <Box className={classes.pageContentMobile}>
+                            <Box className={classes.box1Mobile}>
+                                <Grid container item direction={'column'} className={classes.box1Content}>
+                                    <Grid item container direction={'row'} className={classes.returnButton} spacing={1}
+                                          alignItems={'center'} onClick={() => history.push('/actus/')}>
+                                        <Grid item>
+                                            <ArrowBackIcon style={{display: "block"}}/>
+                                        </Grid>
+                                        <Grid item>
+                                            Retour aux actualités
+                                        </Grid>
                                     </Grid>
-                                    <Grid item>
-                                        Retour aux actualités
+                                    <Grid item className={classes.gridElements}>
+                                        <Typography className={classes.h3Mobile}>{actualite.titleFR}</Typography>
+                                    </Grid>
+                                    <Grid item container direction={'row'} spacing={1} className={classes.gridElements}>
+                                        <Grid item>
+                                            <Chip
+                                                color={'secondary'}
+                                                avatar={<Avatar>{actualite.author.charAt(0)}</Avatar>}
+                                                label={actualite.author}
+                                                clickable
+                                            />
+                                        </Grid>
+                                        <Grid item>
+                                            <Chip
+                                                color={'primary'}
+                                                avatar={<Avatar color={'primary'}>
+                                                    <CategoryIcon type={actualite.typeFR}/>
+                                                </Avatar>}
+                                                label={actualite.typeFR}
+                                                clickable
+                                            />
+                                        </Grid>
+                                    </Grid>
+                                    {actualite.imgFile === '' ? '' :
+                                    <Grid item className={classes.gridElements}>
+                                        <img className={classes.imgNews} src={actualite.imgFile}/>
+                                    </Grid>}
+                                    <Grid item container direction={'row'} spacing={1} className={classes.gridElements}>
+                                        <Grid item>
+                                            <Typography className={classes.body1Mobile}>
+                                                Publiée par
+                                            </Typography>
+                                        </Grid>
+                                        <Grid item>
+                                            <Typography className={classes.smallBold}>
+                                                {actualite.author}
+                                            </Typography>
+                                        </Grid>
+                                        <Grid item>
+                                            <Typography className={classes.body1Mobile}>
+                                                le
+                                            </Typography>
+                                        </Grid>
+                                        <Grid item>
+                                            <Typography className={classes.smallBold}>
+                                                {formatDate(actualite.date)}
+                                            </Typography>
+                                        </Grid>
+                                    </Grid>
+                                    <Grid item className={classes.gridElements}>
+                                        <Divider/>
+                                    </Grid>
+                                    <Grid item className={classes.gridElements}>
+                                        <Typography className={classes.body1Mobile}>{actualite.contentFR}</Typography>
                                     </Grid>
                                 </Grid>
-                                <Grid item className={classes.gridElements}>
-                                    <Typography variant={'h3'}>{actualite.titleFR}</Typography>
-                                </Grid>
-                                <Grid item container direction={'row'} spacing={1} className={classes.gridElements}>
-                                    <Grid item>
-                                        <Chip
-                                            color={'secondary'}
-                                            avatar={<Avatar>{actualite.author.charAt(0)}</Avatar>}
-                                            label={actualite.author}
-                                            clickable
-                                        />
+                            </Box>
+                            <Box className={classes.box3Mobile}>
+                                <Grid container item direction={'column'} className={classes.box3Content}>
+                                    <Grid item className={classes.gridElements}>
+                                        <Typography variant={'h5'} align={'center'}>
+                                            Actualités récentes
+                                        </Typography>
                                     </Grid>
-                                    <Grid item>
-                                        <Chip
-                                            color={'primary'}
-                                            avatar={<Avatar color={'primary'}>
-                                                <CategoryIcon type={actualite.typeFR}/>
-                                            </Avatar>}
-                                            label={actualite.typeFR}
-                                            clickable
-                                        />
+                                    <Grid item className={classes.gridElements}>
+                                        <Divider/>
+                                    </Grid>
+                                    <Grid container item direction={'row'} className={classes.gridElements} spacing={4}>
+                                        {actusRecentes.slice(0,2).map(actu =>
+                                            <Grid container item direction={'column'} xs={6}
+                                                  className={classes.gridRecentNews} onClick={() => {
+                                                history.push('/actus/' + actu.idNews);
+                                                history.go(0);
+                                            }}>
+                                                <Grid item container justifyContent={'center'}>
+                                                    <img className={classes.imgRecentNews} src={actu.imgFile}/>
+                                                </Grid>
+                                                <Grid item>
+                                                    <Typography className={classes.recentNewsTitle} align={'center'}>
+                                                        {actu.titleFR}
+                                                    </Typography>
+                                                </Grid>
+                                            </Grid>
+                                        )}
                                     </Grid>
                                 </Grid>
-                                <Grid item className={classes.gridElements}>
-                                    <img className={classes.imgNews} src={actualite.imgFile}/>
-                                </Grid>
+                            </Box>
+                            <Box className={classes.box2Mobile}>
+                                <Grid container item direction={'column'} className={classes.box2Content}>
+                                    <Grid item container justifyContent={'space-between'} direction={'row'}
+                                          alignItems={'flex-start'} className={classes.gridElements}>
+                                        <Grid item>
+                                            <Typography variant={'h5'}>
+                                                {'Commentaires (' + actualite.nbComments + ')'}
+                                            </Typography>
+                                        </Grid>
+                                    </Grid>
+                                    <Grid item className={classes.gridElements}>
+                                        <Divider/>
+                                    </Grid>
+                                    <Grid item className={classes.gridElements}>
+                                        {actualite.nbComments === 0 ?
+                                            <Typography variant={'body1'}>
+                                                Aucun commentaire pour le moment
+                                            </Typography>
+                                            :
+                                            <Grid container direction={'column'}>
+                                                {comments.map(comment =>
+                                                    <Grid>
+                                                        <Grid className={classes.commentContainer}>
+                                                            <Grid item container direction={'column'}
+                                                                  className={classes.comments}
+                                                                  spacing={1} /*onClick={()=>handleDelete(comment)}*/>
+                                                                <Grid item>
+                                                                    <Typography className={classes.commentAuthor}>
+                                                                        {comment.author}
+                                                                    </Typography>
+                                                                </Grid>
+                                                                <Grid item>
+                                                                    <Typography>
+                                                                        {comment.content}
+                                                                    </Typography>
+                                                                </Grid>
+                                                                <Grid item>
+                                                                    <Typography className={classes.commentDate}>
+                                                                        Posté
+                                                                        le {formatDate(comment.date)} à {formatHour(comment.date)}
+                                                                    </Typography>
+                                                                </Grid>
+                                                            </Grid>
+                                                        </Grid>
+                                                        <Grid item>
+                                                            <Divider/>
+                                                        </Grid>
+                                                    </Grid>
+                                                )}
+                                            </Grid>
+                                        }
+                                        <Grid container direction={'column'}>
+                                            <Grid item className={classes.gridElements}>
+                                                <Typography className={classes.smallBold}>
+                                                    Laissez un commentaire :
+                                                </Typography>
+                                            </Grid>
+                                            <Grid item className={classes.gridElements}>
+                                                <form onSubmit={handleSubmit(submitForm)}>
+                                                    <Grid container direction={'column'}>
+                                                        <Grid item className={classes.gridElements}>
+                                                            <Controller
+                                                                control={control}
+                                                                name="firstName"
+                                                                rules={{required: true}}
+                                                                render={({
+                                                                             field: {onChange, value, ref}
+                                                                         }) => (
+                                                                    <TextField fullWidth variant='outlined'
+                                                                               label={'Votre nom'}
+                                                                               id="firstName"
+                                                                               inputRef={ref}
+                                                                               onChange={onChange} value={value} error={!!errors.firstName}/>
+                                                                )}/>
+                                                            {errors.firstName && <span className={classes.required}>Champ requis *</span>}
+                                                        </Grid>
+                                                        <Grid item className={classes.gridElements}>
+                                                            <Controller
+                                                                control={control}
+                                                                name="comment"
+                                                                rules={{required: true}}
+                                                                render={({
+                                                                             field: {onChange, value, ref}
+                                                                         }) => (
+                                                                    <TextField fullWidth variant='outlined'
+                                                                               label={'Votre commentaire'}
+                                                                               id="comment"
+                                                                               inputRef={ref}
+                                                                               onChange={onChange} value={value} error={!!errors.comment}/>
+                                                                )}/>
+                                                            {errors.comment && <span className={classes.required}>Champ requis *</span>}
+                                                        </Grid>
+                                                        <Grid item className={classes.gridElements}>
+                                                            <ReCAPTCHA
+                                                                sitekey="6LekmF4dAAAAAI5KDwNpa4MibUpuJ4BZMCXDuRbb"
+                                                                onChange={handleCaptcha}
+                                                            />
+                                                        </Grid>
+                                                        <Grid item>
+                                                            <Button disabled={!captchaVerif} type={'submit'}
+                                                                    color={'primary'} variant={'contained'}
+                                                                    className={classes.button}>
+                                                                Envoyer votre commentaire
+                                                            </Button>
+                                                        </Grid>
+                                                    </Grid>
+                                                </form>
+                                            </Grid>
 
-                                <Grid item container direction={'row'} spacing={1} className={classes.gridElements}>
-                                    <Grid item>
-                                        <Typography variant={'body1'}>
-                                            Publiée par
-                                        </Typography>
-                                    </Grid>
-                                    <Grid item>
-                                        <Typography className={classes.smallBold}>
-                                            {actualite.author}
-                                        </Typography>
-                                    </Grid>
-                                    <Grid item>
-                                        <Typography variant={'body1'}>
-                                            le
-                                        </Typography>
-                                    </Grid>
-                                    <Grid item>
-                                        <Typography className={classes.smallBold}>
-                                            {formatDate(actualite.date)}
-                                        </Typography>
+                                        </Grid>
                                     </Grid>
                                 </Grid>
-                                <Grid item className={classes.gridElements}>
-                                    <Divider/>
-                                </Grid>
-                                <Grid item className={classes.gridElements}>
-                                    <Typography variant={'body1'}>{actualite.contentFR}</Typography>
-                                </Grid>
-                            </Grid>
+                            </Box>
                         </Box>
-                        <Box className={classes.box3}>
-                            <Grid container item direction={'column'} className={classes.box3Content}>
-                                <Grid item className={classes.gridElements}>
-                                    <Typography variant={'h5'}>
-                                        Actualités récentes
-                                    </Typography>
-                                </Grid>
-                                <Grid item className={classes.gridElements}>
-                                    <Divider/>
-                                </Grid>
-                                <Grid container item direction={'row'} className={classes.gridElements} spacing={4}>
-                                    {actusRecentes.map(actu =>
-                                        <Grid container item direction={'column'} xs={3}
-                                              className={classes.gridRecentNews} onClick={() => {
-                                            history.push('/actus/' + actu.idNews);
-                                            history.go(0);
-                                        }}>
+                    </Fragment>
+                    :
+                        <Fragment>
+                            <Box className={classes.pageContent}>
+                                <Box className={classes.box1}>
+                                    <Grid container item direction={'column'} className={classes.box1Content}>
+                                        <Grid item container direction={'row'} className={classes.returnButton} spacing={1}
+                                              alignItems={'center'} onClick={() => history.push('/actus/')}>
                                             <Grid item>
-                                                <img className={classes.imgRecentNews} src={actu.imgFile}/>
+                                                <ArrowBackIcon style={{display: "block"}}/>
                                             </Grid>
                                             <Grid item>
-                                                <Typography className={classes.recentNewsTitle}>
-                                                    {actu.titleFR}
+                                                Retour aux actualités
+                                            </Grid>
+                                        </Grid>
+                                        <Grid item className={classes.gridElements}>
+                                            <Typography variant={'h3'}>{actualite.titleFR}</Typography>
+                                        </Grid>
+                                        <Grid item container direction={'row'} spacing={1} className={classes.gridElements}>
+                                            <Grid item>
+                                                <Chip
+                                                    color={'secondary'}
+                                                    avatar={<Avatar>{actualite.author.charAt(0)}</Avatar>}
+                                                    label={actualite.author}
+                                                    clickable
+                                                />
+                                            </Grid>
+                                            <Grid item>
+                                                <Chip
+                                                    color={'primary'}
+                                                    avatar={<Avatar color={'primary'}>
+                                                        <CategoryIcon type={actualite.typeFR}/>
+                                                    </Avatar>}
+                                                    label={actualite.typeFR}
+                                                    clickable
+                                                />
+                                            </Grid>
+                                        </Grid>
+                                        {actualite.imgFile === '' ? '' :
+                                            <Grid item className={classes.gridElements}>
+                                                <img className={classes.imgNews} src={actualite.imgFile}/>
+                                            </Grid>
+                                        }
+
+                                        <Grid item container direction={'row'} spacing={1} className={classes.gridElements}>
+                                            <Grid item>
+                                                <Typography variant={'body1'}>
+                                                    Publiée par
+                                                </Typography>
+                                            </Grid>
+                                            <Grid item>
+                                                <Typography className={classes.smallBold}>
+                                                    {actualite.author}
+                                                </Typography>
+                                            </Grid>
+                                            <Grid item>
+                                                <Typography variant={'body1'}>
+                                                    le
+                                                </Typography>
+                                            </Grid>
+                                            <Grid item>
+                                                <Typography className={classes.smallBold}>
+                                                    {formatDate(actualite.date)}
                                                 </Typography>
                                             </Grid>
                                         </Grid>
-                                    )}
-                                </Grid>
-                            </Grid>
-                        </Box>
-                        <Box className={classes.box2}>
-                            <Grid container item direction={'column'} className={classes.box2Content}>
-                                <Grid item container justifyContent={'space-between'} direction={'row'}
-                                      alignItems={'flex-start'} className={classes.gridElements}>
-                                    <Grid item>
-                                        <Typography variant={'h5'}>
-                                            {'Commentaires (' + actualite.nbComments + ')'}
-                                        </Typography>
+                                        <Grid item className={classes.gridElements}>
+                                            <Divider/>
+                                        </Grid>
+                                        <Grid item className={classes.gridElements}>
+                                            <Typography variant={'body1'}>{actualite.contentFR}</Typography>
+                                        </Grid>
                                     </Grid>
-                                </Grid>
-                                <Grid item className={classes.gridElements}>
-                                    <Divider/>
-                                </Grid>
-                                <Grid item className={classes.gridElements}>
-                                    {actualite.nbComments === 0 ?
-                                        <Typography variant={'body1'}>
-                                            Aucun commentaire pour le moment
-                                        </Typography>
-                                        :
-                                        <Grid container direction={'column'}>
-                                            {comments.map(comment =>
-                                                <Grid>
-                                                    <Grid className={classes.commentContainer}>
-                                                        <Grid item container direction={'column'}
-                                                              className={classes.comments}
-                                                              spacing={1} /*onClick={()=>handleDelete(comment)}*/>
-                                                            <Grid item>
-                                                                <Typography className={classes.commentAuthor}>
-                                                                    {comment.author}
-                                                                </Typography>
-                                                            </Grid>
-                                                            <Grid item>
-                                                                <Typography>
-                                                                    {comment.content}
-                                                                </Typography>
-                                                            </Grid>
-                                                            <Grid item>
-                                                                <Typography className={classes.commentDate}>
-                                                                    Posté
-                                                                    le {formatDate(comment.date)} à {formatHour(comment.date)}
-                                                                </Typography>
-                                                            </Grid>
-                                                        </Grid>
+                                </Box>
+                                <Box className={classes.box3}>
+                                    <Grid container item direction={'column'} className={classes.box3Content}>
+                                        <Grid item className={classes.gridElements}>
+                                            <Typography variant={'h5'}>
+                                                Actualités récentes
+                                            </Typography>
+                                        </Grid>
+                                        <Grid item className={classes.gridElements}>
+                                            <Divider/>
+                                        </Grid>
+                                        <Grid container item direction={'row'} className={classes.gridElements} spacing={4}>
+                                            {actusRecentes.map(actu =>
+                                                <Grid container item direction={'column'} xs={3}
+                                                      className={classes.gridRecentNews} onClick={() => {
+                                                    history.push('/actus/' + actu.idNews);
+                                                    history.go(0);
+                                                }}>
+                                                    <Grid item>
+                                                        <img className={classes.imgRecentNews} src={actu.imgFile}/>
                                                     </Grid>
                                                     <Grid item>
-                                                        <Divider/>
+                                                        <Typography className={classes.recentNewsTitle}>
+                                                            {actu.titleFR}
+                                                        </Typography>
                                                     </Grid>
                                                 </Grid>
                                             )}
                                         </Grid>
-                                    }
-                                    <Grid container direction={'column'}>
-                                        <Grid item className={classes.gridElements}>
-                                            <Typography className={classes.smallBold}>
-                                                Laissez un commentaire :
-                                            </Typography>
-                                        </Grid>
-                                        <Grid item className={classes.gridElements}>
-                                            <form onSubmit={handleSubmit(submitForm)}>
-                                                <Grid container direction={'column'}>
-                                                    <Grid item className={classes.gridElements}>
-                                                        <Controller
-                                                            control={control}
-                                                            name="firstName"
-                                                            rules={{required: true}}
-                                                            render={({
-                                                                         field: {onChange, value, ref}
-                                                                     }) => (
-                                                                <TextField fullWidth variant='outlined'
-                                                                           label={'Votre nom'}
-                                                                           id="firstName"
-                                                                           inputRef={ref}
-                                                                           onChange={onChange} value={value} error={!!errors.firstName}/>
-                                                            )}/>
-                                                        {errors.firstName && <span className={classes.required}>Champ requis *</span>}
-                                                    </Grid>
-                                                    <Grid item className={classes.gridElements}>
-                                                        <Controller
-                                                            control={control}
-                                                            name="comment"
-                                                            rules={{required: true}}
-                                                            render={({
-                                                                         field: {onChange, value, ref}
-                                                                     }) => (
-                                                                <TextField fullWidth variant='outlined'
-                                                                           label={'Votre commentaire'}
-                                                                           id="comment"
-                                                                           inputRef={ref}
-                                                                           onChange={onChange} value={value} error={!!errors.comment}/>
-                                                            )}/>
-                                                        {errors.comment && <span className={classes.required}>Champ requis *</span>}
-                                                    </Grid>
-                                                    <Grid item className={classes.gridElements}>
-                                                        <ReCAPTCHA
-                                                            sitekey="6LekmF4dAAAAAI5KDwNpa4MibUpuJ4BZMCXDuRbb"
-                                                            onChange={handleCaptcha}
-                                                        />
-                                                    </Grid>
-                                                    <Grid item>
-                                                        <Button disabled={!captchaVerif} type={'submit'}
-                                                                color={'primary'} variant={'contained'}
-                                                                className={classes.button}>
-                                                            Envoyer votre commentaire
-                                                        </Button>
-                                                    </Grid>
-                                                </Grid>
-                                            </form>
-                                        </Grid>
-
                                     </Grid>
-                                </Grid>
-                            </Grid>
-                        </Box>
-                    </Box>
+                                </Box>
+                                <Box className={classes.box2}>
+                                    <Grid container item direction={'column'} className={classes.box2Content}>
+                                        <Grid item container justifyContent={'space-between'} direction={'row'}
+                                              alignItems={'flex-start'} className={classes.gridElements}>
+                                            <Grid item>
+                                                <Typography variant={'h5'}>
+                                                    {'Commentaires (' + actualite.nbComments + ')'}
+                                                </Typography>
+                                            </Grid>
+                                        </Grid>
+                                        <Grid item className={classes.gridElements}>
+                                            <Divider/>
+                                        </Grid>
+                                        <Grid item className={classes.gridElements}>
+                                            {actualite.nbComments === 0 ?
+                                                <Typography variant={'body1'}>
+                                                    Aucun commentaire pour le moment
+                                                </Typography>
+                                                :
+                                                <Grid container direction={'column'}>
+                                                    {comments.map(comment =>
+                                                        <Grid>
+                                                            <Grid className={classes.commentContainer}>
+                                                                <Grid item container direction={'column'}
+                                                                      className={classes.comments}
+                                                                      spacing={1} /*onClick={()=>handleDelete(comment)}*/>
+                                                                    <Grid item>
+                                                                        <Typography className={classes.commentAuthor}>
+                                                                            {comment.author}
+                                                                        </Typography>
+                                                                    </Grid>
+                                                                    <Grid item>
+                                                                        <Typography>
+                                                                            {comment.content}
+                                                                        </Typography>
+                                                                    </Grid>
+                                                                    <Grid item>
+                                                                        <Typography className={classes.commentDate}>
+                                                                            Posté
+                                                                            le {formatDate(comment.date)} à {formatHour(comment.date)}
+                                                                        </Typography>
+                                                                    </Grid>
+                                                                </Grid>
+                                                            </Grid>
+                                                            <Grid item>
+                                                                <Divider/>
+                                                            </Grid>
+                                                        </Grid>
+                                                    )}
+                                                </Grid>
+                                            }
+                                            <Grid container direction={'column'}>
+                                                <Grid item className={classes.gridElements}>
+                                                    <Typography className={classes.smallBold}>
+                                                        Laissez un commentaire :
+                                                    </Typography>
+                                                </Grid>
+                                                <Grid item className={classes.gridElements}>
+                                                    <form onSubmit={handleSubmit(submitForm)}>
+                                                        <Grid container direction={'column'}>
+                                                            <Grid item className={classes.gridElements}>
+                                                                <Controller
+                                                                    control={control}
+                                                                    name="firstName"
+                                                                    rules={{required: true}}
+                                                                    render={({
+                                                                                 field: {onChange, value, ref}
+                                                                             }) => (
+                                                                        <TextField fullWidth variant='outlined'
+                                                                                   label={'Votre nom'}
+                                                                                   id="firstName"
+                                                                                   inputRef={ref}
+                                                                                   onChange={onChange} value={value} error={!!errors.firstName}/>
+                                                                    )}/>
+                                                                {errors.firstName && <span className={classes.required}>Champ requis *</span>}
+                                                            </Grid>
+                                                            <Grid item className={classes.gridElements}>
+                                                                <Controller
+                                                                    control={control}
+                                                                    name="comment"
+                                                                    rules={{required: true}}
+                                                                    render={({
+                                                                                 field: {onChange, value, ref}
+                                                                             }) => (
+                                                                        <TextField fullWidth variant='outlined'
+                                                                                   label={'Votre commentaire'}
+                                                                                   id="comment"
+                                                                                   inputRef={ref}
+                                                                                   onChange={onChange} value={value} error={!!errors.comment}/>
+                                                                    )}/>
+                                                                {errors.comment && <span className={classes.required}>Champ requis *</span>}
+                                                            </Grid>
+                                                            <Grid item className={classes.gridElements}>
+                                                                <ReCAPTCHA
+                                                                    sitekey="6LekmF4dAAAAAI5KDwNpa4MibUpuJ4BZMCXDuRbb"
+                                                                    onChange={handleCaptcha}
+                                                                />
+                                                            </Grid>
+                                                            <Grid item>
+                                                                <Button disabled={!captchaVerif} type={'submit'}
+                                                                        color={'primary'} variant={'contained'}
+                                                                        className={classes.button}>
+                                                                    Envoyer votre commentaire
+                                                                </Button>
+                                                            </Grid>
+                                                        </Grid>
+                                                    </form>
+                                                </Grid>
+
+                                            </Grid>
+                                        </Grid>
+                                    </Grid>
+                                </Box>
+                            </Box>
+                        </Fragment>
+                }
                 </Fragment>
             }
         </Fragment>

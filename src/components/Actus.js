@@ -5,6 +5,7 @@ import AddCommentOutlinedIcon from '@mui/icons-material/AddCommentOutlined';
 import CommentOutlinedIcon from '@mui/icons-material/CommentOutlined';
 import CheckIcon from '@mui/icons-material/Check';
 import CloseIcon from '@mui/icons-material/Close';
+import SearchIcon from '@mui/icons-material/Search';
 import Timeline from '@mui/lab/Timeline';
 import TimelineItem from '@mui/lab/TimelineItem';
 import {DataStore, Predicates, SortDirection} from '@aws-amplify/datastore';
@@ -39,6 +40,8 @@ import {Route, Switch, useHistory, useLocation} from "react-router-dom";
 import ZoomActu from "./ZoomActu";
 import Accueil from "./Accueil";
 import useAuth from "../hooks/useAuth";
+import {useMediaQuery} from "react-responsive";
+import IconButton from "@mui/material/IconButton";
 
 
 const MenuProps = {
@@ -112,7 +115,7 @@ const useStyles = makeStyles((theme) => ({
         alignItems: 'center',
     },
     headerContent: {
-        width: '65vw',
+        width: '80vw',
     },
     box1Content: {
         width: '80vw',
@@ -124,6 +127,19 @@ const useStyles = makeStyles((theme) => ({
     card: {
         borderRadius: '0px',
         width: '80%',
+        transition: 'all .3s',
+        "&:hover": {
+            transform: 'scale(1.04)',
+            boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)',
+            cursor: 'pointer',
+        }
+    },
+    cardMobile: {
+        backgroundColor: '#f6f6f6',
+        borderRadius: '15px',
+        marginTop: '4vmax',
+        marginBottom: '4vmax',
+        width: '100%',
         transition: 'all .3s',
         "&:hover": {
             transform: 'scale(1.04)',
@@ -162,12 +178,27 @@ const useStyles = makeStyles((theme) => ({
         fontSize: '14px',
         fontFamily: 'Montserrat-Medium',
     },
+    authorTextMobile: {
+        fontSize: '2vmax',
+        fontFamily: 'Montserrat-Medium',
+    },
     contentText: {
         fontSize: '14px',
         fontFamily: 'Montserrat-Light',
+        overflowWrap: 'anywhere',
+    },
+    contentTextMobile: {
+        fontSize: '2vmax',
+        fontFamily: 'Montserrat-Light',
+        overflowWrap: 'anywhere',
     },
     cardImg: {
         minWidth: '70%',
+        maxWidth: '100%',
+        maxHeight: '30vh',
+        objectFit: 'contain'
+    },
+    cardImgMobile: {
         maxWidth: '100%',
         maxHeight: '30vh',
         objectFit: 'contain'
@@ -220,24 +251,24 @@ const useStyles = makeStyles((theme) => ({
         transform: 'translate(-50%, -50%)',
         width: '60vw',
         height: '80vh',
-        overflow:'hidden',
+        overflow: 'hidden',
     },
     modalScrollable: {
-        paddingRight:'30px',
+        paddingRight: '30px',
         overflowY: 'scroll',
-        overflowX:'hidden',
-        height:'55vh',
+        overflowX: 'hidden',
+        height: '55vh',
     },
-    modalHeader:{
-        paddingBottom:'20px',
+    modalHeader: {
+        paddingBottom: '20px',
     },
-    miniText:{
-        fontSize:'12px',
-        fontFamily:'Montserrat-Light',
-        color:'#d70000'
+    miniText: {
+        fontSize: '12px',
+        fontFamily: 'Montserrat-Light',
+        color: '#d70000'
     },
-    modalButtons:{
-        paddingTop:'20px',
+    modalButtons: {
+        paddingTop: '20px',
     },
     modalValidateButton: {
         backgroundColor: '#32a823',
@@ -260,14 +291,55 @@ const useStyles = makeStyles((theme) => ({
     textField: {
         fontSize: '15px',
         margin: '-5px',
-    }
+    },
+    h1Mobile: {
+        fontSize: '5vmax',
+        fontFamily: 'Montserrat-Bold',
+    },
+
+    h2Mobile: {
+        fontSize: '4.5vmax',
+        fontFamily: 'Montserrat-Bold',
+    },
+
+    h3Mobile: {
+        fontSize: '4vmax',
+        fontFamily: 'Montserrat-Bold',
+    },
+
+    h4Mobile: {
+        fontSize: '3.5vmax',
+        fontFamily: 'Montserrat-Bold',
+    },
+    h5Mobile: {
+        fontSize: '3vmax',
+        fontFamily: 'Montserrat-Bold',
+    },
+
+    h6Mobile: {
+        fontSize: '2.5vmax',
+        fontFamily: 'Montserrat-Bold',
+    },
+    body1Mobile: {
+        fontSize: '2vmax',
+        fontFamily: 'Montserrat-Regular',
+    },
+
+    body2Mobile: {
+        fontSize: '2vmax',
+        fontFamily: 'Montserrat-Light',
+    },
+    body3Mobile: {
+        fontSize: '2.5vmax',
+        fontFamily: 'Montserrat-Medium',
+    },
 }));
 
 export default function Actus() {
     const [offset, setOffset] = useState(0);
     const [admin, setAdmin] = useState(false);
-    const [selectTypeFR, setSelectTypeFR]= useState('');
-    const [selectTypeEN, setSelectTypeEN]= useState('');
+    const [selectTypeFR, setSelectTypeFR] = useState('');
+    const [selectTypeEN, setSelectTypeEN] = useState('');
 
     const handleSelectTypeFR = (event) => {
         setSelectTypeFR(event.target.value);
@@ -364,8 +436,7 @@ export default function Actus() {
         const toEdit = await DataStore.query(News, actualite.id);
         await DataStore.save(
             News.copyOf(toEdit, updated => {
-                if(actualite.title!=='' && actualite.title !== modalIndex2.title)
-                {
+                if (actualite.title !== '' && actualite.title !== modalIndex2.title) {
                     updated.title = actualite.title
                 };
                 if(actualite.titleFR!=='' && actualite.titleFR !== modalIndex2.titleFR)
@@ -395,45 +466,43 @@ export default function Actus() {
                 if(actualite.typeFR!=='' && actualite.typeFR !== modalIndex2.typeFR)
                 {
                     updated.typeFR = actualite.typeFR
-                };
-                if(actualite.imgFile !== null && typeof actualite.imgFile !== 'undefined')
-                {
-                    updated.img = 'actu' + (actualite.idNews).toString()+'.png';
                 }
-                else if(actualite.img !=='' && actualite.img !== modalIndex2.img)
-                {
+                ;
+                if (actualite.imgFile !== null && typeof actualite.imgFile !== 'undefined') {
+                    updated.img = 'actu' + (actualite.idNews).toString() + '.png';
+                } else if (actualite.img !== '' && actualite.img !== modalIndex2.img) {
                     updated.img = actualite.img
                 }
             })
         );
-        if(actualite.imgFile !== null && typeof actualite.imgFile !== 'undefined')
-        {
-            await Storage.put('actu' + (actualite.idNews).toString()+'.png', actualite.imgFile, {
-            resumable: true,
-        });
+        if (actualite.imgFile !== null && typeof actualite.imgFile !== 'undefined') {
+            await Storage.put('actu' + (actualite.idNews).toString() + '.png', actualite.imgFile, {
+                resumable: true,
+            });
         }
     }
     async function createNews(actualite) {
-        const id = (Math.max.apply(Math, actualites.map(function(actu) { return actu.idNews; })))+1;
+        const id = (Math.max.apply(Math, actualites.map(function (actu) {
+            return actu.idNews;
+        }))) + 1;
         await DataStore.save(
             new News({
-                idNews : id,
-                title : actualite.title,
-                titleFR : actualite.titleFR,
-                content : actualite.content,
-                contentFR : actualite.contentFR,
-                author : actualite.author,
-                date : actualite.date,
-                type : actualite.type,
-                typeFR : actualite.typeFR,
-                img : typeof actualite.imgFile !== "undefined" ? ('actu' + id.toString()+'.png') : (actualite.img !== '' ? actualite.img : ''),
-                nbCommentsFR : 0,
-                nbComments : 0,
+                idNews: id,
+                title: actualite.title,
+                titleFR: actualite.titleFR,
+                content: actualite.content,
+                contentFR: actualite.contentFR,
+                author: actualite.author,
+                date: actualite.date,
+                type: actualite.type,
+                typeFR: actualite.typeFR,
+                img: typeof actualite.imgFile !== "undefined" ? ('actu' + id.toString() + '.png') : (actualite.img !== '' ? actualite.img : ''),
+                nbCommentsFR: 0,
+                nbComments: 0,
             })
         );
-        if(actualite.imgFile !== null && typeof actualite.imgFile !== 'undefined')
-        {
-            await Storage.put('actu' + id.toString()+'.png', actualite.imgFile,{
+        if (actualite.imgFile !== null && typeof actualite.imgFile !== 'undefined') {
+            await Storage.put('actu' + id.toString() + '.png', actualite.imgFile, {
                 resumable: true,
             });
         }
@@ -509,26 +578,23 @@ export default function Actus() {
         values.preventDefault()
     }
     const formatDate = (date) => {
-        if(date === null || date ==='' || typeof date === 'undefined')
-        {
+        if (date === null || date === '' || typeof date === 'undefined') {
             return ''
         }
         const month = mois[parseInt(date.substring(5, 7)) - 1]
         return date.substring(8, 10) + ' ' + month + ' ' + date.substring(0, 4);
     };
-    const formatDateAWSToDatePicker= (date) => {
-        if(date === null || date ==='' || typeof date === 'undefined')
-        {
+    const formatDateAWSToDatePicker = (date) => {
+        if (date === null || date === '' || typeof date === 'undefined') {
             return ''
         }
-        return  date.substring(5, 7) + '/' + date.substring(8, 10) + '/' + date.substring(0, 4);
+        return date.substring(5, 7) + '/' + date.substring(8, 10) + '/' + date.substring(0, 4);
     }
-    const formatDateDatePickerToAWS= (date) => {
-        if(date === null || date ==='' || typeof date === 'undefined')
-        {
+    const formatDateDatePickerToAWS = (date) => {
+        if (date === null || date === '' || typeof date === 'undefined') {
             return ''
         }
-        return  date.substring(6, 10) + '-' + date.substring(0, 2) + '-' + date.substring(3, 5);
+        return date.substring(6, 10) + '-' + date.substring(0, 2) + '-' + date.substring(3, 5);
     }
     const handleEdit = (values) => {
         const news = {
@@ -550,7 +616,7 @@ export default function Actus() {
     const handleDelete = (actu) => {
         deleteNews(actu);
     }
-    const handleCreate = (values) =>{
+    const handleCreate = (values) => {
         const news = {
             title: values.target[0].value,
             titleFR: values.target[3].value,
@@ -613,110 +679,401 @@ export default function Actus() {
     }
 
     const classes = useStyles()
-
+    const isTabletOrMobile = useMediaQuery({query: '(max-width: 1224px)'})
     return (
         <Fragment>
-            <Box className={classes.header}>
-                <Grid container className={classes.headerContent} direction={'column'} spacing={3}>
-                    <Grid item>
-                        <Typography variant={'h2'}>Actualités</Typography>
-                    </Grid>
-                    <Grid item>
-                        <form onSubmit={handleSubmit}>
-                            <Grid container direction={'row'} spacing={2}>
-                                <Grid item xs>
-                                    <TextField label="Effectuer une recherche" fullWidth/>
-                                </Grid>
-                                <Button type={'submit'}>
-                                    Rechercher
-                                </Button>
-                            </Grid>
-                        </form>
-                    </Grid>
-                    {admin === true ?
-                            <Grid item>
-                                <Button className={classes.adminButtons}
-                                        variant={"contained"} color={'primary'}
-                                        onClick={() => {
-                                            handleOpenModal3();
-                                            setSelectTypeEN('');
-                                            setSelectTypeFR('');
-                                        }}>
-                                    Ajouter une actualité
-                                </Button>
-                            </Grid> : ''}
-                </Grid>
-            </Box>
-            <Box className={classes.box1}>
-                <Grid className={classes.box1Content} container spacing={3}>
-                    {actualites.length === 0 ?
-                        <Fragment>
-                            <Grid container direction={'column'} spacing={4} display={'flex'} alignItems={'center'}>
+            {isTabletOrMobile ? (<Fragment>
+                        <Box className={classes.header}>
+                            <Grid container className={classes.headerContent} direction={'column'}>
                                 <Grid item>
-                                    <Typography variant={'h4'} color={'primary'}>
-                                        Aucun résultats correspondants à la recherche...
-                                    </Typography>
+                                    <Typography className={classes.h2Mobile}>Actualités</Typography>
                                 </Grid>
                                 <Grid item>
-                                    <Button color={'primary'} variant={'contained'} onClick={() => history.go(0)}>
-                                        Voir toutes les actualités
-                                    </Button>
+                                    <form onSubmit={handleSubmit}>
+                                        <Grid container direction={'row'} spacing={2}>
+                                            <Grid item xs>
+                                                <TextField label="Effectuer une recherche" fullWidth/>
+                                            </Grid>
+                                            <IconButton type={'submit'}>
+                                                <SearchIcon/>
+                                            </IconButton>
+                                        </Grid>
+                                    </form>
                                 </Grid>
                             </Grid>
-                        </Fragment>
-                        :
-                        <Timeline position="alternate">
+                        </Box>
+                        <Box className={classes.box1}>
+                            <Grid className={classes.box1Content} container spacing={3}>
+                                {actualites.length === 0 ?
+                                    <Fragment>
+                                        <Grid container direction={'column'} spacing={4} display={'flex'}
+                                              alignItems={'center'}>
+                                            <Grid item>
+                                                <Typography variant={'h4'} color={'primary'}>
+                                                    Aucun résultats correspondants à la recherche...
+                                                </Typography>
+                                            </Grid>
+                                            <Grid item>
+                                                <Button color={'primary'} variant={'contained'}
+                                                        onClick={() => history.go(0)}>
+                                                    Voir toutes les actualités
+                                                </Button>
+                                            </Grid>
+                                        </Grid>
+                                    </Fragment>
+                                    :
+                                    <Fragment>
+                                        <Grid container direction={'column'}>
+                                            {actualites.sort((a, b) => (a.idNews > b.idNews) ? -1 : ((b.idNews > a.idNews) ? 1 : 0)).map(actualite =>
+                                                <Grid item container justifyContent={'center'} alignItems={'center'}>
+                                                    <Card className={classes.cardMobile}
+                                                          onClick={() => history.push('/actus/' + actualite.idNews)}>
+                                                        <CardContent className={classes.cardContent}>
+                                                            <Grid container direction={'column'} spacing={1}>
+                                                                {actualite.imgFile === '' ? '' :
+                                                                    <Grid item>
+                                                                        <img src={actualite.imgFile}
+                                                                             className={classes.cardImgMobile}/>
+                                                                    </Grid>}
+                                                                <Grid item>
+                                                                    <Typography className={classes.h5Mobile}>
+                                                                        {actualite.titleFR}
+                                                                    </Typography>
+                                                                </Grid>
+                                                                <Grid item container direction={'row'} spacing={1}>
+                                                                    <Grid item>
+                                                                        <Typography className={classes.contentTextMobile}>
+                                                                            par
+                                                                        </Typography>
+                                                                    </Grid>
+                                                                    <Grid item>
+                                                                        <Typography className={classes.authorTextMobile}>
+                                                                            {actualite.author}
+                                                                        </Typography>
+                                                                    </Grid>
+                                                                    <Grid item>
+                                                                        <Typography className={classes.contentTextMobile}>
+                                                                            le
+                                                                        </Typography>
+                                                                    </Grid>
+                                                                    <Grid item>
+                                                                        <Typography className={classes.authorTextMobile}>
+                                                                            {formatDate(actualite.date)}
+                                                                        </Typography>
+                                                                    </Grid>
+                                                                </Grid>
+                                                                <Grid item>
+                                                                    <Typography className={classes.contentTextMobile}>
+                                                                        {actualite.contentFR}
+                                                                    </Typography>
+                                                                </Grid>
+                                                            </Grid>
+                                                        </CardContent>
+                                                        <CardActions className={classes.cardActions}>
+                                                            {(actualite.typeFR === '' || actualite.typeFR === null) ? '' : (
+                                                                <Button>
+                                                                    <CategoryIcon type={actualite.typeFR}/>
+                                                                    <Typography
+                                                                        className={classes.body2Mobile}>{actualite.typeFR}</Typography>
+                                                                </Button>)
+                                                            }
+                                                            {(actualite.nbCommentsFR === '' || actualite.nbCommentsFR === null) ? '' : (
+                                                                <Button>
+                                                                    <CommentOutlinedIcon className={classes.typeIcon}/>
+                                                                    <Typography
+                                                                        className={classes.body2Mobile}>{actualite.nbCommentsFR}</Typography>
+                                                                </Button>)
+                                                            }
+                                                        </CardActions>
+                                                    </Card>
+                                                </Grid>
+                                            )}
+                                        </Grid>
+                                    </Fragment>
+                                }
+                            </Grid>
+                        </Box>
+                    </Fragment>
+                    /*<Fragment>
+                <Box className={classes.box1}>
+                    <Grid className={classes.box1Content} container spacing={3}>
+                        {actualites.length === 0 ?
+                            <Fragment>
+                                <Grid container direction={'column'} spacing={4} display={'flex'} alignItems={'center'}>
+                                    <Grid item>
+                                        <Typography variant={'h4'} color={'primary'}>
+                                            Aucun résultats correspondants à la recherche...
+                                        </Typography>
+                                    </Grid>
+                                    <Grid item>
+                                        <Button color={'primary'} variant={'contained'} onClick={() => history.go(0)}>
+                                            Voir toutes les actualités
+                                        </Button>
+                                    </Grid>
+                                </Grid>
+                            </Fragment>
+                            :
+                            <Timeline position="alternate">
 
-                            {actualites.sort((a, b) => (a.idNews > b.idNews) ? -1 : ((b.idNews > a.idNews) ? 1 : 0)).map(actualite =>
-                                <Fragment>
-                                    <TimelineItem>
-                                        <TimelineOppositeContent className={classes.TLOppositeContent}>
-                                            <Typography variant={'h4'} color={'primary'}
-                                                        style={{marginLeft: '10%', marginRight: '10%'}}>
-                                                {formatDate(actualite.date)}
-                                            </Typography>
-                                        </TimelineOppositeContent>
-                                        <TimelineSeparator>
-                                            <TimelineConnector className={classes.TLSep}/>
-                                            <TimelineDot/>
-                                            <TimelineConnector className={classes.TLSep}/>
-                                        </TimelineSeparator>
-                                        <TimelineContent className={classes.TLContent}>
-                                            <Card className={classes.card}
-                                                  onClick={() => history.push('/actus/' + actualite.idNews)}>
+                                {actualites.sort((a, b) => (a.idNews > b.idNews) ? -1 : ((b.idNews > a.idNews) ? 1 : 0)).map(actualite =>
+                                    <Fragment>
+                                        <TimelineItem>
+                                            <TimelineOppositeContent className={classes.TLOppositeContent}>
+                                                <Typography variant={'h4'} color={'primary'}
+                                                            style={{marginLeft: '10%', marginRight: '10%'}}>
+                                                    {formatDate(actualite.date)}
+                                                </Typography>
+                                            </TimelineOppositeContent>
+                                            <TimelineSeparator>
+                                                <TimelineConnector className={classes.TLSep}/>
+                                                <TimelineDot/>
+                                                <TimelineConnector className={classes.TLSep}/>
+                                            </TimelineSeparator>
+                                            <TimelineContent className={classes.TLContent}>
+                                                <Card className={classes.card}
+                                                      onClick={() => history.push('/actus/' + actualite.idNews)}>
+                                                    <CardContent className={classes.cardContent}>
+                                                        {admin === true ?
+                                                            <Grid container direction={'row'}
+                                                                  className={classes.adminButtonsGrid} spacing={2}>
+                                                                <Grid item>
+                                                                    <Button className={classes.adminButtons}
+                                                                            variant={"contained"} color={'primary'}
+                                                                            onClick={(event) => {
+                                                                                handleOpenModal2();
+                                                                                handleChangeModalIndex2(actualite);
+                                                                                setSelectTypeEN(actualite.type)
+                                                                                setSelectTypeFR(actualite.typeFR)
+                                                                                event.stopPropagation();
+                                                                            }}>
+                                                                        Editer
+                                                                    </Button>
+                                                                </Grid>
+                                                                <Grid item>
+                                                                    <Button className={classes.adminButtons}
+                                                                            variant={"contained"} color={'primary'}
+                                                                            onClick={(event) => {
+                                                                                handleOpenModal();
+                                                                                handleChangeModalIndex(actualite);
+                                                                                event.stopPropagation();
+                                                                            }}>
+                                                                        Supprimer
+                                                                    </Button>
+                                                                </Grid>
+                                                            </Grid> : ''}
+                                                        {actualite.imgFile === '' ? '' : <img src={actualite.imgFile} className={classes.cardImg}/>}
+
+                                                        <Typography className={classes.titleText}>
+                                                            {actualite.titleFR}
+                                                        </Typography>
+                                                        <Grid item container direction={'row'} spacing={1}>
+                                                            <Grid item>
+                                                                <Typography className={classes.contentText}>
+                                                                    par
+                                                                </Typography>
+                                                            </Grid>
+                                                            <Grid item>
+                                                                <Typography className={classes.authorText}>
+                                                                    {actualite.author}
+                                                                </Typography>
+                                                            </Grid>
+                                                        </Grid>
+                                                        <Typography className={classes.contentText}>
+                                                            {actualite.contentFR}
+                                                        </Typography>
+                                                    </CardContent>
+                                                    <CardActions className={classes.cardActions}>
+                                                        {(actualite.typeFR === '' || actualite.typeFR === null) ? '' : (
+                                                            <Button>
+                                                                <CategoryIcon type={actualite.typeFR}/>
+                                                                <Typography
+                                                                    className={classes.contentText}>{actualite.typeFR}</Typography>
+                                                            </Button>)
+                                                        }
+                                                        {(actualite.nbCommentsFR === '' || actualite.nbCommentsFR === null) ? '' : (
+                                                            <Button>
+                                                                <CommentOutlinedIcon className={classes.typeIcon}/>
+                                                                <Typography
+                                                                    className={classes.contentText}>{actualite.nbCommentsFR}</Typography>
+                                                            </Button>)
+                                                        }
+                                                    </CardActions>
+                                                </Card>
+                                            </TimelineContent>
+                                        </TimelineItem>
+                                    </Fragment>
+                                )}
+                            </Timeline>}
+                    </Grid>
+                </Box>
+                </Fragment>*/
+                ) :
+                (
+                    <Fragment>
+                        <Box className={classes.header}>
+                            <Grid container className={classes.headerContent} direction={'column'} spacing={3}>
+                                <Grid item>
+                                    <Typography variant={'h2'}>Actualités</Typography>
+                                </Grid>
+                                <Grid item>
+                                    <form onSubmit={handleSubmit}>
+                                        <Grid container direction={'row'} spacing={2}>
+                                            <Grid item xs>
+                                                <TextField label="Effectuer une recherche" fullWidth/>
+                                            </Grid>
+                                            <Button type={'submit'}>
+                                                Rechercher
+                                            </Button>
+                                        </Grid>
+                                    </form>
+                                </Grid>
+                                {admin === true ?
+                                    <Grid item>
+                                        <Button className={classes.adminButtons}
+                                                variant={"contained"} color={'primary'}
+                                                onClick={() => {
+                                                    handleOpenModal3();
+                                                    setSelectTypeEN('');
+                                                    setSelectTypeFR('');
+                                                }}>
+                                            Ajouter une actualité
+                                        </Button>
+                                    </Grid> : ''}
+                            </Grid>
+                        </Box>
+                        <Box className={classes.box1}>
+                            <Grid className={classes.box1Content} container spacing={3}>
+                                {actualites.length === 0 ?
+                                    <Fragment>
+                                        <Grid container direction={'column'} spacing={4} display={'flex'}
+                                              alignItems={'center'}>
+                                            <Grid item>
+                                                <Typography variant={'h4'} color={'primary'}>
+                                                    Aucun résultats correspondants à la recherche...
+                                                </Typography>
+                                            </Grid>
+                                            <Grid item>
+                                                <Button color={'primary'} variant={'contained'}
+                                                        onClick={() => history.go(0)}>
+                                                    Voir toutes les actualités
+                                                </Button>
+                                            </Grid>
+                                        </Grid>
+                                    </Fragment>
+                                    :
+                                    <Timeline position="alternate">
+
+                                        {actualites.sort((a, b) => (a.idNews > b.idNews) ? -1 : ((b.idNews > a.idNews) ? 1 : 0)).map(actualite =>
+                                            <Fragment>
+                                                <TimelineItem>
+                                                    <TimelineOppositeContent className={classes.TLOppositeContent}>
+                                                        <Typography variant={'h4'} color={'primary'}
+                                                                    style={{marginLeft: '10%', marginRight: '10%'}}>
+                                                            {formatDate(actualite.date)}
+                                                        </Typography>
+                                                    </TimelineOppositeContent>
+                                                    <TimelineSeparator>
+                                                        <TimelineConnector className={classes.TLSep}/>
+                                                        <TimelineDot/>
+                                                        <TimelineConnector className={classes.TLSep}/>
+                                                    </TimelineSeparator>
+                                                    <TimelineContent className={classes.TLContent}>
+                                                        <Card className={classes.card}
+                                                              onClick={() => history.push('/actus/' + actualite.idNews)}>
+                                                            <CardContent className={classes.cardContent}>
+                                                                {admin === true ?
+                                                                    <Grid container direction={'row'}
+                                                                          className={classes.adminButtonsGrid}
+                                                                          spacing={2}>
+                                                                        <Grid item>
+                                                                            <Button className={classes.adminButtons}
+                                                                                    variant={"contained"}
+                                                                                    color={'primary'}
+                                                                                    onClick={(event) => {
+                                                                                        handleOpenModal2();
+                                                                                        handleChangeModalIndex2(actualite);
+                                                                                        setSelectTypeEN(actualite.type)
+                                                                                        setSelectTypeFR(actualite.typeFR)
+                                                                                        event.stopPropagation();
+                                                                                    }}>
+                                                                                Editer
+                                                                            </Button>
+                                                                        </Grid>
+                                                                        <Grid item>
+                                                                            <Button className={classes.adminButtons}
+                                                                                    variant={"contained"}
+                                                                                    color={'primary'}
+                                                                                    onClick={(event) => {
+                                                                                        handleOpenModal();
+                                                                                        handleChangeModalIndex(actualite);
+                                                                                        event.stopPropagation();
+                                                                                    }}>
+                                                                                Supprimer
+                                                                            </Button>
+                                                                        </Grid>
+                                                                    </Grid> : ''}
+                                                                {actualite.imgFile === '' ? '' :
+                                                                    <img src={actualite.imgFile}
+                                                                         className={classes.cardImg}/>}
+
+                                                                <Typography className={classes.titleText}>
+                                                                    {actualite.titleFR}
+                                                                </Typography>
+                                                                <Grid item container direction={'row'} spacing={1}>
+                                                                    <Grid item>
+                                                                        <Typography className={classes.contentText}>
+                                                                            par
+                                                                        </Typography>
+                                                                    </Grid>
+                                                                    <Grid item>
+                                                                        <Typography className={classes.authorText}>
+                                                                            {actualite.author}
+                                                                        </Typography>
+                                                                    </Grid>
+                                                                </Grid>
+                                                                <Typography className={classes.contentText}>
+                                                                    {actualite.contentFR}
+                                                                </Typography>
+                                                            </CardContent>
+                                                            <CardActions className={classes.cardActions}>
+                                                                {(actualite.typeFR === '' || actualite.typeFR === null) ? '' : (
+                                                                    <Button>
+                                                                        <CategoryIcon type={actualite.typeFR}/>
+                                                                        <Typography
+                                                                            className={classes.contentText}>{actualite.typeFR}</Typography>
+                                                                    </Button>)
+                                                                }
+                                                                {(actualite.nbCommentsFR === '' || actualite.nbCommentsFR === null) ? '' : (
+                                                                    <Button>
+                                                                        <CommentOutlinedIcon
+                                                                            className={classes.typeIcon}/>
+                                                                        <Typography
+                                                                            className={classes.contentText}>{actualite.nbCommentsFR}</Typography>
+                                                                    </Button>)
+                                                                }
+                                                            </CardActions>
+                                                        </Card>
+                                                    </TimelineContent>
+                                                </TimelineItem>
+                                            </Fragment>
+                                        )}
+                                    </Timeline>}
+                                <Modal open={openModal}
+                                       onClose={handleCloseModal}>
+                                    <Grid container direction={'column'} className={classes.modal} spacing={4}
+                                          justifyContent={'center'} alignItems={'center'}>
+                                        <Grid item>
+                                            <Typography variant={'h5'} align={'center'}>Êtes-vous sûr de vouloir
+                                                supprimer cette
+                                                actualité?</Typography>
+                                        </Grid>
+                                        <Grid item container justifyContent={'center'} alignItems={'center'}>
+                                            <Card className={classes.smallCard}>
                                                 <CardContent className={classes.cardContent}>
-                                                    {admin === true ?
-                                                        <Grid container direction={'row'}
-                                                              className={classes.adminButtonsGrid} spacing={2}>
-                                                            <Grid item>
-                                                                <Button className={classes.adminButtons}
-                                                                        variant={"contained"} color={'primary'}
-                                                                        onClick={(event) => {
-                                                                            handleOpenModal2();
-                                                                            handleChangeModalIndex2(actualite);
-                                                                            setSelectTypeEN(actualite.type)
-                                                                            setSelectTypeFR(actualite.typeFR)
-                                                                            event.stopPropagation();
-                                                                        }}>
-                                                                    Editer
-                                                                </Button>
-                                                            </Grid>
-                                                            <Grid item>
-                                                                <Button className={classes.adminButtons}
-                                                                        variant={"contained"} color={'primary'}
-                                                                        onClick={(event) => {
-                                                                            handleOpenModal();
-                                                                            handleChangeModalIndex(actualite);
-                                                                            event.stopPropagation();
-                                                                        }}>
-                                                                    Supprimer
-                                                                </Button>
-                                                            </Grid>
-                                                        </Grid> : ''}
-                                                    {actualite.imgFile === '' ? '' : <img src={actualite.imgFile} className={classes.cardImg}/>}
+                                                    <img src={modalIndex.imgFile} className={classes.smallCardImg}/>
 
-                                                    <Typography className={classes.titleText}>
-                                                        {actualite.titleFR}
+                                                    <Typography className={classes.smallTitleText}>
+                                                        {modalIndex.titleFR}
                                                     </Typography>
                                                     <Grid item container direction={'row'} spacing={1}>
                                                         <Grid item>
@@ -726,320 +1083,299 @@ export default function Actus() {
                                                         </Grid>
                                                         <Grid item>
                                                             <Typography className={classes.authorText}>
-                                                                {actualite.author}
+                                                                {modalIndex.author}
                                                             </Typography>
                                                         </Grid>
                                                     </Grid>
                                                     <Typography className={classes.contentText}>
-                                                        {actualite.contentFR}
+                                                        {modalIndex.contentFR}
                                                     </Typography>
                                                 </CardContent>
-                                                <CardActions className={classes.cardActions}>
-                                                    {(actualite.typeFR === '' || actualite.typeFR === null) ? '' : (
-                                                        <Button>
-                                                            <CategoryIcon type={actualite.typeFR}/>
-                                                            <Typography
-                                                                className={classes.contentText}>{actualite.typeFR}</Typography>
-                                                        </Button>)
-                                                    }
-                                                    {(actualite.nbCommentsFR === '' || actualite.nbCommentsFR === null) ? '' : (
-                                                        <Button>
-                                                            <CommentOutlinedIcon className={classes.typeIcon}/>
-                                                            <Typography
-                                                                className={classes.contentText}>{actualite.nbCommentsFR}</Typography>
-                                                        </Button>)
-                                                    }
-                                                </CardActions>
                                             </Card>
-                                        </TimelineContent>
-                                    </TimelineItem>
-                                </Fragment>
-                            )}
-                        </Timeline>}
-                    <Modal open={openModal}
-                           onClose={handleCloseModal}>
-                        <Grid container direction={'column'} className={classes.modal} spacing={4}
-                              justifyContent={'center'} alignItems={'center'}>
-                            <Grid item>
-                                <Typography variant={'h5'} align={'center'}>Êtes-vous sûr de vouloir supprimer cette
-                                    actualité?</Typography>
-                            </Grid>
-                            <Grid item container justifyContent={'center'} alignItems={'center'}>
-                                <Card className={classes.smallCard}>
-                                    <CardContent className={classes.cardContent}>
-                                        <img src={modalIndex.imgFile} className={classes.smallCardImg}/>
-
-                                        <Typography className={classes.smallTitleText}>
-                                            {modalIndex.titleFR}
-                                        </Typography>
-                                        <Grid item container direction={'row'} spacing={1}>
+                                        </Grid>
+                                        <Grid item container direction={'row'} justifyContent={'space-around'}>
                                             <Grid item>
-                                                <Typography className={classes.contentText}>
-                                                    par
-                                                </Typography>
+                                                <Button variant={'contained'} className={classes.modalValidateButton}
+                                                        startIcon={<CheckIcon/>}
+                                                        onClick={() => handleDelete(modalIndex)}>Oui</Button>
                                             </Grid>
                                             <Grid item>
-                                                <Typography className={classes.authorText}>
-                                                    {modalIndex.author}
-                                                </Typography>
+                                                <Button variant={'contained'} className={classes.modalCancelButton}
+                                                        startIcon={<CloseIcon/>}
+                                                        onClick={() => handleCloseModal()}>Non</Button>
                                             </Grid>
                                         </Grid>
-                                        <Typography className={classes.contentText}>
-                                            {modalIndex.contentFR}
-                                        </Typography>
-                                    </CardContent>
-                                </Card>
-                            </Grid>
-                            <Grid item container direction={'row'} justifyContent={'space-around'}>
-                                <Grid item>
-                                    <Button variant={'contained'} className={classes.modalValidateButton}
-                                            startIcon={<CheckIcon/>}
-                                            onClick={() => handleDelete(modalIndex)}>Oui</Button>
-                                </Grid>
-                                <Grid item>
-                                    <Button variant={'contained'} className={classes.modalCancelButton}
-                                            startIcon={<CloseIcon/>} onClick={() => handleCloseModal()}>Non</Button>
-                                </Grid>
-                            </Grid>
-                        </Grid>
-                    </Modal>
-                    <Modal open={openModal2}
-                           onClose={handleCloseModal2}
-                    >
-                        <div className={classes.modalEdit}>
-                            <div  className={classes.modalHeader}>
-                                <Typography variant={'h5'} align={'center'}>Edition de l'actualité</Typography>
-                                <Typography className={classes.miniText} >Attention : si tu upload une image et que tu rentres une valeur pour le champ "Image Existante", seule l'image uploadée sera prise en compte!</Typography>
-                                <Typography className={classes.miniText} >Si tu changes le contenu d'un champ en une valeur vide, celle-ci ne sera pas prise en compte</Typography>
-                            </div>
-                            <div className={classes.modalScrollable}>
-                                <Grid container direction={'column'} spacing={4}>
-                                    <Grid item>
-                                        <form onSubmit={handleEdit} id={'editNews'}>
-                                            <Grid container direction={'column'} spacing={2}>
+                                    </Grid>
+                                </Modal>
+                                <Modal open={openModal2}
+                                       onClose={handleCloseModal2}
+                                >
+                                    <div className={classes.modalEdit}>
+                                        <div className={classes.modalHeader}>
+                                            <Typography variant={'h5'} align={'center'}>Edition de
+                                                l'actualité</Typography>
+                                            <Typography className={classes.miniText}>Attention : si tu upload une image
+                                                et que tu rentres une valeur pour le champ "Image Existante", seule
+                                                l'image uploadée sera prise en compte!</Typography>
+                                            <Typography className={classes.miniText}>Si tu changes le contenu d'un champ
+                                                en une valeur vide, celle-ci ne sera pas prise en compte</Typography>
+                                        </div>
+                                        <div className={classes.modalScrollable}>
+                                            <Grid container direction={'column'} spacing={4}>
                                                 <Grid item>
-                                                    <Typography className={classes.contentText}>Titre
-                                                        Anglais</Typography>
-                                                    <TextField fullWidth multiline variant={'outlined'}
-                                                               margin={'normal'} defaultValue={modalIndex2.title}
-                                                               InputProps={{classes: {input: classes.textField}}}/>
-                                                </Grid>
-                                                <Grid item>
-                                                    <Typography className={classes.contentText}>Titre
-                                                        Français</Typography>
-                                                    <TextField fullWidth multiline variant={'outlined'}
-                                                               margin={'normal'} defaultValue={modalIndex2.titleFR}
-                                                               InputProps={{classes: {input: classes.textField}}}/>
-                                                </Grid>
-                                                <Grid item>
-                                                    <Typography className={classes.contentText}>Contenu
-                                                        Anglais</Typography>
-                                                    <TextField fullWidth multiline variant={'outlined'}
-                                                               margin={'normal'} defaultValue={modalIndex2.content}
-                                                               InputProps={{classes: {input: classes.textField}}}/>
-                                                </Grid>
-                                                <Grid item>
-                                                    <Typography className={classes.contentText}>Contenu
-                                                        Français</Typography>
-                                                    <TextField fullWidth multiline variant={'outlined'}
-                                                               margin={'normal'} defaultValue={modalIndex2.contentFR}
-                                                               InputProps={{classes: {input: classes.textField}}}/>
-                                                </Grid>
-                                                <Grid item>
-                                                    <Typography className={classes.contentText}>Auteur</Typography>
-                                                    <TextField fullWidth multiline variant={'outlined'}
-                                                               margin={'normal'} defaultValue={modalIndex2.author}
-                                                               InputProps={{classes: {input: classes.textField}}}/>
-                                                </Grid>
-                                                <Grid item>
-                                                    <Typography className={classes.contentText}>Datepicker</Typography>
-                                                    <LocalizationProvider dateAdapter={AdapterDateFns}>
-                                                        <DatePicker
-                                                            value={datePickerValue}
-                                                            onChange={(newValue) => {
-                                                                setDatePickerValue(newValue);
-                                                            }}
-                                                            renderInput={(params) => <TextField {...params} />}
-                                                        />
-                                                    </LocalizationProvider>
-                                                </Grid>
-                                                <Grid item>
-                                                    <Typography className={classes.contentText}>Type
-                                                        Anglais</Typography>
-                                                    <Select fullWidth variant={'outlined'}
-                                                            margin={'normal'}
-                                                            InputProps={{classes: {input: classes.textField}}}
-                                                            value={selectTypeEN}
-                                                            onChange={handleSelectTypeEN}>
-                                                        {typesEN.map(type =>
-                                                            <MenuItem value={type}>{type}</MenuItem>
-                                                        )}
-                                                    </Select>
-                                                </Grid>
-                                                <Grid item>
-                                                    <Typography className={classes.contentText}>Type
-                                                        Français</Typography>
-                                                    <Select fullWidth variant={'outlined'}
-                                                            margin={'normal'}
-                                                            InputProps={{classes: {input: classes.textField}}}
-                                                            value={selectTypeFR}
-                                                            onChange={handleSelectTypeFR}>
-                                                        {typesFR.map(type =>
-                                                            <MenuItem value={type}>{type}</MenuItem>
-                                                        )}
-                                                    </Select>
-                                                </Grid>
-                                                <Grid item>
-                                                    <Typography className={classes.contentText}>Image</Typography>
-                                                    <TextField fullWidth multiline variant={'outlined'}
-                                                               margin={'normal'} defaultValue={modalIndex2.img}
-                                                               InputProps={{classes: {input: classes.textField}}}/>
-                                                </Grid>
-                                                <Grid item>
-                                                    <Typography className={classes.contentText}>Uploader une image</Typography>
-                                                    <input
-                                                        type="file"
-                                                    />
+                                                    <form onSubmit={handleEdit} id={'editNews'}>
+                                                        <Grid container direction={'column'} spacing={2}>
+                                                            <Grid item>
+                                                                <Typography className={classes.contentText}>Titre
+                                                                    Anglais</Typography>
+                                                                <TextField fullWidth multiline variant={'outlined'}
+                                                                           margin={'normal'}
+                                                                           defaultValue={modalIndex2.title}
+                                                                           InputProps={{classes: {input: classes.textField}}}/>
+                                                            </Grid>
+                                                            <Grid item>
+                                                                <Typography className={classes.contentText}>Titre
+                                                                    Français</Typography>
+                                                                <TextField fullWidth multiline variant={'outlined'}
+                                                                           margin={'normal'}
+                                                                           defaultValue={modalIndex2.titleFR}
+                                                                           InputProps={{classes: {input: classes.textField}}}/>
+                                                            </Grid>
+                                                            <Grid item>
+                                                                <Typography className={classes.contentText}>Contenu
+                                                                    Anglais</Typography>
+                                                                <TextField fullWidth multiline variant={'outlined'}
+                                                                           margin={'normal'}
+                                                                           defaultValue={modalIndex2.content}
+                                                                           InputProps={{classes: {input: classes.textField}}}/>
+                                                            </Grid>
+                                                            <Grid item>
+                                                                <Typography className={classes.contentText}>Contenu
+                                                                    Français</Typography>
+                                                                <TextField fullWidth multiline variant={'outlined'}
+                                                                           margin={'normal'}
+                                                                           defaultValue={modalIndex2.contentFR}
+                                                                           InputProps={{classes: {input: classes.textField}}}/>
+                                                            </Grid>
+                                                            <Grid item>
+                                                                <Typography
+                                                                    className={classes.contentText}>Auteur</Typography>
+                                                                <TextField fullWidth multiline variant={'outlined'}
+                                                                           margin={'normal'}
+                                                                           defaultValue={modalIndex2.author}
+                                                                           InputProps={{classes: {input: classes.textField}}}/>
+                                                            </Grid>
+                                                            <Grid item>
+                                                                <Typography
+                                                                    className={classes.contentText}>Datepicker</Typography>
+                                                                <LocalizationProvider dateAdapter={AdapterDateFns}>
+                                                                    <DatePicker
+                                                                        value={datePickerValue}
+                                                                        onChange={(newValue) => {
+                                                                            setDatePickerValue(newValue);
+                                                                        }}
+                                                                        renderInput={(params) =>
+                                                                            <TextField {...params} />}
+                                                                    />
+                                                                </LocalizationProvider>
+                                                            </Grid>
+                                                            <Grid item>
+                                                                <Typography className={classes.contentText}>Type
+                                                                    Anglais</Typography>
+                                                                <Select fullWidth variant={'outlined'}
+                                                                        margin={'normal'}
+                                                                        InputProps={{classes: {input: classes.textField}}}
+                                                                        value={selectTypeEN}
+                                                                        onChange={handleSelectTypeEN}>
+                                                                    {typesEN.map(type =>
+                                                                        <MenuItem value={type}>{type}</MenuItem>
+                                                                    )}
+                                                                </Select>
+                                                            </Grid>
+                                                            <Grid item>
+                                                                <Typography className={classes.contentText}>Type
+                                                                    Français</Typography>
+                                                                <Select fullWidth variant={'outlined'}
+                                                                        margin={'normal'}
+                                                                        InputProps={{classes: {input: classes.textField}}}
+                                                                        value={selectTypeFR}
+                                                                        onChange={handleSelectTypeFR}>
+                                                                    {typesFR.map(type =>
+                                                                        <MenuItem value={type}>{type}</MenuItem>
+                                                                    )}
+                                                                </Select>
+                                                            </Grid>
+                                                            <Grid item>
+                                                                <Typography
+                                                                    className={classes.contentText}>Image</Typography>
+                                                                <TextField fullWidth multiline variant={'outlined'}
+                                                                           margin={'normal'}
+                                                                           defaultValue={modalIndex2.img}
+                                                                           InputProps={{classes: {input: classes.textField}}}/>
+                                                            </Grid>
+                                                            <Grid item>
+                                                                <Typography className={classes.contentText}>Uploader une
+                                                                    image</Typography>
+                                                                <input
+                                                                    type="file"
+                                                                />
+                                                            </Grid>
+                                                        </Grid>
+                                                    </form>
                                                 </Grid>
                                             </Grid>
-                                        </form>
-                                    </Grid>
-                                </Grid>
-                            </div>
-                            <div className={classes.modalButtons}>
-                                <Grid container direction={'row'} justifyContent={'space-around'}>
-                                    <Grid item>
-                                        <Button variant={'contained'} className={classes.modalSmallValidateButton}
-                                                startIcon={<CheckIcon/>} type={'submit'} form={'editNews'}>Valider les changements</Button>
-                                    </Grid>
-                                    <Grid item>
-                                        <Button variant={'contained'} className={classes.modalSmallCancelButton}
-                                                startIcon={<CloseIcon/>}
-                                                onClick={() => handleCloseModal2()}>Annuler</Button>
-                                    </Grid>
-                                </Grid>
-                            </div>
-                        </div>
-                    </Modal>
-                    <Modal open={openModal3}
-                           onClose={handleCloseModal3}
-                    >
-                        <div className={classes.modalEdit}>
-                            <div  className={classes.modalHeader}>
-                                <Typography variant={'h5'} align={'center'}>Ajouter une actualité</Typography>
-                                <Typography className={classes.miniText} >Attention : si tu upload une image et que tu rentres une valeur pour le champ "Image Existante", seule l'image uploadée sera prise en compte!</Typography>
-                            </div>
-                            <div className={classes.modalScrollable}>
-                                <Grid container direction={'column'} spacing={4}>
-                                    <Grid item>
-                                        <form onSubmit={handleCreate} id={'createNews'}>
-                                            <Grid container direction={'column'} spacing={2}>
+                                        </div>
+                                        <div className={classes.modalButtons}>
+                                            <Grid container direction={'row'} justifyContent={'space-around'}>
                                                 <Grid item>
-                                                    <Typography className={classes.contentText}>Titre
-                                                        Anglais</Typography>
-                                                    <TextField fullWidth multiline variant={'outlined'}
-                                                               margin={'normal'}
-                                                               InputProps={{classes: {input: classes.textField}}}/>
+                                                    <Button variant={'contained'}
+                                                            className={classes.modalSmallValidateButton}
+                                                            startIcon={<CheckIcon/>} type={'submit'} form={'editNews'}>Valider
+                                                        les changements</Button>
                                                 </Grid>
                                                 <Grid item>
-                                                    <Typography className={classes.contentText}>Titre
-                                                        Français</Typography>
-                                                    <TextField fullWidth multiline variant={'outlined'}
-                                                               margin={'normal'}
-                                                               InputProps={{classes: {input: classes.textField}}}/>
-                                                </Grid>
-                                                <Grid item>
-                                                    <Typography className={classes.contentText}>Contenu
-                                                        Anglais</Typography>
-                                                    <TextField fullWidth multiline variant={'outlined'}
-                                                               margin={'normal'}
-                                                               InputProps={{classes: {input: classes.textField}}}/>
-                                                </Grid>
-                                                <Grid item>
-                                                    <Typography className={classes.contentText}>Contenu
-                                                        Français</Typography>
-                                                    <TextField fullWidth multiline variant={'outlined'}
-                                                               margin={'normal'}
-                                                               InputProps={{classes: {input: classes.textField}}}/>
-                                                </Grid>
-                                                <Grid item>
-                                                    <Typography className={classes.contentText}>Auteur</Typography>
-                                                    <TextField fullWidth multiline variant={'outlined'}
-                                                               margin={'normal'}
-                                                               InputProps={{classes: {input: classes.textField}}}/>
-                                                </Grid>
-                                                <Grid item>
-                                                    <Typography className={classes.contentText}>Datepicker</Typography>
-                                                    <LocalizationProvider dateAdapter={AdapterDateFns}>
-                                                        <DatePicker
-                                                            value={datePickerValue2}
-                                                            onChange={(newValue) => {
-                                                                setDatePickerValue2(newValue);
-                                                            }}
-                                                            renderInput={(params) => <TextField {...params} />}
-                                                        />
-                                                    </LocalizationProvider>
-                                                </Grid>
-                                                <Grid item>
-                                                    <Typography className={classes.contentText}>Type
-                                                        Anglais</Typography>
-                                                    <Select fullWidth variant={'outlined'}
-                                                               margin={'normal'}
-                                                               InputProps={{classes: {input: classes.textField}}}
-                                                            value={selectTypeEN}
-                                                                onChange={handleSelectTypeEN}>
-                                                        {typesEN.map(type =>
-                                                            <MenuItem value={type}>{type}</MenuItem>
-                                                        )}
-                                                    </Select>
-                                                </Grid>
-                                                <Grid item>
-                                                    <Typography className={classes.contentText}>Type
-                                                        Français</Typography>
-                                                    <Select fullWidth variant={'outlined'}
-                                                            margin={'normal'}
-                                                            InputProps={{classes: {input: classes.textField}}}
-                                                            value={selectTypeFR}
-                                                            onChange={handleSelectTypeFR}>
-                                                        {typesFR.map(type =>
-                                                            <MenuItem value={type}>{type}</MenuItem>
-                                                        )}
-                                                    </Select>
-                                                </Grid>
-                                                <Grid item>
-                                                    <Typography className={classes.contentText}>Image existante</Typography>
-                                                    <TextField fullWidth multiline variant={'outlined'}
-                                                               margin={'normal'}
-                                                               InputProps={{classes: {input: classes.textField}}}/>
-                                                </Grid>
-                                                <Grid item>
-                                                    <Typography className={classes.contentText}>Uploader une image</Typography>
-                                                    <input
-                                                        type="file"
-                                                    />
+                                                    <Button variant={'contained'}
+                                                            className={classes.modalSmallCancelButton}
+                                                            startIcon={<CloseIcon/>}
+                                                            onClick={() => handleCloseModal2()}>Annuler</Button>
                                                 </Grid>
                                             </Grid>
-                                        </form>
-                                    </Grid>
-                                </Grid>
-                            </div>
-                            <div className={classes.modalButtons}>
-                                <Grid container direction={'row'} justifyContent={'space-around'}>
-                                    <Grid item>
-                                        <Button variant={'contained'} className={classes.modalSmallValidateButton}
-                                                startIcon={<CheckIcon/>} type={'submit'} form={'createNews'}>Valider</Button>
-                                    </Grid>
-                                    <Grid item>
-                                        <Button variant={'contained'} className={classes.modalSmallCancelButton}
-                                                startIcon={<CloseIcon/>}
-                                                onClick={() => handleCloseModal3()}>Annuler</Button>
-                                    </Grid>
-                                </Grid>
-                            </div>
-                        </div>
-                    </Modal>
-                </Grid>
-            </Box>
+                                        </div>
+                                    </div>
+                                </Modal>
+                                <Modal open={openModal3}
+                                       onClose={handleCloseModal3}
+                                >
+                                    <div className={classes.modalEdit}>
+                                        <div className={classes.modalHeader}>
+                                            <Typography variant={'h5'} align={'center'}>Ajouter une
+                                                actualité</Typography>
+                                            <Typography className={classes.miniText}>Attention : si tu upload une image
+                                                et que tu rentres une valeur pour le champ "Image Existante", seule
+                                                l'image uploadée sera prise en compte!</Typography>
+                                        </div>
+                                        <div className={classes.modalScrollable}>
+                                            <Grid container direction={'column'} spacing={4}>
+                                                <Grid item>
+                                                    <form onSubmit={handleCreate} id={'createNews'}>
+                                                        <Grid container direction={'column'} spacing={2}>
+                                                            <Grid item>
+                                                                <Typography className={classes.contentText}>Titre
+                                                                    Anglais</Typography>
+                                                                <TextField fullWidth multiline variant={'outlined'}
+                                                                           margin={'normal'}
+                                                                           InputProps={{classes: {input: classes.textField}}}/>
+                                                            </Grid>
+                                                            <Grid item>
+                                                                <Typography className={classes.contentText}>Titre
+                                                                    Français</Typography>
+                                                                <TextField fullWidth multiline variant={'outlined'}
+                                                                           margin={'normal'}
+                                                                           InputProps={{classes: {input: classes.textField}}}/>
+                                                            </Grid>
+                                                            <Grid item>
+                                                                <Typography className={classes.contentText}>Contenu
+                                                                    Anglais</Typography>
+                                                                <TextField fullWidth multiline variant={'outlined'}
+                                                                           margin={'normal'}
+                                                                           InputProps={{classes: {input: classes.textField}}}/>
+                                                            </Grid>
+                                                            <Grid item>
+                                                                <Typography className={classes.contentText}>Contenu
+                                                                    Français</Typography>
+                                                                <TextField fullWidth multiline variant={'outlined'}
+                                                                           margin={'normal'}
+                                                                           InputProps={{classes: {input: classes.textField}}}/>
+                                                            </Grid>
+                                                            <Grid item>
+                                                                <Typography
+                                                                    className={classes.contentText}>Auteur</Typography>
+                                                                <TextField fullWidth multiline variant={'outlined'}
+                                                                           margin={'normal'}
+                                                                           InputProps={{classes: {input: classes.textField}}}/>
+                                                            </Grid>
+                                                            <Grid item>
+                                                                <Typography
+                                                                    className={classes.contentText}>Datepicker</Typography>
+                                                                <LocalizationProvider dateAdapter={AdapterDateFns}>
+                                                                    <DatePicker
+                                                                        value={datePickerValue2}
+                                                                        onChange={(newValue) => {
+                                                                            setDatePickerValue2(newValue);
+                                                                        }}
+                                                                        renderInput={(params) =>
+                                                                            <TextField {...params} />}
+                                                                    />
+                                                                </LocalizationProvider>
+                                                            </Grid>
+                                                            <Grid item>
+                                                                <Typography className={classes.contentText}>Type
+                                                                    Anglais</Typography>
+                                                                <Select fullWidth variant={'outlined'}
+                                                                        margin={'normal'}
+                                                                        InputProps={{classes: {input: classes.textField}}}
+                                                                        value={selectTypeEN}
+                                                                        onChange={handleSelectTypeEN}>
+                                                                    {typesEN.map(type =>
+                                                                        <MenuItem value={type}>{type}</MenuItem>
+                                                                    )}
+                                                                </Select>
+                                                            </Grid>
+                                                            <Grid item>
+                                                                <Typography className={classes.contentText}>Type
+                                                                    Français</Typography>
+                                                                <Select fullWidth variant={'outlined'}
+                                                                        margin={'normal'}
+                                                                        InputProps={{classes: {input: classes.textField}}}
+                                                                        value={selectTypeFR}
+                                                                        onChange={handleSelectTypeFR}>
+                                                                    {typesFR.map(type =>
+                                                                        <MenuItem value={type}>{type}</MenuItem>
+                                                                    )}
+                                                                </Select>
+                                                            </Grid>
+                                                            <Grid item>
+                                                                <Typography className={classes.contentText}>Image
+                                                                    existante</Typography>
+                                                                <TextField fullWidth multiline variant={'outlined'}
+                                                                           margin={'normal'}
+                                                                           InputProps={{classes: {input: classes.textField}}}/>
+                                                            </Grid>
+                                                            <Grid item>
+                                                                <Typography className={classes.contentText}>Uploader une
+                                                                    image</Typography>
+                                                                <input
+                                                                    type="file"
+                                                                />
+                                                            </Grid>
+                                                        </Grid>
+                                                    </form>
+                                                </Grid>
+                                            </Grid>
+                                        </div>
+                                        <div className={classes.modalButtons}>
+                                            <Grid container direction={'row'} justifyContent={'space-around'}>
+                                                <Grid item>
+                                                    <Button variant={'contained'}
+                                                            className={classes.modalSmallValidateButton}
+                                                            startIcon={<CheckIcon/>} type={'submit'}
+                                                            form={'createNews'}>Valider</Button>
+                                                </Grid>
+                                                <Grid item>
+                                                    <Button variant={'contained'}
+                                                            className={classes.modalSmallCancelButton}
+                                                            startIcon={<CloseIcon/>}
+                                                            onClick={() => handleCloseModal3()}>Annuler</Button>
+                                                </Grid>
+                                            </Grid>
+                                        </div>
+                                    </div>
+                                </Modal>
+                            </Grid>
+                        </Box>
+                    </Fragment>
+                )
+            }
         </Fragment>
     );
 }

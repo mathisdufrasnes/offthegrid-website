@@ -25,6 +25,7 @@ import c2 from '../media/c2.jpg'
 import c3 from '../media/c3.png'
 import c4 from '../media/c4.png'
 import useAuth from "../hooks/useAuth";
+import {useMediaQuery} from "react-responsive";
 
 const useStyles = makeStyles((theme) => ({
     root:
@@ -50,6 +51,16 @@ const useStyles = makeStyles((theme) => ({
         margin: '5%',
         padding: '2%'
     },
+    box1ContentMobile:{
+        width: '90vw',
+        borderRadius: '35px',
+        background: 'rgba(252, 252, 252, 0.87)',
+        display: "flex",
+        justifyContent: 'center',
+        alignItems: 'center',
+        margin: '5%',
+        padding: '2%'
+    },
     customDiv: {
         paddingTop: '5px',
         backgroundColor: '#000000',
@@ -57,15 +68,22 @@ const useStyles = makeStyles((theme) => ({
         borderRadius: '15px',
         marginBottom: '5%'
     },
+    customDivMobile: {
+        paddingTop: '5px',
+        background: '#000000',
+        width: '80%',
+        borderRadius: '15px',
+        marginBottom: '5%'
+    },
     customDiv2: {
-        paddingTop:'5px',
+        paddingTop: '5px',
         backgroundColor: '#000000',
         width: '20%',
         borderRadius: '15px',
         marginBottom: '5%'
     },
     customDiv2White: {
-        paddingTop:'5px',
+        paddingTop: '5px',
         backgroundColor: '#ffffff',
         width: '20%',
         borderRadius: '15px',
@@ -80,6 +98,12 @@ const useStyles = makeStyles((theme) => ({
     },
     box2Content: {
         width: '50vw',
+        display: "flex",
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    box2ContentMobile: {
+        width: '90vw',
         display: "flex",
         justifyContent: 'center',
         alignItems: 'center',
@@ -127,9 +151,16 @@ const useStyles = makeStyles((theme) => ({
     profileImg: {
         width: '65%',
     },
+    profileImgMobile: {
+        width: '20vmax',
+    },
     partnerImg: {
         objectFit: 'contain',
         maxWidth: '60%',
+    },
+    partnerImgMobile: {
+        objectFit: 'contain',
+        maxWidth: '80%',
     },
     textNom: {
         fontFamily: 'Montserrat-Bold',
@@ -149,7 +180,51 @@ const useStyles = makeStyles((theme) => ({
     },
     comiteImg: {
         maxWidth: '25vh',
-    }
+    },
+    comiteImgMobile: {
+        width: '15vmax',
+    },
+    h1Mobile: {
+        fontSize: '5vmax',
+        fontFamily: 'Montserrat-Bold',
+    },
+
+    h2Mobile: {
+        fontSize: '4.5vmax',
+        fontFamily: 'Montserrat-Bold',
+    },
+
+    h3Mobile: {
+        fontSize: '4vmax',
+        fontFamily: 'Montserrat-Bold',
+    },
+
+    h4Mobile: {
+        fontSize: '3.5vmax',
+        fontFamily: 'Montserrat-Bold',
+    },
+    h5Mobile: {
+        fontSize: '3vmax',
+        fontFamily: 'Montserrat-Bold',
+    },
+
+    h6Mobile: {
+        fontSize: '2.5vmax',
+        fontFamily: 'Montserrat-SemiBold',
+    },
+    body1Mobile: {
+        fontSize: '2vmax',
+        fontFamily: 'Montserrat-Regular',
+    },
+
+    body2Mobile: {
+        fontSize: '2.5vmax',
+        fontFamily: 'Montserrat-Light',
+    },
+    body3Mobile: {
+        fontSize: '2.5vmax',
+        fontFamily: 'Montserrat-Medium',
+    },
 }));
 
 export default function EquipeEN() {
@@ -227,7 +302,7 @@ export default function EquipeEN() {
     }
     const profils = [profil1, profil2, profil3, profil4, profil5]
     const partenaires = [part1, part2, part3, part4]
-    const clients = [client1,client2,client3,client4,client5,client6]
+    const clients = [client1, client2, client3, client4, client5, client6]
     const comiteAdviseurs = [comite1, comite2, comite3, comite4]
     const [admin, setAdmin] = useState(false);
     const {currentUser} = useAuth()
@@ -238,7 +313,133 @@ export default function EquipeEN() {
             }
         }
     });
+    const isTabletOrMobile = useMediaQuery({query: '(max-width: 1224px)'})
     return (
+        <Fragment>
+            {isTabletOrMobile ? (<Fragment>
+                <Box className={classes.box1}>
+                    <Grid container className={classes.box1ContentMobile} direction={'column'} spacing={5}>
+                        <Grid item>
+                            <Typography className={classes.h3Mobile} align={'center'}>
+                                About Off The Grid inc.
+                            </Typography>
+                        </Grid>
+                        <Divider classes={{root: classes.customDivMobile}}/>
+                        <Grid item>
+                            <Typography className={classes.h6Mobile} align={'center'}>
+                                At Off The Grid, we believe physical training is an untapped source of energy. We launched the company with a specific objective: to reduce the ecological footprint of every workout! With this goal in mind, our team is pushing the boundaries of technology, while advocating the daily use of renewable energy.
+                            </Typography>
+                        </Grid>
+                    </Grid>
+                </Box>
+                <Box className={classes.box2}>
+                    <Grid container className={classes.box2ContentMobile} direction={'column'} spacing={3}>
+                        <Grid item justifyContent={'center'}>
+                            <Typography  className={classes.h3Mobile} align={'center'}>
+                                Our team
+                            </Typography>
+                        </Grid>
+                        <Divider classes={{root: classes.customDivMobile}}/>
+                        <Grid item container direction={'column'} justifyContent={'center'}
+                              alignItems={'center'} spacing={5}>
+                            {profils.map(profil =>
+                                <Grid item container direction={'column'} display={'flex'}
+                                      justifyContent={'center'}
+                                      alignItems={'center'} spacing={1}>
+                                    <Grid item className={classes.profileGrid}>
+                                        <img src={profil.img} className={classes.profileImgMobile}/>
+                                    </Grid>
+                                    <Grid item>
+                                        <Typography className={classes.h6Mobile}
+                                                    align={'center'}>{profil.prenom} {profil.nom}</Typography>
+                                    </Grid>
+                                    <Grid item>
+                                        <Typography className={classes.body2Mobile}
+                                                    align={'center'}>{profil.poste}</Typography>
+                                    </Grid>
+                                    <Grid item>
+                                        <Typography className={classes.body2Mobile}
+                                                    align={'center'}>{profil.formation}</Typography>
+                                    </Grid>
+                                    <Grid item>
+                                        <i className="fab fa-linkedin"></i>
+                                    </Grid>
+                                </Grid>
+                            )}
+                        </Grid>
+
+                    </Grid>
+                </Box>
+                <Carousel autoPlay interval={5000} animation={"slide"} duration={500} navButtonsAlwaysVisible
+                          cycleNavigation stopAutoPlayOnHover={false} className={classes.carousel}>
+                    <Box className={classes.box3}>
+                        <Grid container direction={'column'} spacing={2} className={classes.box3Content}>
+                            <Grid item>
+                                <Typography className={classes.h3Mobile} color={'secondary'}>
+                                    Our partners
+                                </Typography>
+                            </Grid>
+                            <Divider classes={{root: classes.customDivMobile}}/>
+                            <Grid item container direction={'row'}>
+                                {partenaires.map(partenaire =>
+                                    <Grid item className={classes.profileGrid} xs>
+                                        <img src={partenaire} className={classes.partnerImgMobile}/>
+                                    </Grid>
+                                )}
+                            </Grid>
+                        </Grid>
+                    </Box>
+                    <Box className={classes.box3}>
+                        <Grid container direction={'column'} spacing={2} className={classes.box3Content}>
+                            <Grid item>
+                                <Typography className={classes.h3Mobile} color={'secondary'}>
+                                    Our clients
+                                </Typography>
+                            </Grid>
+                            <Divider classes={{root: classes.customDivMobile}}/>
+                            <Grid item container direction={'row'}>
+                                {clients.map(client =>
+                                    <Grid item className={classes.profileGrid} xs>
+                                        <img src={client} className={classes.partnerImgMobile}/>
+                                    </Grid>
+                                )}
+                            </Grid>
+                        </Grid>
+                    </Box>
+                </Carousel>
+                <Box className={classes.box4}>
+                    <Grid container direction={'column'} spacing={8} className={classes.box4Content}>
+                        <Grid item>
+                            <Typography className={classes.h3Mobile} align={'center'}>
+                                Advisors
+                            </Typography>
+                        </Grid>
+                        <Divider classes={{root: classes.customDivMobile}}/>
+                        <Grid item container className={classes.profileGrid} direction={'row'} spacing={2} alignItems={'flex-start'}>
+                            {comiteAdviseurs.map(comiteAdviseur =>
+                                <Grid item container className={classes.profileGrid} xs={6} direction={'column'} justifyContent={'flex-start'}>
+                                    <Grid item className={classes.profileGrid}>
+                                        <img src={comiteAdviseur.img} className={classes.comiteImgMobile}/>
+                                    </Grid>
+                                    <Grid item className={classes.profileGrid}>
+                                        <Typography className={classes.h6Mobile}
+                                                    align={'center'}>{comiteAdviseur.nom} {comiteAdviseur.prenom}</Typography>
+                                    </Grid>
+                                    <Grid item className={classes.profileGrid}>
+                                        <Typography className={classes.body2Mobile}
+                                                    align={'center'}>{comiteAdviseur.poste}</Typography>
+                                    </Grid>
+                                    <Grid item className={classes.profileGrid}>
+                                        <Typography className={classes.body2Mobile}
+                                                    align={'center'}>{comiteAdviseur.organisation}</Typography>
+                                    </Grid>
+                                </Grid>
+                            )}
+                        </Grid>
+                    </Grid>
+                </Box>
+            </Fragment>
+            ) : (
         <Fragment>
             <Box className={classes.box1}>
                 <Grid container className={classes.box1Content} direction={'column'} spacing={8}>
@@ -360,6 +561,7 @@ export default function EquipeEN() {
                     </Grid>
                 </Grid>
             </Box>
+        </Fragment>)}
         </Fragment>
     );
 }

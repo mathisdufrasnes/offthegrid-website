@@ -14,6 +14,7 @@ import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import useAuth from "../hooks/useAuth";
+import {useMediaQuery} from "react-responsive";
 
 const useStyles = makeStyles((theme) => ({
     root:
@@ -27,7 +28,17 @@ const useStyles = makeStyles((theme) => ({
         paddingTop: '75px',
         display: "flex",
         justifyContent: 'center',
-        alignItems: 'center' ,
+        alignItems: 'center',
+    },
+
+    box1Mobile: {
+        backgroundImage: `url(${background1})`,
+        backgroundSize: 'cover',
+        paddingBottom: '10vmax',
+        paddingTop: '150px',
+        display: "flex",
+        justifyContent: 'center',
+        alignItems: 'center',
     },
     box1Content: {
         width: '66vw',
@@ -39,12 +50,27 @@ const useStyles = makeStyles((theme) => ({
         alignItems: 'flex-start',
         padding: '5%',
     },
+    box1ContentMobile: {
+        width: '90vw',
+        borderRadius: '35px',
+        background: 'rgba(252, 252, 252, 0.87)',
+        display: "flex",
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
     customDiv: {
         paddingTop: '5px',
         backgroundColor: '#000000',
         width: '35%',
         borderRadius: '15px',
-        marginBottom:'5%',
+        marginBottom: '5%',
+    },
+    customDivMobile: {
+        paddingTop: '5px',
+        backgroundColor: '#000000',
+        width: '90%',
+        borderRadius: '15px',
+        marginBottom: '5%',
     },
     box2: {
         backgroundColor: "#ffffff",
@@ -58,17 +84,34 @@ const useStyles = makeStyles((theme) => ({
         display: "flex",
         justifyContent: 'center',
     },
+    box2ContentMobile: {
+        width: '90vw',
+        display: "flex",
+        justifyContent: 'center',
+    },
     textFAQ: {
         fontSize: 15,
         fontFamily: '"Montserrat-Regular"',
         textAlign: 'Left',
         lineHeight: 3,
     },
+    textFAQMobile: {
+        fontSize: '2vmax',
+        fontFamily: '"Montserrat-Regular"',
+        textAlign: 'Left',
+        lineHeight: 1.5,
+    },
     titleFAQ: {
         fontSize: 18,
         fontFamily: '"Montserrat-Medium"',
         textAlign: 'center',
         lineHeight: 3,
+    },
+    titleFAQMobile: {
+        fontSize: '2.5vmax',
+        fontFamily: '"Montserrat-Medium"',
+        textAlign: 'center',
+        lineHeight: 1.5,
     },
     box3: {
         backgroundColor: "#f2f2f2",
@@ -83,18 +126,77 @@ const useStyles = makeStyles((theme) => ({
         justifyContent: 'center',
         alignItems: 'center',
     },
-    notBold: {
-        fontFamily: 'Montserrat-SemiBold'
-    },
-    carousel:{
-        width:'80vh',
+    box3ContentMobile: {
+        width: '90vw',
         display: "flex",
         justifyContent: 'center',
         alignItems: 'center',
     },
-    spacing:{
-        paddingBottom:'5%'
-    }
+    notBold: {
+        fontFamily: 'Montserrat-SemiBold'
+    },
+    carousel: {
+        width: '80vh',
+        display: "flex",
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+
+    carouselMobile: {
+        width: '70vw',
+        display: "flex",
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginBottom:'10vmax'
+    },
+    imgMobile: {
+        maxWidth: '50vmax',
+        objectFit: 'contain',
+    },
+    spacing: {
+        paddingBottom: '5%'
+    },
+    h1Mobile: {
+        fontSize: '5vmax',
+        fontFamily: 'Montserrat-Bold',
+    },
+
+    h2Mobile: {
+        fontSize: '4.5vmax',
+        fontFamily: 'Montserrat-Bold',
+    },
+
+    h3Mobile: {
+        fontSize: '4vmax',
+        fontFamily: 'Montserrat-Bold',
+    },
+
+    h4Mobile: {
+        fontSize: '3.5vmax',
+        fontFamily: 'Montserrat-Bold',
+    },
+    h5Mobile: {
+        fontSize: '3vmax',
+        fontFamily: 'Montserrat-Bold',
+    },
+
+    h6Mobile: {
+        fontSize: '2.5vmax',
+        fontFamily: 'Montserrat-Bold',
+    },
+    body1Mobile: {
+        fontSize: '2vmax',
+        fontFamily: 'Montserrat-Regular',
+    },
+
+    body2Mobile: {
+        fontSize: '2vmax',
+        fontFamily: 'Montserrat-Light',
+    },
+    body3Mobile: {
+        fontSize: '2.5vmax',
+        fontFamily: 'Montserrat-Medium',
+    },
 }));
 
 export default function FAQ() {
@@ -112,151 +214,339 @@ export default function FAQ() {
         }
     });
     const imgList = [equi1, equi2, equi3, equi4, equi5]
+    const isTabletOrMobile = useMediaQuery({query: '(max-width: 1224px)'})
     return (
         <Fragment>
-            <Box className={classes.box1}>
-                <Grid container className={classes.box1Content} direction={'column'} spacing={8}>
-                    <Grid item container direction={'row'}>
-                        <Grid item xs={8}>
-                            <Typography variant={'h1'}>
-                                Des réponses à vos questions
-                            </Typography>
+            {isTabletOrMobile ? (
+                <Fragment>
+                    <Box className={classes.box1Mobile}>
+                        <Grid container className={classes.box1ContentMobile} direction={'column'} spacing={4}
+                              alignItems={'center'} justifyContent={'center'}>
+                            <Grid item>
+                                <Typography className={classes.h2Mobile} align={'center'}>
+                                    Des réponses à vos questions
+                                </Typography>
+                            </Grid>
+                            <Divider classes={{root: classes.customDiv}}/>
+                            <Grid item>
+                                <Typography className={classes.body2Mobile} align={'center'}>
+                                    Nous répondons à vos questions les plus fréquemment posées et nous vous présentons
+                                    des
+                                    équivalences de consommation d'électricité avec des items de tous les jours.
+                                </Typography>
+                            </Grid>
                         </Grid>
-                    </Grid>
-                    <Divider classes={{root: classes.customDiv}} style={{marginLeft: '35px'}}/>
-                    <Grid item>
-                        <Typography variant={'h5'} className={classes.notBold}>
-                            Nous répondons à vos questions les plus fréquemment posées et nous vous présentons des
-                            équivalences de consommation d'électricité avec des items de tous les jours.
-                        </Typography>
-                    </Grid>
-                </Grid>
-            </Box>
-            <Box className={classes.box2}>
-                <Grid container direction={'column'} className={classes.box2Content} spacing={8}>
-                    <Grid item container direction={'row'} justifyContent={'center'}>
-                        <Grid item style={{width: '50vw'}}>
-                            <Typography variant={'h1'} align={'center'}>
-                                Questions fréquemment posées
-                            </Typography>
+                    </Box>
+                    <Box className={classes.box2}>
+                        <Grid container direction={'column'} className={classes.box2ContentMobile} spacing={2}>
+                            <Grid item container direction={'row'} justifyContent={'center'}>
+                                <Grid item style={{width: '50vw'}}>
+                                    <Typography className={classes.h3Mobile} align={'center'}>
+                                        Questions fréquemment posées
+                                    </Typography>
+                                </Grid>
+                            </Grid>
+                            <Divider classes={{root: classes.customDivMobile}} style={{alignSelf: 'center'}}/>
+                            <Accordion>
+                                <AccordionSummary
+                                    expandIcon={<ExpandMoreIcon/>}
+                                >
+                                    <Typography className={classes.titleFAQMobile}>Comment est-ce que le vélo
+                                        fonctionne?</Typography>
+                                </AccordionSummary>
+                                <AccordionDetails>
+                                    <Typography className={classes.textFAQMobile}>
+                                        C'est simple! Il suffit d'effectuer votre entraînement habituel sur votre vélo
+                                        de
+                                        spinning Off The Grid, afin que l'énergie générée soit transformée en
+                                        électricité. Grâce
+                                        à notre technologie, celle-ci est ensuite synchronisée et distribuée directement
+                                        dans
+                                        votre réseau électrique. Notre solution est clé en main: pas besoin de batterie,
+                                        ni
+                                        d'attestation d'Hydro-Québec. Vous devez simplement brancher le vélo dans une
+                                        prise
+                                        murale standard (120V) et le tour est joué!
+                                    </Typography>
+                                </AccordionDetails>
+                            </Accordion>
+                            <Accordion>
+                                <AccordionSummary
+                                    expandIcon={<ExpandMoreIcon/>}
+                                >
+                                    <Typography className={classes.titleFAQMobile}>Combien d’énergie puis-je produire
+                                        avec le
+                                        vélo?</Typography>
+                                </AccordionSummary>
+                                <AccordionDetails>
+                                    <Typography className={classes.textFAQMobile}>
+                                        En moyenne, un individu produira environ 150Wh lors d'un entraînement d'une
+                                        heure. Notre
+                                        vélo permet toutefois de générer un maximum de 250Wh d'énergie.
+                                    </Typography>
+                                </AccordionDetails>
+                            </Accordion>
+                            <Accordion>
+                                <AccordionSummary
+                                    expandIcon={<ExpandMoreIcon/>}
+                                >
+                                    <Typography className={classes.titleFAQMobile}>Est-ce que le produit est fabriqué au
+                                        Québec?</Typography>
+                                </AccordionSummary>
+                                <AccordionDetails>
+                                    <Typography className={classes.textFAQMobile}>
+                                        Dans notre volonté d’offrir un produit responsable, nous privilégions toujours
+                                        la
+                                        création de partenariats locaux. Notre produit a donc été conçu, fabriqué et
+                                        assemblé au
+                                        Québec.
+                                    </Typography>
+                                </AccordionDetails>
+                            </Accordion>
+                            <Accordion
+                                fullWidth
+                            >
+                                <AccordionSummary
+                                    expandIcon={<ExpandMoreIcon/>}
+                                >
+                                    <Typography className={classes.titleFAQMobile}>Puis-je recharger mon cellulaire avec
+                                        le
+                                        vélo?</Typography>
+                                </AccordionSummary>
+                                <AccordionDetails>
+                                    <Typography className={classes.textFAQMobile}>
+                                        Oui, les prises électroniques nécessaires pour recharger vos appareils (USB
+                                        Type-C,
+                                        Micro-USB et iPhone) sont incluses. Vous n'avez qu'à brancher votre appareil et
+                                        pédaler!
+                                    </Typography>
+                                </AccordionDetails>
+                            </Accordion>
+                            <Accordion>
+                                <AccordionSummary
+                                    expandIcon={<ExpandMoreIcon/>}
+                                >
+                                    <Typography className={classes.titleFAQMobile}>Puis-je consulter l'historique de mes
+                                        entraînements?</Typography>
+                                </AccordionSummary>
+                                <AccordionDetails>
+                                    <Typography className={classes.textFAQMobile}>
+                                        Bien sûr! Notre vélo se connecte à votre réseau et transmet vos données
+                                        d'entraînement à
+                                        une base de données. Vous pouvez ensuite y accéder gratuitement afin d'avoir
+                                        accès à vos
+                                        performances, la quantité d'énergie produite et des équivalents écologiques !
+                                    </Typography>
+                                </AccordionDetails>
+                            </Accordion>
                         </Grid>
-                    </Grid>
-                    <Divider classes={{root: classes.customDiv}} style={{alignSelf:'center'}}/>
-                    <Accordion>
-                        <AccordionSummary
-                            expandIcon={<ExpandMoreIcon />}
-                        >
-                            <Typography className={classes.titleFAQ}>Comment est-ce que le vélo fonctionne?</Typography>
-                        </AccordionSummary>
-                        <AccordionDetails>
-                            <Typography className={classes.textFAQ}>
-                                C'est simple! Il suffit d'effectuer votre entraînement habituel sur votre vélo de
-                                spinning Off The Grid, afin que l'énergie générée soit transformée en électricité. Grâce
-                                à notre technologie, celle-ci est ensuite synchronisée et distribuée directement dans
-                                votre réseau électrique. Notre solution est clé en main: pas besoin de batterie, ni
-                                d'attestation d'Hydro-Québec. Vous devez simplement brancher le vélo dans une prise
-                                murale standard (120V) et le tour est joué!
-                            </Typography>
-                        </AccordionDetails>
-                    </Accordion>
-                    <Accordion>
-                        <AccordionSummary
-                            expandIcon={<ExpandMoreIcon />}
-                        >
-                            <Typography className={classes.titleFAQ}>Combien d’énergie puis-je produire avec le vélo?</Typography>
-                        </AccordionSummary>
-                        <AccordionDetails>
-                            <Typography className={classes.textFAQ}>
-                                En moyenne, un individu produira environ 150Wh lors d'un entraînement d'une heure. Notre
-                                vélo permet toutefois de générer un maximum de 250Wh d'énergie.
-                            </Typography>
-                        </AccordionDetails>
-                    </Accordion>
-                    <Accordion>
-                        <AccordionSummary
-                            expandIcon={<ExpandMoreIcon />}
-                        >
-                            <Typography className={classes.titleFAQ}>Est-ce que le produit est fabriqué au Québec?</Typography>
-                        </AccordionSummary>
-                        <AccordionDetails>
-                            <Typography className={classes.textFAQ}>
-                                Dans notre volonté d’offrir un produit responsable, nous privilégions toujours la
-                                création de partenariats locaux. Notre produit a donc été conçu, fabriqué et assemblé au
-                                Québec.
-                            </Typography>
-                        </AccordionDetails>
-                    </Accordion>
-                    <Accordion
-                    fullWidth
-                    >
-                        <AccordionSummary
-                            expandIcon={<ExpandMoreIcon />}
-                        >
-                            <Typography className={classes.titleFAQ}>Puis-je recharger mon cellulaire avec le vélo?</Typography>
-                        </AccordionSummary>
-                        <AccordionDetails>
-                            <Typography className={classes.textFAQ}>
-                                Oui, les prises électroniques nécessaires pour recharger vos appareils (USB Type-C,
-                                Micro-USB et iPhone) sont incluses. Vous n'avez qu'à brancher votre appareil et pédaler!
-                            </Typography>
-                        </AccordionDetails>
-                    </Accordion>
-                    <Accordion>
-                        <AccordionSummary
-                            expandIcon={<ExpandMoreIcon />}
-                        >
-                            <Typography className={classes.titleFAQ}>Puis-je consulter l'historique de mes entraînements?</Typography>
-                        </AccordionSummary>
-                        <AccordionDetails>
-                            <Typography className={classes.textFAQ}>
-                                Bien sûr! Notre vélo se connecte à votre réseau et transmet vos données d'entraînement à
-                                une base de données. Vous pouvez ensuite y accéder gratuitement afin d'avoir accès à vos
-                                performances, la quantité d'énergie produite et des équivalents écologiques !
-                            </Typography>
-                        </AccordionDetails>
-                    </Accordion>
-                </Grid>
-            </Box>
-            <Box className={classes.box3}>
-                <Grid container direction={'column'} className={classes.box3Content}>
-                    <Grid item className={classes.spacing}>
-                        <Typography variant={'h1'} align={'center'} >
-                            Équivalences
-                        </Typography>
-                    </Grid>
-                    <Divider classes={{root: classes.customDiv}}/>
-                    <Grid item container direction={'row'} justifyContent={'center'} spacing={2} className={classes.spacing}>
-                        <Grid item className={classes.spacing}>
-                            <Typography variant={'h6'} align={'center'}>
-                                Combien d'électricité je génère?
-                            </Typography>
+                    </Box>
+                    <Box className={classes.box3}>
+                        <Grid container direction={'column'} className={classes.box3ContentMobile}>
+                            <Grid item>
+                                <Typography className={classes.h3Mobile} align={'center'}>
+                                    Équivalences
+                                </Typography>
+                            </Grid>
+                            <Divider classes={{root: classes.customDivMobile}}/>
+                            <Grid item>
+                                <Typography className={classes.h5Mobile} align={'center'}>
+                                    Combien d'électricité je génère?
+                                </Typography>
+                            </Grid>
+                            <Grid item>
+                                <Typography className={classes.body1Mobile} align={'center'}>
+                                    Ces équivalences permettent d'imager rapidement ce qu'une heure de vélo Off The
+                                    Grid
+                                    peut alimenter en électricité, en moyenne.
+                                </Typography>
+                            </Grid>
+                            <Grid item className={classes.carouselMobile}>
+                                <Carousel
+                                    swipeable
+                                    autoPlay
+                                    showArrows
+                                    showThumbs={false}
+                                    infiniteLoop
+                                    emulateTouch
+                                    interval={3000}
+                                >
+                                    {imgList.map(imgInList =>
+                                        <div>
+                                            <img src={imgInList} className={classes.imgMobile}/>
+                                        </div>
+                                    )}
+                                </Carousel>
+                            </Grid>
                         </Grid>
-                        <Grid item className={classes.spacing}>
-                            <Typography variant={'body2'} align={'center'}>
-                                Ces équivalences permettent d'imager rapidement ce qu'une heure de vélo Off The Grid
-                                peut alimenter en électricité, en moyenne.
-                            </Typography>
+                    </Box>
+                </Fragment>
+            ) : (
+                <Fragment>
+                    <Box className={classes.box1}>
+                        <Grid container className={classes.box1Content} direction={'column'} spacing={8}>
+                            <Grid item container direction={'row'}>
+                                <Grid item xs={8}>
+                                    <Typography variant={'h1'}>
+                                        Des réponses à vos questions
+                                    </Typography>
+                                </Grid>
+                            </Grid>
+                            <Divider classes={{root: classes.customDiv}} style={{marginLeft: '35px'}}/>
+                            <Grid item>
+                                <Typography variant={'h5'} className={classes.notBold}>
+                                    Nous répondons à vos questions les plus fréquemment posées et nous vous présentons
+                                    des
+                                    équivalences de consommation d'électricité avec des items de tous les jours.
+                                </Typography>
+                            </Grid>
                         </Grid>
-                    </Grid>
-                    <Grid item className={classes.carousel}>
-                        <Carousel
-                            swipeable
-                            autoPlay
-                            showArrows
-                            showThumbs
-                            infiniteLoop
-                            emulateTouch
-                            interval={3000}
-                        >
-                            {imgList.map(imgInList =>
-                                <div>
-                                    <img src={imgInList}/>
-                                </div>
-                            )}
-                        </Carousel>
-                    </Grid>
-                </Grid>
-            </Box>
+                    </Box>
+                    <Box className={classes.box2}>
+                        <Grid container direction={'column'} className={classes.box2Content} spacing={8}>
+                            <Grid item container direction={'row'} justifyContent={'center'}>
+                                <Grid item style={{width: '50vw'}}>
+                                    <Typography variant={'h1'} align={'center'}>
+                                        Questions fréquemment posées
+                                    </Typography>
+                                </Grid>
+                            </Grid>
+                            <Divider classes={{root: classes.customDiv}} style={{alignSelf: 'center'}}/>
+                            <Accordion>
+                                <AccordionSummary
+                                    expandIcon={<ExpandMoreIcon/>}
+                                >
+                                    <Typography className={classes.titleFAQ}>Comment est-ce que le vélo
+                                        fonctionne?</Typography>
+                                </AccordionSummary>
+                                <AccordionDetails>
+                                    <Typography className={classes.textFAQ}>
+                                        C'est simple! Il suffit d'effectuer votre entraînement habituel sur votre vélo
+                                        de
+                                        spinning Off The Grid, afin que l'énergie générée soit transformée en
+                                        électricité. Grâce
+                                        à notre technologie, celle-ci est ensuite synchronisée et distribuée directement
+                                        dans
+                                        votre réseau électrique. Notre solution est clé en main: pas besoin de batterie,
+                                        ni
+                                        d'attestation d'Hydro-Québec. Vous devez simplement brancher le vélo dans une
+                                        prise
+                                        murale standard (120V) et le tour est joué!
+                                    </Typography>
+                                </AccordionDetails>
+                            </Accordion>
+                            <Accordion>
+                                <AccordionSummary
+                                    expandIcon={<ExpandMoreIcon/>}
+                                >
+                                    <Typography className={classes.titleFAQ}>Combien d’énergie puis-je produire avec le
+                                        vélo?</Typography>
+                                </AccordionSummary>
+                                <AccordionDetails>
+                                    <Typography className={classes.textFAQ}>
+                                        En moyenne, un individu produira environ 150Wh lors d'un entraînement d'une
+                                        heure. Notre
+                                        vélo permet toutefois de générer un maximum de 250Wh d'énergie.
+                                    </Typography>
+                                </AccordionDetails>
+                            </Accordion>
+                            <Accordion>
+                                <AccordionSummary
+                                    expandIcon={<ExpandMoreIcon/>}
+                                >
+                                    <Typography className={classes.titleFAQ}>Est-ce que le produit est fabriqué au
+                                        Québec?</Typography>
+                                </AccordionSummary>
+                                <AccordionDetails>
+                                    <Typography className={classes.textFAQ}>
+                                        Dans notre volonté d’offrir un produit responsable, nous privilégions toujours
+                                        la
+                                        création de partenariats locaux. Notre produit a donc été conçu, fabriqué et
+                                        assemblé au
+                                        Québec.
+                                    </Typography>
+                                </AccordionDetails>
+                            </Accordion>
+                            <Accordion
+                                fullWidth
+                            >
+                                <AccordionSummary
+                                    expandIcon={<ExpandMoreIcon/>}
+                                >
+                                    <Typography className={classes.titleFAQ}>Puis-je recharger mon cellulaire avec le
+                                        vélo?</Typography>
+                                </AccordionSummary>
+                                <AccordionDetails>
+                                    <Typography className={classes.textFAQ}>
+                                        Oui, les prises électroniques nécessaires pour recharger vos appareils (USB
+                                        Type-C,
+                                        Micro-USB et iPhone) sont incluses. Vous n'avez qu'à brancher votre appareil et
+                                        pédaler!
+                                    </Typography>
+                                </AccordionDetails>
+                            </Accordion>
+                            <Accordion>
+                                <AccordionSummary
+                                    expandIcon={<ExpandMoreIcon/>}
+                                >
+                                    <Typography className={classes.titleFAQ}>Puis-je consulter l'historique de mes
+                                        entraînements?</Typography>
+                                </AccordionSummary>
+                                <AccordionDetails>
+                                    <Typography className={classes.textFAQ}>
+                                        Bien sûr! Notre vélo se connecte à votre réseau et transmet vos données
+                                        d'entraînement à
+                                        une base de données. Vous pouvez ensuite y accéder gratuitement afin d'avoir
+                                        accès à vos
+                                        performances, la quantité d'énergie produite et des équivalents écologiques !
+                                    </Typography>
+                                </AccordionDetails>
+                            </Accordion>
+                        </Grid>
+                    </Box>
+                    <Box className={classes.box3}>
+                        <Grid container direction={'column'} className={classes.box3Content}>
+                            <Grid item className={classes.spacing}>
+                                <Typography variant={'h1'} align={'center'}>
+                                    Équivalences
+                                </Typography>
+                            </Grid>
+                            <Divider classes={{root: classes.customDiv}}/>
+                            <Grid item container direction={'row'} justifyContent={'center'} spacing={2}
+                                  className={classes.spacing}>
+                                <Grid item className={classes.spacing}>
+                                    <Typography variant={'h6'} align={'center'}>
+                                        Combien d'électricité je génère?
+                                    </Typography>
+                                </Grid>
+                                <Grid item className={classes.spacing}>
+                                    <Typography variant={'body2'} align={'center'}>
+                                        Ces équivalences permettent d'imager rapidement ce qu'une heure de vélo Off The
+                                        Grid
+                                        peut alimenter en électricité, en moyenne.
+                                    </Typography>
+                                </Grid>
+                            </Grid>
+                            <Grid item className={classes.carousel}>
+                                <Carousel
+                                    swipeable
+                                    autoPlay
+                                    showArrows
+                                    showThumbs
+                                    infiniteLoop
+                                    emulateTouch
+                                    interval={3000}
+                                >
+                                    {imgList.map(imgInList =>
+                                        <div>
+                                            <img src={imgInList}/>
+                                        </div>
+                                    )}
+                                </Carousel>
+                            </Grid>
+                        </Grid>
+                    </Box>
+                </Fragment>)}
         </Fragment>
     );
 }

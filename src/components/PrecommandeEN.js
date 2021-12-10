@@ -6,6 +6,7 @@ import {makeStyles} from "@material-ui/core/styles"
 import {Box, Divider, Grid, Modal, Typography} from "@material-ui/core";
 import HubspotForm from 'react-hubspot-form'
 import useAuth from "../hooks/useAuth";
+import {useMediaQuery} from "react-responsive";
 
 const useStyles = makeStyles((theme) => ({
     root:
@@ -21,9 +22,26 @@ const useStyles = makeStyles((theme) => ({
         justifyContent: 'center',
         alignItems: 'center',
     },
+    box1Mobile: {
+        backgroundColor:'#f1f1f1',
+        backgroundSize: 'cover',
+        display: "flex",
+        paddingBottom: '10vmax',
+        paddingTop: '150px',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
     box1Content: {
         width: '66vw',
         minHeight: '55vh',
+        borderRadius: '35px',
+        background: 'rgba(252, 252, 252, 0.90)',
+        display: "flex",
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    box1ContentMobile: {
+        width: '90vw',
         borderRadius: '35px',
         background: 'rgba(252, 252, 252, 0.90)',
         display: "flex",
@@ -46,6 +64,13 @@ const useStyles = makeStyles((theme) => ({
         borderRadius: '35px',
         marginLeft: '3%',
         padding:'4%'
+    },
+
+    boxFormMobile: {
+        backgroundColor: '#f2f2f2',
+        borderRadius: '35px',
+        padding:'4%',
+        marginTop:'5vmax',
     },
     formPadding:{
         padding:'8% 10% 0% 8%'
@@ -70,7 +95,55 @@ const useStyles = makeStyles((theme) => ({
         transform: 'translate(-50%, 0%)',
         outline:'none',
         boxShadow: '0 0 30px rgb(0,0,0,0.5)'
-    }
+    },
+    h1Mobile: {
+        fontSize: '5vmax',
+        fontFamily: 'Montserrat-Bold',
+    },
+
+    h2Mobile: {
+        fontSize: '4.5vmax',
+        fontFamily: 'Montserrat-Bold',
+    },
+
+    h3Mobile: {
+        fontSize: '4vmax',
+        fontFamily: 'Montserrat-Bold',
+    },
+
+    h4Mobile: {
+        fontSize: '3.5vmax',
+        fontFamily: 'Montserrat-Bold',
+    },
+    h5Mobile: {
+        fontSize: '3vmax',
+        fontFamily: 'Montserrat-Bold',
+    },
+
+    h6Mobile: {
+        fontSize: '2.5vmax',
+        fontFamily: 'Montserrat-SemiBold',
+    },
+    body1Mobile: {
+        fontSize: '2vmax',
+        fontFamily: 'Montserrat-Regular',
+    },
+
+    body2Mobile: {
+        fontSize: '2.5vmax',
+        fontFamily: 'Montserrat-Light',
+    },
+    body3Mobile: {
+        fontSize: '2.5vmax',
+        fontFamily: 'Montserrat-Medium',
+    },
+    customDivMobile: {
+        paddingTop: '5px',
+        background: '#000000',
+        width: '80%',
+        borderRadius: '15px',
+        marginBottom: '5%'
+    },
 }));
 
 export default function PrecommandeEN() {
@@ -87,7 +160,61 @@ export default function PrecommandeEN() {
             }
         }
     });
+    const isTabletOrMobile = useMediaQuery({query: '(max-width: 1224px)'})
     return (
+        <Fragment>
+            {isTabletOrMobile ? (<Fragment>
+                <Box className={classes.box1Mobile}>
+                    <Grid container className={classes.box1ContentMobile} direction={'column'} spacing={3}>
+                        <Grid item>
+                            <Typography className={classes.h3Mobile}>
+                                Preorder
+                            </Typography>
+                        </Grid>
+                        <Divider classes={{root: classes.customDivMobile}}/>
+                        <Grid item>
+                            <Typography className={classes.h4Mobile} color={'primary'}>
+                                Don't wait !
+                            </Typography>
+                        </Grid>
+                        <Grid item xs={8}>
+                            <Typography className={classes.body3Mobile} align={'center'}>
+                                Preorder our bikes today and make sure that you are one of the first ones to get them.
+                            </Typography>
+                        </Grid>
+                    </Grid>
+                </Box>
+                <Box className={classes.box2}>
+                    <Grid item container direction={'column'} spacing={5} justifyContent={'center'}>
+                        <Grid item justifyContent={'center'}>
+                            <Typography className={classes.h2Mobile} color={'secondary'} align={'center'}>Contact us to get yours when they're ready</Typography>
+                        </Grid>
+                        <Grid item justifyContent={'center'}>
+                            <Typography className={classes.body3Mobile} color={'secondary'} align={'center'}>
+                                To preorder a spin bike from Off The Grid, fill out this form and let us know how many bikes you're interested in. A member of our team will then gladly contact you!
+                            </Typography>
+                        </Grid>
+                        <Grid item justifyContent={'center'}>
+                            <Typography className={classes.h6Mobile} color={'primary'} align={'center'}>Price : 3 500 $ + tx</Typography>
+                        </Grid>
+                        <Grid item container justifyContent={'center'} alignItems={'center'}>
+                            <img src={bikeImg} className={classes.bikeImg}/>
+                        </Grid>
+                    </Grid>
+                    <Grid item container className={classes.boxFormMobile} direction={'column'}>
+                        <Grid item>
+                            <Typography className={classes.h3Mobile}>Preorder request form</Typography>
+                        </Grid>
+                        <Grid item className={classes.formPadding}>
+                            <HubspotForm
+                                portalId='8730883'
+                                formId='af1beb56-ad92-4f10-a092-d82b29bf39df'
+                                loading={<div>Chargement du formulaire</div>}
+                            />
+                        </Grid>
+                    </Grid>
+                </Box>
+            </Fragment>) : (
         <Fragment>
             <Box className={classes.box1}>
                 <Grid container className={classes.box1Content} direction={'column'} spacing={8}>
@@ -147,6 +274,7 @@ export default function PrecommandeEN() {
                     </Grid>
                 </Grid>
             </Box>
+        </Fragment>)}
         </Fragment>
     );
 }
