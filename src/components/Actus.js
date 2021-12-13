@@ -7,6 +7,8 @@ import CheckIcon from '@mui/icons-material/Check';
 import CloseIcon from '@mui/icons-material/Close';
 import SearchIcon from '@mui/icons-material/Search';
 import Timeline from '@mui/lab/Timeline';
+import ReactMarkdown from 'react-markdown'
+import MDEditor from '@uiw/react-md-editor';
 import TimelineItem from '@mui/lab/TimelineItem';
 import {DataStore, Predicates, SortDirection} from '@aws-amplify/datastore';
 import {API, Storage} from 'aws-amplify';
@@ -18,6 +20,7 @@ import TimelineDot from '@mui/lab/TimelineDot';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import DatePicker from '@mui/lab/DatePicker';
+import gfm from 'remark-gfm'
 import {createTheme, ThemeProvider, styled} from '@mui/material/styles';
 import {makeStyles} from "@material-ui/core/styles"
 import "./Actus.css"
@@ -25,7 +28,7 @@ import {
     Box,
     Card,
     CardActions,
-    CardContent, Checkbox,
+    CardContent, Checkbox, CircularProgress,
     FormControl,
     Grid,
     InputLabel, ListItemText,
@@ -338,15 +341,19 @@ const useStyles = makeStyles((theme) => ({
 export default function Actus() {
     const [offset, setOffset] = useState(0);
     const [admin, setAdmin] = useState(false);
+    const [loadingNews, setLoadingNews] = useState(true);
     const [selectTypeFR, setSelectTypeFR] = useState('');
     const [selectTypeEN, setSelectTypeEN] = useState('');
-
     const handleSelectTypeFR = (event) => {
         setSelectTypeFR(event.target.value);
     };
     const handleSelectTypeEN = (event) => {
         setSelectTypeEN(event.target.value);
     };
+
+    const [styledContentFR, setStyledContentFR]= React.useState('')
+    const [styledContentEN, setStyledContentEN]= React.useState('')
+
 
     const {currentUser} = useAuth()
     useEffect(() => {
@@ -395,6 +402,7 @@ export default function Actus() {
     }, []);
 
     async function fetchNews() {
+        setLoadingNews(true);
         let news = await DataStore.query(News, Predicates.ALL, {
             sort: s => s.idNews(SortDirection.ASCENDING)
         });
@@ -425,6 +433,7 @@ export default function Actus() {
             actus.push(actu);
         }))
         setActualites(actus);
+        setLoadingNews(false);
     }
 
     async function deleteNews(actualite) {
@@ -508,6 +517,7 @@ export default function Actus() {
         }
     }
     async function fetchNewsSearch(search) {
+        setLoadingNews(true);
         let news = await DataStore.query(News, c => c.or(
             c => c.title("contains", search).titleFR("contains", search).content("contains", search).contentFR("contains", search).title("contains", search.toLowerCase()).titleFR("contains", search.toLowerCase()).content("contains", search.toLowerCase()).contentFR("contains", search.toLowerCase())
         ), {
@@ -540,6 +550,7 @@ export default function Actus() {
             actus.push(actu);
         }))
         setActualites(actus);
+        setLoadingNews(false);
     }
 
     const history = useHistory();
@@ -597,19 +608,31 @@ export default function Actus() {
         return date.substring(6, 10) + '-' + date.substring(0, 2) + '-' + date.substring(3, 5);
     }
     const handleEdit = (values) => {
+        /*console.log(
+            values.target[0].value+'\n ----------------\n'+
+            values.target[3].value+'\n ---------------- \n'+
+            values.target[22].value+'\n ---------------- \n'+
+            values.target[39].value+'\n ---------------- \n'+
+            values.target[40].value+'\n ---------------- \n'+
+            values.target[43].value+'\n ---------------- \n'+
+            values.target[45].value+'\n ---------------- \n'+
+            values.target[47].value+'\n ---------------- \n'+
+            values.target[49].value+'\n ---------------- \n'+
+            values.target[52].files[0]+'\n ---------------- \n'
+        )*/
         const news = {
             id: modalIndex2.id,
             idNews: modalIndex2.idNews,
             title: values.target[0].value,
             titleFR: values.target[3].value,
-            content: values.target[6].value,
-            contentFR: values.target[9].value,
-            author: values.target[12].value,
-            date: values.target[15].value === '' ? null : formatDateDatePickerToAWS(values.target[15].value),
-            type: values.target[17].value,
-            typeFR: values.target[19].value,
-            img: values.target[21].value,
-            imgFile: values.target[24].files[0],
+            content: values.target[22].value,
+            contentFR: values.target[39].value,
+            author: values.target[40].value,
+            date: values.target[43].value === '' ? null : formatDateDatePickerToAWS(values.target[43].value),
+            type: values.target[45].value,
+            typeFR: values.target[47].value,
+            img: values.target[49].value,
+            imgFile: values.target[52].files[0],
         }
         editNews(news).then(values.preventDefault());
     }
@@ -617,17 +640,29 @@ export default function Actus() {
         deleteNews(actu);
     }
     const handleCreate = (values) => {
+        /*console.log(
+            values.target[0].value+'\n ----------------\n'+
+            values.target[3].value+'\n ---------------- \n'+
+            values.target[22].value+'\n ---------------- \n'+
+            values.target[39].value+'\n ---------------- \n'+
+            values.target[40].value+'\n ---------------- \n'+
+            values.target[43].value+'\n ---------------- \n'+
+            values.target[45].value+'\n ---------------- \n'+
+            values.target[47].value+'\n ---------------- \n'+
+            values.target[49].value+'\n ---------------- \n'+
+            values.target[52].files[0]+'\n ---------------- \n'
+        )*/
         const news = {
             title: values.target[0].value,
             titleFR: values.target[3].value,
-            content: values.target[6].value,
-            contentFR: values.target[9].value,
-            author: values.target[12].value,
-            date: values.target[15].value === '' ? null : formatDateDatePickerToAWS(values.target[15].value),
-            type: values.target[17].value,
-            typeFR: values.target[19].value,
-            img: values.target[21].values,
-            imgFile: values.target[24].files[0]
+            content: values.target[22].value,
+            contentFR: values.target[39].value,
+            author: values.target[40].value,
+            date: values.target[43].value === '' ? null : formatDateDatePickerToAWS(values.target[43].value),
+            type: values.target[45].value,
+            typeFR: values.target[47].value,
+            img: values.target[49].values,
+            imgFile: values.target[52].files[0]
         }
         createNews(news).then(values.preventDefault());
     }
@@ -680,9 +715,11 @@ export default function Actus() {
 
     const classes = useStyles()
     const isTabletOrMobile = useMediaQuery({query: '(max-width: 1224px)'})
+
     return (
         <Fragment>
-            {isTabletOrMobile ? (<Fragment>
+            {isTabletOrMobile ? (
+                <Fragment>
                         <Box className={classes.header}>
                             <Grid container className={classes.headerContent} direction={'column'}>
                                 <Grid item>
@@ -704,7 +741,7 @@ export default function Actus() {
                         </Box>
                         <Box className={classes.box1}>
                             <Grid className={classes.box1Content} container spacing={3}>
-                                {actualites.length === 0 ?
+                                {actualites.length === 0 && !loadingNews?
                                     <Fragment>
                                         <Grid container direction={'column'} spacing={4} display={'flex'}
                                               alignItems={'center'}>
@@ -721,7 +758,16 @@ export default function Actus() {
                                             </Grid>
                                         </Grid>
                                     </Fragment>
-                                    :
+                                    : (loadingNews ?
+                                        <Fragment>
+                                            <Grid container direction={'column'} spacing={4} display={'flex'}
+                                                  alignItems={'center'}>
+                                                <Grid item>
+                                                    <CircularProgress size={'10vmax'}/>
+                                                </Grid>
+                                            </Grid>
+                                        </Fragment>
+                                        :
                                     <Fragment>
                                         <Grid container direction={'column'}>
                                             {actualites.sort((a, b) => (a.idNews > b.idNews) ? -1 : ((b.idNews > a.idNews) ? 1 : 0)).map(actualite =>
@@ -763,9 +809,7 @@ export default function Actus() {
                                                                     </Grid>
                                                                 </Grid>
                                                                 <Grid item>
-                                                                    <Typography className={classes.contentTextMobile}>
-                                                                        {actualite.contentFR}
-                                                                    </Typography>
+                                                                    <ReactMarkdown remarkPlugins={[gfm]}>{actualite.contentFR}</ReactMarkdown>
                                                                 </Grid>
                                                             </Grid>
                                                         </CardContent>
@@ -789,126 +833,13 @@ export default function Actus() {
                                                 </Grid>
                                             )}
                                         </Grid>
-                                    </Fragment>
+                                    </Fragment>)
                                 }
                             </Grid>
                         </Box>
                     </Fragment>
-                    /*<Fragment>
-                <Box className={classes.box1}>
-                    <Grid className={classes.box1Content} container spacing={3}>
-                        {actualites.length === 0 ?
-                            <Fragment>
-                                <Grid container direction={'column'} spacing={4} display={'flex'} alignItems={'center'}>
-                                    <Grid item>
-                                        <Typography variant={'h4'} color={'primary'}>
-                                            Aucun résultats correspondants à la recherche...
-                                        </Typography>
-                                    </Grid>
-                                    <Grid item>
-                                        <Button color={'primary'} variant={'contained'} onClick={() => history.go(0)}>
-                                            Voir toutes les actualités
-                                        </Button>
-                                    </Grid>
-                                </Grid>
-                            </Fragment>
-                            :
-                            <Timeline position="alternate">
-
-                                {actualites.sort((a, b) => (a.idNews > b.idNews) ? -1 : ((b.idNews > a.idNews) ? 1 : 0)).map(actualite =>
-                                    <Fragment>
-                                        <TimelineItem>
-                                            <TimelineOppositeContent className={classes.TLOppositeContent}>
-                                                <Typography variant={'h4'} color={'primary'}
-                                                            style={{marginLeft: '10%', marginRight: '10%'}}>
-                                                    {formatDate(actualite.date)}
-                                                </Typography>
-                                            </TimelineOppositeContent>
-                                            <TimelineSeparator>
-                                                <TimelineConnector className={classes.TLSep}/>
-                                                <TimelineDot/>
-                                                <TimelineConnector className={classes.TLSep}/>
-                                            </TimelineSeparator>
-                                            <TimelineContent className={classes.TLContent}>
-                                                <Card className={classes.card}
-                                                      onClick={() => history.push('/actus/' + actualite.idNews)}>
-                                                    <CardContent className={classes.cardContent}>
-                                                        {admin === true ?
-                                                            <Grid container direction={'row'}
-                                                                  className={classes.adminButtonsGrid} spacing={2}>
-                                                                <Grid item>
-                                                                    <Button className={classes.adminButtons}
-                                                                            variant={"contained"} color={'primary'}
-                                                                            onClick={(event) => {
-                                                                                handleOpenModal2();
-                                                                                handleChangeModalIndex2(actualite);
-                                                                                setSelectTypeEN(actualite.type)
-                                                                                setSelectTypeFR(actualite.typeFR)
-                                                                                event.stopPropagation();
-                                                                            }}>
-                                                                        Editer
-                                                                    </Button>
-                                                                </Grid>
-                                                                <Grid item>
-                                                                    <Button className={classes.adminButtons}
-                                                                            variant={"contained"} color={'primary'}
-                                                                            onClick={(event) => {
-                                                                                handleOpenModal();
-                                                                                handleChangeModalIndex(actualite);
-                                                                                event.stopPropagation();
-                                                                            }}>
-                                                                        Supprimer
-                                                                    </Button>
-                                                                </Grid>
-                                                            </Grid> : ''}
-                                                        {actualite.imgFile === '' ? '' : <img src={actualite.imgFile} className={classes.cardImg}/>}
-
-                                                        <Typography className={classes.titleText}>
-                                                            {actualite.titleFR}
-                                                        </Typography>
-                                                        <Grid item container direction={'row'} spacing={1}>
-                                                            <Grid item>
-                                                                <Typography className={classes.contentText}>
-                                                                    par
-                                                                </Typography>
-                                                            </Grid>
-                                                            <Grid item>
-                                                                <Typography className={classes.authorText}>
-                                                                    {actualite.author}
-                                                                </Typography>
-                                                            </Grid>
-                                                        </Grid>
-                                                        <Typography className={classes.contentText}>
-                                                            {actualite.contentFR}
-                                                        </Typography>
-                                                    </CardContent>
-                                                    <CardActions className={classes.cardActions}>
-                                                        {(actualite.typeFR === '' || actualite.typeFR === null) ? '' : (
-                                                            <Button>
-                                                                <CategoryIcon type={actualite.typeFR}/>
-                                                                <Typography
-                                                                    className={classes.contentText}>{actualite.typeFR}</Typography>
-                                                            </Button>)
-                                                        }
-                                                        {(actualite.nbCommentsFR === '' || actualite.nbCommentsFR === null) ? '' : (
-                                                            <Button>
-                                                                <CommentOutlinedIcon className={classes.typeIcon}/>
-                                                                <Typography
-                                                                    className={classes.contentText}>{actualite.nbCommentsFR}</Typography>
-                                                            </Button>)
-                                                        }
-                                                    </CardActions>
-                                                </Card>
-                                            </TimelineContent>
-                                        </TimelineItem>
-                                    </Fragment>
-                                )}
-                            </Timeline>}
-                    </Grid>
-                </Box>
-                </Fragment>*/
                 ) :
-                (
+                    (
                     <Fragment>
                         <Box className={classes.header}>
                             <Grid container className={classes.headerContent} direction={'column'} spacing={3}>
@@ -935,6 +866,8 @@ export default function Actus() {
                                                     handleOpenModal3();
                                                     setSelectTypeEN('');
                                                     setSelectTypeFR('');
+                                                    setStyledContentEN('');
+                                                    setStyledContentFR('');
                                                 }}>
                                             Ajouter une actualité
                                         </Button>
@@ -943,7 +876,7 @@ export default function Actus() {
                         </Box>
                         <Box className={classes.box1}>
                             <Grid className={classes.box1Content} container spacing={3}>
-                                {actualites.length === 0 ?
+                                {actualites.length === 0 && !loadingNews ?
                                     <Fragment>
                                         <Grid container direction={'column'} spacing={4} display={'flex'}
                                               alignItems={'center'}>
@@ -960,6 +893,16 @@ export default function Actus() {
                                             </Grid>
                                         </Grid>
                                     </Fragment>
+                                    :
+                                    (loadingNews ?
+                                        <Fragment>
+                                            <Grid container direction={'column'} spacing={4} display={'flex'}
+                                                  alignItems={'center'}>
+                                                <Grid item>
+                                                    <CircularProgress size={'10vmax'}/>
+                                                </Grid>
+                                            </Grid>
+                                        </Fragment>
                                     :
                                     <Timeline position="alternate">
 
@@ -994,6 +937,8 @@ export default function Actus() {
                                                                                         handleChangeModalIndex2(actualite);
                                                                                         setSelectTypeEN(actualite.type)
                                                                                         setSelectTypeFR(actualite.typeFR)
+                                                                                        setStyledContentEN(actualite.content)
+                                                                                        setStyledContentFR(actualite.contentFR)
                                                                                         event.stopPropagation();
                                                                                     }}>
                                                                                 Editer
@@ -1031,9 +976,7 @@ export default function Actus() {
                                                                         </Typography>
                                                                     </Grid>
                                                                 </Grid>
-                                                                <Typography className={classes.contentText}>
-                                                                    {actualite.contentFR}
-                                                                </Typography>
+                                                                <ReactMarkdown remarkPlugins={[gfm]}>{actualite.contentFR}</ReactMarkdown>
                                                             </CardContent>
                                                             <CardActions className={classes.cardActions}>
                                                                 {(actualite.typeFR === '' || actualite.typeFR === null) ? '' : (
@@ -1057,7 +1000,7 @@ export default function Actus() {
                                                 </TimelineItem>
                                             </Fragment>
                                         )}
-                                    </Timeline>}
+                                    </Timeline>)}
                                 <Modal open={openModal}
                                        onClose={handleCloseModal}>
                                     <Grid container direction={'column'} className={classes.modal} spacing={4}
@@ -1087,9 +1030,7 @@ export default function Actus() {
                                                             </Typography>
                                                         </Grid>
                                                     </Grid>
-                                                    <Typography className={classes.contentText}>
-                                                        {modalIndex.contentFR}
-                                                    </Typography>
+                                                    <ReactMarkdown remarkPlugins={[gfm]}>{modalIndex.contentFR}</ReactMarkdown>
                                                 </CardContent>
                                             </Card>
                                         </Grid>
@@ -1144,18 +1085,18 @@ export default function Actus() {
                                                             <Grid item>
                                                                 <Typography className={classes.contentText}>Contenu
                                                                     Anglais</Typography>
-                                                                <TextField fullWidth multiline variant={'outlined'}
-                                                                           margin={'normal'}
-                                                                           defaultValue={modalIndex2.content}
-                                                                           InputProps={{classes: {input: classes.textField}}}/>
+                                                                <MDEditor
+                                                                    value={styledContentEN}
+                                                                    onChange={setStyledContentEN}
+                                                                />
                                                             </Grid>
                                                             <Grid item>
                                                                 <Typography className={classes.contentText}>Contenu
                                                                     Français</Typography>
-                                                                <TextField fullWidth multiline variant={'outlined'}
-                                                                           margin={'normal'}
-                                                                           defaultValue={modalIndex2.contentFR}
-                                                                           InputProps={{classes: {input: classes.textField}}}/>
+                                                                <MDEditor
+                                                                    value={styledContentFR}
+                                                                    onChange={setStyledContentFR}
+                                                                />
                                                             </Grid>
                                                             <Grid item>
                                                                 <Typography
@@ -1276,16 +1217,18 @@ export default function Actus() {
                                                             <Grid item>
                                                                 <Typography className={classes.contentText}>Contenu
                                                                     Anglais</Typography>
-                                                                <TextField fullWidth multiline variant={'outlined'}
-                                                                           margin={'normal'}
-                                                                           InputProps={{classes: {input: classes.textField}}}/>
+                                                                <MDEditor
+                                                                    value={styledContentEN}
+                                                                    onChange={setStyledContentEN}
+                                                                />
                                                             </Grid>
                                                             <Grid item>
                                                                 <Typography className={classes.contentText}>Contenu
                                                                     Français</Typography>
-                                                                <TextField fullWidth multiline variant={'outlined'}
-                                                                           margin={'normal'}
-                                                                           InputProps={{classes: {input: classes.textField}}}/>
+                                                                <MDEditor
+                                                                    value={styledContentFR}
+                                                                    onChange={setStyledContentFR}
+                                                                />
                                                             </Grid>
                                                             <Grid item>
                                                                 <Typography

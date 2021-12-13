@@ -299,10 +299,9 @@ export default function Accueil() {
     }
     const handleScrollTo2 = () => {
         scroller.scrollTo('scroll-to-element-mobile', {
-            duration: 800,
+            duration: 600,
             delay: 0,
-            smooth: 'easeInOutQuart',
-            offset: -30,
+            offset: -90,
         })
     }
     const width = useWindowWidth();
@@ -587,7 +586,7 @@ export default function Accueil() {
                                 </Grid>
                             </Grid>
                         </Box>
-                        <Element name="scroll-to-element-mobile">
+
                             <Box className={classes.box7} display={'flex'}>
                                 <Grid container direction={'column'} spacing={3}>
                                     <Grid item>
@@ -616,6 +615,7 @@ export default function Accueil() {
                                                                  href={'mailto:info@getoffthegrid.ca'}>info@getoffthegrid.ca</Link>
                                         </Typography>
                                     </Grid>
+                                    <Element name="scroll-to-element-mobile">
                                     <Grid item container className={classes.boxNewsletterMobile}>
                                         <Grid container direction={'column'} className={classes.newsletterContentMobile} spacing={2}>
                                             <Grid item>
@@ -632,9 +632,9 @@ export default function Accueil() {
                                             </Grid>
                                         </Grid>
                                     </Grid>
+                                    </Element>
                                 </Grid>
                             </Box>
-                        </Element>
                     </Fragment>
                 )
                 : (

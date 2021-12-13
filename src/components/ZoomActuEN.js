@@ -37,6 +37,8 @@ import useAuth from "../hooks/useAuth";
 import PlayCircleOutlineIcon from "@mui/icons-material/PlayCircleOutline";
 import AddCommentOutlinedIcon from "@mui/icons-material/AddCommentOutlined";
 import {useMediaQuery} from "react-responsive";
+import gfm from "remark-gfm";
+import ReactMarkdown from "react-markdown";
 
 const CustomTextField = withStyles({
     root: {
@@ -581,7 +583,7 @@ export default function ZoomActuEN() {
                                             <Divider/>
                                         </Grid>
                                         <Grid item className={classes.gridElements}>
-                                            <Typography className={classes.body1Mobile}>{actualite.content}</Typography>
+                                            <ReactMarkdown remarkPlugins={[gfm]}>{actualite.content}</ReactMarkdown>
                                         </Grid>
                                     </Grid>
                                 </Box>
@@ -797,7 +799,7 @@ export default function ZoomActuEN() {
                                     <Divider/>
                                 </Grid>
                                 <Grid item className={classes.gridElements}>
-                                    <Typography variant={'body1'}>{actualite.contentFR}</Typography>
+                                    <ReactMarkdown remarkPlugins={[gfm]}>{actualite.content}</ReactMarkdown>
                                 </Grid>
                             </Grid>
                         </Box>
@@ -925,7 +927,7 @@ export default function ZoomActuEN() {
                                                     </Grid>
                                                     <Grid item className={classes.gridElements}>
                                                         <ReCAPTCHA
-                                                            sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"
+                                                            sitekey="6LekmF4dAAAAAI5KDwNpa4MibUpuJ4BZMCXDuRbb"
                                                             onChange={handleCaptcha}
                                                         />
                                                     </Grid>
