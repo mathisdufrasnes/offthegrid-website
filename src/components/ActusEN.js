@@ -66,7 +66,7 @@ const MenuProps = {
     getContentAnchorEl: null,
 };
 const typesFR = [
-    'Actualité',
+    'Actualités',
     'Concours',
     'Vente',
     'Vidéo'

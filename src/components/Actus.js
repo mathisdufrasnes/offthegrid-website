@@ -66,7 +66,7 @@ const MenuProps = {
     getContentAnchorEl: null,
 };
 const typesFR = [
-    'Actualité',
+    'Actualités',
     'Concours',
     'Vente',
     'Vidéo'
@@ -433,6 +433,7 @@ export default function Actus() {
             actus.push(actu);
         }))
         setActualites(actus);
+        console.log(actus);
         setLoadingNews(false);
     }
 
@@ -702,7 +703,7 @@ export default function Actus() {
     const [datePickerValue2, setDatePickerValue2] = React.useState(null);
     function CategoryIcon(props) {
         switch (props.type) {
-            case "Actualité":
+            case "Actualités":
                 return (<Fragment><FeedOutlinedIcon className={classes.typeIcon}/></Fragment>)
             case "Vidéo":
                 return (<Fragment><PlayCircleOutlineIcon className={classes.typeIcon}/></Fragment>)
@@ -747,7 +748,7 @@ export default function Actus() {
                                               alignItems={'center'}>
                                             <Grid item>
                                                 <Typography variant={'h4'} color={'primary'}>
-                                                    Aucun résultats correspondants à la recherche...
+                                                    Aucun résultat ne correspond à la recherche...
                                                 </Typography>
                                             </Grid>
                                             <Grid item>
@@ -882,7 +883,7 @@ export default function Actus() {
                                               alignItems={'center'}>
                                             <Grid item>
                                                 <Typography variant={'h4'} color={'primary'}>
-                                                    Aucun résultats correspondants à la recherche...
+                                                    Aucun résultat ne correspon à la recherche...
                                                 </Typography>
                                             </Grid>
                                             <Grid item>

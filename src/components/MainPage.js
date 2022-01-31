@@ -326,7 +326,7 @@ export default function MainPage() {
                                                                     history.push('/actus');
                                                                     history.go(0);
                                                                 }}>
-                                                            Actualité
+                                                            Actualités
                                                         </Button>
                                                     </Grid>
 
@@ -546,7 +546,7 @@ export default function MainPage() {
                                                                             history.go(0);
                                                                         }}>
                                                                     <Typography
-                                                                        className={classes.menuText}>Actualité</Typography>
+                                                                        className={classes.menuText}>Actualités</Typography>
                                                                 </Button>
                                                             </Grid>
                                                             <Grid item>

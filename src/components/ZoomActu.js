@@ -317,7 +317,7 @@ export default function ZoomActu() {
     const {handleSubmit, control, formState:{errors}} = useForm();
     function CategoryIcon(props) {
         switch (props.type) {
-            case "Actualité":
+            case "Actualités":
                 return (<Fragment><FeedOutlinedIcon className={classes.typeIcon}/></Fragment>)
             case "Vidéo":
                 return (<Fragment><PlayCircleOutlineIcon className={classes.typeIcon}/></Fragment>)
