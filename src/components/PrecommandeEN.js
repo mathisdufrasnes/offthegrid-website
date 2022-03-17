@@ -1,6 +1,7 @@
 import React, {Fragment, useEffect, useState} from "react"
 import background1 from "../media/backgroundPreorder.jpg"
 import bikeImg from "../media/OTG-14-1-e1628705408390.png"
+import bikeImg2 from "../media/otg_bike2.png"
 
 import {makeStyles} from "@material-ui/core/styles"
 import {Box, Divider, Grid, Modal, Typography} from "@material-ui/core";
@@ -23,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
         alignItems: 'center',
     },
     box1Mobile: {
-        backgroundColor:'#f1f1f1',
+        backgroundColor: '#f1f1f1',
         backgroundSize: 'cover',
         display: "flex",
         paddingBottom: '10vmax',
@@ -56,44 +57,50 @@ const useStyles = makeStyles((theme) => ({
     },
     box2: {
         minHeight: "100vh",
-        backgroundColor: "#000000",
+        backgroundColor: "#494949",
         padding: "5%"
     },
     boxForm: {
         backgroundColor: '#f2f2f2',
         borderRadius: '35px',
         marginLeft: '3%',
-        padding:'4%'
+        padding: '4%'
     },
 
     boxFormMobile: {
         backgroundColor: '#f2f2f2',
         borderRadius: '35px',
-        padding:'4%',
-        marginTop:'5vmax',
+        padding: '4%',
+        marginTop: '5vmax',
     },
-    formPadding:{
-        padding:'8% 10% 0% 8%'
+    formPadding: {
+        padding: '8% 10% 0% 8%'
     },
-    bikeImg:{
-        width:'30vw',
-        height:'auto',
-        "&:hover":{
-            cursor:'zoom-in'
+    bikeImg: {
+        width: '30vw',
+        height: 'auto',
+        "&:hover": {
+            cursor: 'zoom-in'
         }
     },
-    bikeImg2:{
-        width:'auto',
-        height:'95vh'
+    bikeImgMobile: {
+        width: '50vw',
+        height: 'auto',
     },
-    modalBox:{
-        height:'100vh',
+    bikeImg2: {
+        width: 'auto',
+        height: '95vh'
+    },
+    modalBox: {
+        height: '90vh',
         backgroundColor: "#333333",
-        width:'85vh',
+        maxWidth: '70vw',
+        width: 'auto',
         position: 'absolute',
         left: '50%',
-        transform: 'translate(-50%, 0%)',
-        outline:'none',
+        top: '47%',
+        transform: 'translate(-50%, -50%)',
+        outline: 'none',
         boxShadow: '0 0 30px rgb(0,0,0,0.5)'
     },
     h1Mobile: {
@@ -119,10 +126,26 @@ const useStyles = makeStyles((theme) => ({
         fontSize: '3vmax',
         fontFamily: 'Montserrat-Bold',
     },
-
     h6Mobile: {
         fontSize: '2.5vmax',
         fontFamily: 'Montserrat-SemiBold',
+    },
+    taxesTextMobile:{
+        fontSize: '1.5vmax',
+        fontFamily: 'Montserrat-Regular',
+    },
+    crossedPriceMobile: {
+        fontSize: '2.5vmax',
+        fontFamily: 'Montserrat-Regular',
+        color:'#e34c4c',
+    },
+    crossedPrice: {
+        fontFamily: 'Montserrat-Regular',
+        color:'#e34c4c',
+    },
+    crossedPriceBar: {
+        textDecoration: "line-through",
+        color: '#e34c4c'
     },
     body1Mobile: {
         fontSize: '2vmax',
@@ -195,10 +218,25 @@ export default function PrecommandeEN() {
                             </Typography>
                         </Grid>
                         <Grid item justifyContent={'center'}>
-                            <Typography className={classes.h6Mobile} color={'primary'} align={'center'}>Price : 3 500 $ + tx</Typography>
+                            <Grid direction={'row'} container justifyContent={'center'} spacing={1} alignItems={'center'}>
+                                <Grid item>
+                                    <Typography item className={classes.h6Mobile} color={'primary'} align={'center'}>Preorder price : </Typography>
+                                </Grid>
+                                <Grid item>
+                                            <span item className={classes.crossedPriceBar}>
+                                                <Typography item className={classes.crossedPriceMobile} color={'primary'} align={'center'}>$3 800 </Typography>
+                                            </span>
+                                </Grid>
+                                <Grid item>
+                                    <Typography item className={classes.h6Mobile} color={'primary'}> $3 500 </Typography>
+                                </Grid>
+                                <Grid item>
+                                    <Typography item className={classes.taxesTextMobile} color={'primary'}> + taxes</Typography>
+                                </Grid>
+                            </Grid>
                         </Grid>
                         <Grid item container justifyContent={'center'} alignItems={'center'}>
-                            <img src={bikeImg} className={classes.bikeImg}/>
+                            <img src={bikeImg2} className={classes.bikeImg}/>
                         </Grid>
                     </Grid>
                     <Grid item container className={classes.boxFormMobile} direction={'column'}>
@@ -245,17 +283,32 @@ export default function PrecommandeEN() {
                         <Grid item>
                             <Typography variant={'body2'} color={'secondary'}>To preorder a spin bike from Off The Grid, fill out this form and let us know how many bikes you're interested in. A member of our team will then gladly contact you!</Typography>
                         </Grid>
-                        <Grid item>
-                            <Typography variant={'h5'} color={'primary'}>Price : 3 500 $ + tx</Typography>
+                        <Grid item justifyContent={'center'}>
+                            <Grid direction={'row'} container spacing={1} alignItems={'center'}>
+                                <Grid item>
+                                    <Typography item variant={'h5'} color={'primary'} align={'center'}>Preorder price : </Typography>
+                                </Grid>
+                                <Grid item>
+                                            <span item className={classes.crossedPriceBar}>
+                                                <Typography item className={classes.crossedPrice} color={'primary'} align={'center'}>$3 800 </Typography>
+                                            </span>
+                                </Grid>
+                                <Grid item>
+                                    <Typography item variant={'h5'} color={'primary'}> $3 500 </Typography>
+                                </Grid>
+                                <Grid item>
+                                    <Typography item variant={'body1'} color={'primary'}> + taxes</Typography>
+                                </Grid>
+                            </Grid>
                         </Grid>
                         <Grid item>
-                            <img src={bikeImg} className={classes.bikeImg} onClick={handleOpenPopup}/>
+                            <img src={bikeImg2} className={classes.bikeImg} onClick={handleOpenPopup}/>
                             <Modal
                                 open={openPopup}
                                 onClose={handleClosePopup}
                             >
                                 <Box className={classes.modalBox}>
-                                    <img src={bikeImg} className={classes.bikeImg2}/>
+                                    <img src={bikeImg2} className={classes.bikeImg2}/>
                                 </Box>
                             </Modal>
                         </Grid>

@@ -106,7 +106,7 @@ const useStyles = makeStyles((theme) => ({
         {
             backgroundColor: 'white',
             borderRadius: '20px',
-            marginBottom: '15px',
+            marginBottom:'15px',
         },
     newsletterContent:
         {
@@ -116,7 +116,7 @@ const useStyles = makeStyles((theme) => ({
     newsletterContentMobile:
         {
             padding: '8%',
-            marginBottom: '-50px',
+            marginBottom:'-50px',
         },
     newsletterForm:
         {
@@ -280,6 +280,23 @@ const useStyles = makeStyles((theme) => ({
         fontSize: '2.5vmax',
         fontFamily: 'Montserrat-Medium',
     },
+    taxesTextMobile:{
+        fontSize: '1.5vmax',
+        fontFamily: 'Montserrat-Regular',
+    },
+    crossedPriceMobile: {
+        fontSize: '2.5vmax',
+        fontFamily: 'Montserrat-Regular',
+        color:'#e34c4c',
+    },
+    crossedPrice: {
+        fontFamily: 'Montserrat-Regular',
+        color:'#e34c4c',
+    },
+    crossedPriceBar: {
+        textDecoration: "line-through",
+        color: '#e34c4c'
+    },
 }));
 
 export default function AccueilEN() {
@@ -393,10 +410,23 @@ export default function AccueilEN() {
                                     into the electrical grid, thus reducing your electricity consumption.
                                 </Typography>
                             </Grid>
-                            <Grid item>
-                                <Typography className={classes.h6Mobile} color={'primary'} align={'center'}>
-                                    Price : 3500 $ + tx
-                                </Typography>
+                            <Grid item justifyContent={'center'}>
+                                <Grid direction={'row'} container justifyContent={'center'} spacing={1} alignItems={'center'}>
+                                    <Grid item>
+                                        <Typography item className={classes.h6Mobile} color={'primary'} align={'center'}>Preorder price : </Typography>
+                                    </Grid>
+                                    <Grid item>
+                                            <span item className={classes.crossedPriceBar}>
+                                                <Typography item className={classes.crossedPriceMobile} color={'primary'} align={'center'}>$3 800 </Typography>
+                                            </span>
+                                    </Grid>
+                                    <Grid item>
+                                        <Typography item className={classes.h6Mobile} color={'primary'}> $3 500 </Typography>
+                                    </Grid>
+                                    <Grid item>
+                                        <Typography item className={classes.taxesTextMobile} color={'primary'}> + taxes</Typography>
+                                    </Grid>
+                                </Grid>
                             </Grid>
                             <Grid item>
                                 <Chip
@@ -710,10 +740,23 @@ export default function AccueilEN() {
                                         into the electrical grid, thus reducing your electricity consumption.
                                     </Typography>
                                 </Grid>
-                                <Grid item>
-                                    <Typography variant={'h5'} color={'primary'}>
-                                        Price : 3500 $ + tx
-                                    </Typography>
+                                <Grid item justifyContent={'center'}>
+                                    <Grid direction={'row'} container spacing={1} alignItems={'center'}>
+                                        <Grid item>
+                                            <Typography item variant={'h5'} color={'primary'} align={'center'}>Preorder price : </Typography>
+                                        </Grid>
+                                        <Grid item>
+                                            <span item className={classes.crossedPriceBar}>
+                                                <Typography item className={classes.crossedPrice} color={'primary'} align={'center'}>$3 800 </Typography>
+                                            </span>
+                                        </Grid>
+                                        <Grid item>
+                                            <Typography item variant={'h5'} color={'primary'}> $3 500 </Typography>
+                                        </Grid>
+                                        <Grid item>
+                                            <Typography item variant={'body1'} color={'primary'}> + taxes</Typography>
+                                        </Grid>
+                                    </Grid>
                                 </Grid>
                                 <Grid item>
                                     <Chip
