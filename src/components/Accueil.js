@@ -414,11 +414,11 @@ export default function Accueil() {
                                         </Grid>
                                         <Grid item>
                                             <span item className={classes.crossedPriceBar}>
-                                                <Typography item className={classes.crossedPriceMobile} color={'primary'} align={'center'}>$3 800 </Typography>
+                                                <Typography item className={classes.crossedPriceMobile} color={'primary'} align={'center'}>3,800$ </Typography>
                                             </span>
                                         </Grid>
                                         <Grid item>
-                                            <Typography item className={classes.h6Mobile} color={'primary'}> $3 500 </Typography>
+                                            <Typography item className={classes.h6Mobile} color={'primary'}> 3,500$ </Typography>
                                         </Grid>
                                         <Grid item>
                                             <Typography item className={classes.taxesTextMobile} color={'primary'}> + taxes</Typography>
@@ -746,11 +746,11 @@ export default function Accueil() {
                                             </Grid>
                                             <Grid item>
                                             <span item className={classes.crossedPriceBar}>
-                                                <Typography item className={classes.crossedPrice} color={'primary'} align={'center'}>$3 800 </Typography>
+                                                <Typography item className={classes.crossedPrice} color={'primary'} align={'center'}>3,800$ </Typography>
                                             </span>
                                             </Grid>
                                             <Grid item>
-                                                <Typography item variant={'h5'} color={'primary'}> $3 500 </Typography>
+                                                <Typography item variant={'h5'} color={'primary'}> 3,500$ </Typography>
                                             </Grid>
                                             <Grid item>
                                                 <Typography item variant={'body1'} color={'primary'}> + taxes</Typography>
