@@ -314,7 +314,7 @@ export default function Precommande() {
                                             </span>
                                             </Grid>
                                             <Grid item>
-                                                <Typography item variant={'h5'} color={'primary'}> $3 500 </Typography>
+                                                <Typography item variant={'h5'} color={'primary'}>$3 500 </Typography>
                                             </Grid>
                                             <Grid item>
                                                 <Typography item variant={'body1'} color={'primary'}> + taxes</Typography>
