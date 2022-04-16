@@ -5,7 +5,6 @@ import {Box, Divider, Grid, Modal, Typography} from "@material-ui/core";
 import Carousel from 'react-material-ui-carousel'
 import img1 from '../media/Profil_Charles.jpg'
 import img2 from '../media/Profil_Seb.png'
-import img3 from '../media/Profil_Simon.png'
 import img4 from '../media/Profil_Flo.png'
 import img5 from '../media/Profil_Mathis.png'
 import part1 from '../media/part1.svg'
@@ -249,14 +248,6 @@ export default function EquipeEN() {
         linkedin: 'https://www.linkedin.com/in/s%C3%A9bastien-brunelle-jestin-060702158/',
     }
     const profil3 = {
-        prenom: 'Simon',
-        nom: 'Tousignant',
-        poste: 'Logistics & Supply Chain Manager',
-        formation: 'CPI industrial engineering, M.Eng candidate',
-        img: img3,
-        linkedin: 'https://www.linkedin.com/in/simon-tousignant-60abb595/',
-    }
-    const profil4 = {
         prenom: 'Florence ',
         nom: 'Boies',
         poste: 'Logistics & Supply Chain Manager',
@@ -264,7 +255,7 @@ export default function EquipeEN() {
         img: img4,
         linkedin: 'https://www.linkedin.com/in/florence-boies-69a746211/',
     }
-    const profil5 = {
+    const profil4 = {
         prenom: 'Mathis',
         nom: 'Dufrasnes',
         poste: 'Full Stack Web Developer',
@@ -300,7 +291,7 @@ export default function EquipeEN() {
         organisation: 'Anges Québec',
         img: c4,
     }
-    const profils = [profil1, profil2, profil3, profil4, profil5]
+    const profils = [profil1, profil2, profil3, profil4]
     const partenaires = [part1, part2, part3, part4]
     const clients = [client1, client2, client3, client4, client5, client6]
     const comiteAdviseurs = [comite1, comite2, comite3, comite4]
