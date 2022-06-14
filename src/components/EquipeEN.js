@@ -11,6 +11,7 @@ import part1 from '../media/part1.svg'
 import part2 from '../media/part2.png'
 import part3 from '../media/part3.webp'
 import part4 from '../media/part4.svg'
+import part5 from '../media/part5.svg'
 
 import client1 from '../media/part1.svg'
 import client2 from '../media/client2.svg'
@@ -292,7 +293,7 @@ export default function EquipeEN() {
         img: c4,
     }
     const profils = [profil1, profil2, profil3, profil4]
-    const partenaires = [part1, part2, part3, part4]
+    const partenaires = [part1, part2, part3, part4, part5]
     const clients = [client1, client2, client3, client4, client5, client6]
     const comiteAdviseurs = [comite1, comite2, comite3, comite4]
     const [admin, setAdmin] = useState(false);
