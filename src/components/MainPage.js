@@ -32,6 +32,7 @@ import ScrollButton from "./ScrollTop";
 import ZoomActu from "./ZoomActu";
 import ZoomActuEN from "./ZoomActuEN";
 import Admin from "./Admin";
+import PrivacyPolicy from "./PrivacyPolicy"
 import {useMediaQuery} from "react-responsive";
 
 export const customTheme = createTheme({
@@ -690,6 +691,8 @@ export default function MainPage() {
                             <Route path="/en/FAQ" exact component={FAQ_EN}/>
                             <Route path="/en/precommande" exact component={PrecommandeEN}/>
                             <Route path="/admin" exact component={Admin}/>
+                            <Route path="/privacy-policy" exact component={PrivacyPolicy}/>
+                            <Redirect from="/en/privacy-policy" to="/privacy-policy"/>
                             <Redirect from="/en/admin" to="/admin"/>
                             <Route
                                 render={() => <div><h1>404: page not found</h1><h1>404: page not found</h1><h1>404:
