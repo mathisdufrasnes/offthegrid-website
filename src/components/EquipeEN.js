@@ -415,7 +415,7 @@ export default function EquipeEN() {
                                     </Grid>
                                     <Grid item className={classes.profileGrid}>
                                         <Typography className={classes.h6Mobile}
-                                                    align={'center'}>{comiteAdviseur.nom} {comiteAdviseur.prenom}</Typography>
+                                                    align={'center'}>{comiteAdviseur.prenom} {comiteAdviseur.nom}</Typography>
                                     </Grid>
                                     <Grid item className={classes.profileGrid}>
                                         <Typography className={classes.body2Mobile}
@@ -538,7 +538,7 @@ export default function EquipeEN() {
                                 </Grid>
                                 <Grid item className={classes.profileGrid}>
                                     <Typography variant={'h5'}
-                                                align={'center'}>{comiteAdviseur.nom} {comiteAdviseur.prenom}</Typography>
+                                                align={'center'}>{comiteAdviseur.prenom} {comiteAdviseur.nom}</Typography>
                                 </Grid>
                                 <Grid item className={classes.profileGrid}>
                                     <Typography className={classes.textFormation}
