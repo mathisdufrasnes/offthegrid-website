@@ -39,7 +39,7 @@ import {
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import {TimelineOppositeContent} from "@mui/lab";
-import {Route, Switch, useHistory, useLocation} from "react-router-dom";
+import {Route, Switch, useNavigate, useLocation} from "react-router-dom";
 import ZoomActu from "./ZoomActu";
 import Accueil from "./Accueil";
 import useAuth from "../hooks/useAuth";
@@ -553,7 +553,7 @@ export default function ActusEN() {
         setLoadingNews(false);
     }
 
-    const history = useHistory();
+    const history = useNavigate();
     const location = useLocation();
     const [search, setSearch] = React.useState('')
     const [category, setCategory] = React.useState([]);
@@ -729,7 +729,7 @@ export default function ActusEN() {
                                     </Grid>
                                     <Grid item>
                                         <Button color={'primary'} variant={'contained'}
-                                                onClick={() => history.go(0)}>
+                                                onClick={() => history(0)}>
                                             Back to the news list
                                         </Button>
                                     </Grid>
@@ -750,7 +750,7 @@ export default function ActusEN() {
                                     {actualites.sort((a, b) => (a.idNews > b.idNews) ? -1 : ((b.idNews > a.idNews) ? 1 : 0)).map(actualite =>
                                         <Grid item container justifyContent={'center'} alignItems={'center'}>
                                             <Card className={classes.cardMobile}
-                                                  onClick={() => history.push('/en/actus/' + actualite.idNews)}>
+                                                  onClick={() => history('/en/actus/' + actualite.idNews)}>
                                                 <CardContent className={classes.cardContent}>
                                                     <Grid container direction={'column'} spacing={1}>
                                                         {actualite.imgFile === '' ? '' :
@@ -862,7 +862,7 @@ export default function ActusEN() {
                                     </Typography>
                                 </Grid>
                                 <Grid item>
-                                    <Button color={'primary'} variant={'contained'} onClick={() => history.go(0)}>
+                                    <Button color={'primary'} variant={'contained'} onClick={() => history(0)}>
                                         Back to the news list
                                     </Button>
                                 </Grid>
@@ -897,7 +897,7 @@ export default function ActusEN() {
                                         </TimelineSeparator>
                                         <TimelineContent className={classes.TLContent}>
                                             <Card className={classes.card}
-                                                  onClick={() => history.push('/en/actus/' + actualite.idNews)}>
+                                                  onClick={() => history('/en/actus/' + actualite.idNews)}>
                                                 <CardContent className={classes.cardContent}>
                                                     {admin === true ?
                                                         <Grid container direction={'row'}

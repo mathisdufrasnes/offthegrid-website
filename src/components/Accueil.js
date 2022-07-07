@@ -13,7 +13,7 @@ import {useWindowWidth} from '@wojtekmaj/react-hooks';
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import ReactPlayer from 'react-player'
-import {useHistory} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import 'react-responsive-carousel/lib/styles/carousel.min.css'
 import backgroundImg from "../media/background2.jpg"
 import bikePhoto from "../media/OTG-14.2-2048x1256.png"
@@ -301,7 +301,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Accueil() {
     const classes = useStyles()
-    const history = useHistory();
+    const history = useNavigate();
     const [openPopup, setOpenPopup] = React.useState(false);
     const handleOpenPopup = () => setOpenPopup(true);
     const handleClosePopup = () => setOpenPopup(false);
@@ -431,7 +431,7 @@ export default function Accueil() {
                                         clickable
                                         color={'primary'}
                                         onClick={() => {
-                                            history.push('/precommande');
+                                            history('/precommande');
                                         }}
                                     />
                                 </Grid>
@@ -763,7 +763,7 @@ export default function Accueil() {
                                             clickable
                                             color={'primary'}
                                             onClick={() => {
-                                                history.push('/precommande');
+                                                history('/precommande');
                                             }}
                                         />
                                     </Grid>

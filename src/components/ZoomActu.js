@@ -3,7 +3,7 @@ import ReCAPTCHA from "react-google-recaptcha";
 import {makeStyles} from "@material-ui/core/styles"
 import {Avatar, Box, Chip, Divider, FormControl, Grid, TextField, withStyles} from "@material-ui/core";
 import Typography from "@material-ui/core/Typography";
-import {useHistory, useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import {DataStore, Predicates, SortDirection} from "@aws-amplify/datastore";
 import {News, Comments} from "../models";
 import {API, Storage} from "aws-amplify";
@@ -461,7 +461,7 @@ export default function ZoomActu() {
         return true;
     }
 
-    const history = useHistory();
+    const history = useNavigate();
     const id = useParams()
     const classes = useStyles()
     const submitForm = (values) => {
@@ -523,7 +523,7 @@ export default function ZoomActu() {
                             <Box className={classes.box1Mobile}>
                                 <Grid container item direction={'column'} className={classes.box1Content}>
                                     <Grid item container direction={'row'} className={classes.returnButton} spacing={1}
-                                          alignItems={'center'} onClick={() => history.push('/actus/')}>
+                                          alignItems={'center'} onClick={() => history('/actus/')}>
                                         <Grid item>
                                             <ArrowBackIcon style={{display: "block"}}/>
                                         </Grid>
@@ -602,8 +602,8 @@ export default function ZoomActu() {
                                         {actusRecentes.slice(0,2).map(actu =>
                                             <Grid container item direction={'column'} xs={6}
                                                   className={classes.gridRecentNews} onClick={() => {
-                                                history.push('/actus/' + actu.idNews);
-                                                history.go(0);
+                                                history('/actus/' + actu.idNews);
+                                                history(0);
                                             }}>
                                                 <Grid item container justifyContent={'center'}>
                                                     <img className={classes.imgRecentNews} src={actu.imgFile}/>
@@ -739,7 +739,7 @@ export default function ZoomActu() {
                                 <Box className={classes.box1}>
                                     <Grid container item direction={'column'} className={classes.box1Content}>
                                         <Grid item container direction={'row'} className={classes.returnButton} spacing={1}
-                                              alignItems={'center'} onClick={() => history.push('/actus/')}>
+                                              alignItems={'center'} onClick={() => history('/actus/')}>
                                             <Grid item>
                                                 <ArrowBackIcon style={{display: "block"}}/>
                                             </Grid>
@@ -820,8 +820,8 @@ export default function ZoomActu() {
                                             {actusRecentes.map(actu =>
                                                 <Grid container item direction={'column'} xs={3}
                                                       className={classes.gridRecentNews} onClick={() => {
-                                                    history.push('/actus/' + actu.idNews);
-                                                    history.go(0);
+                                                    history('/actus/' + actu.idNews);
+                                                    history(0);
                                                 }}>
                                                     <Grid item>
                                                         <img className={classes.imgRecentNews} src={actu.imgFile}/>

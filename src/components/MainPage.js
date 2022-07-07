@@ -10,7 +10,7 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import CloseIcon from '@mui/icons-material/Close';
 import {FormControl, Grid, InputLabel, Modal, Select} from "@material-ui/core";
-import {Link, Redirect, Route, Router, Switch, useHistory, useLocation, useParams} from "react-router-dom";
+import {Link, Route, Router, Routes, Switch, useNavigate, useLocation, useParams, Navigate} from "react-router-dom";
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import {Fragment} from "react";
@@ -33,6 +33,10 @@ import ZoomActu from "./ZoomActu";
 import ZoomActuEN from "./ZoomActuEN";
 import Admin from "./Admin";
 import PrivacyPolicy from "./PrivacyPolicy"
+import ConfirmAccount from "./ConfirmAccount"
+import ConfirmAccountEN from "./ConfirmAccountEN"
+import PasswordReset from "./PasswordReset"
+
 import {useMediaQuery} from "react-responsive";
 
 export const customTheme = createTheme({
@@ -194,7 +198,7 @@ export default function MainPage() {
     }
     const dispatch = useDispatch()
     const classes = useStyles();
-    const history = useHistory();
+    const history = useNavigate();
     const location = useLocation();
 
     //const lang = useSelector(state => state.lang.value)
@@ -204,18 +208,18 @@ export default function MainPage() {
     })
     const toggleLanguage = (language) => {
         if (language === "fr") {
-            history.push('/en' + location.pathname)
+            history('/en' + location.pathname)
         } else if (language === "gb") {
-            history.push(location.pathname.replace("/en", ""))
+            history(location.pathname.replace("/en", ""))
         }
         dispatch(toggle())
     };
 
     const setLanguage = (language) => {
         if (language === "gb") {
-            history.push('/en' + location.pathname)
+            history('/en' + location.pathname)
         } else if (language === "fr") {
-            history.push(location.pathname.replace("/en", ""))
+            history(location.pathname.replace("/en", ""))
         }
         dispatch(setLang(language))
     };
@@ -256,8 +260,8 @@ export default function MainPage() {
                                                                 size="large"
                                                                 edge="start"
                                                                 color="inherit" onClick={() => {
-                                                            history.push('/');
-                                                            history.go(0);
+                                                            history('/');
+                                                            history(0);
                                                         }}>
                                                             <img className={classes.logoMobile} src={logo}></img>
                                                         </Button>
@@ -287,8 +291,8 @@ export default function MainPage() {
                                                                 size="large"
                                                                 edge="start"
                                                                 color="inherit" onClick={() => {
-                                                            history.push('/');
-                                                            history.go(0);
+                                                            history('/');
+                                                            history(0);
                                                         }}>
                                                             <img className={classes.logoMobile} src={logo}></img>
                                                         </Button>
@@ -312,8 +316,8 @@ export default function MainPage() {
                                                                 variant={location.pathname === '/' ? 'contained' : ''}
                                                                 onClick={() => {
                                                                     handleCloseModal();
-                                                                    history.push('/');
-                                                                    history.go(0);
+                                                                    history('/');
+                                                                    history(0);
                                                                 }}>
                                                             Accueil
                                                         </Button>
@@ -324,8 +328,8 @@ export default function MainPage() {
                                                                 variant={location.pathname.includes('/actus') ? 'contained' : ''}
                                                                 onClick={() => {
                                                                     handleCloseModal();
-                                                                    history.push('/actus');
-                                                                    history.go(0);
+                                                                    history('/actus');
+                                                                    history(0);
                                                                 }}>
                                                             Actualités
                                                         </Button>
@@ -336,8 +340,8 @@ export default function MainPage() {
                                                                 variant={location.pathname.includes('/equipe') ? 'contained' : ''}
                                                                 onClick={() => {
                                                                     handleCloseModal();
-                                                                    history.push('/equipe');
-                                                                    history.go(0);
+                                                                    history('/equipe');
+                                                                    history(0);
                                                                 }}>
                                                             Notre équipe
                                                         </Button>
@@ -348,8 +352,8 @@ export default function MainPage() {
                                                                 variant={location.pathname.includes('/FAQ') ? 'contained' : ''}
                                                                 onClick={() => {
                                                                     handleCloseModal();
-                                                                    history.push('/FAQ');
-                                                                    history.go(0);
+                                                                    history('/FAQ');
+                                                                    history(0);
                                                                 }}>
                                                             FAQ
                                                         </Button>
@@ -360,8 +364,8 @@ export default function MainPage() {
                                                                 variant={location.pathname.includes('/precommande') ? 'contained' : ''}
                                                                 onClick={() => {
                                                                     handleCloseModal();
-                                                                    history.push('/precommande');
-                                                                    history.go(0);
+                                                                    history('/precommande');
+                                                                    history(0);
                                                                 }}>
                                                             Précommande
                                                         </Button>
@@ -386,8 +390,8 @@ export default function MainPage() {
                                                                 size="large"
                                                                 edge="start"
                                                                 color="inherit" onClick={() => {
-                                                            history.push('/en');
-                                                            history.go(0);
+                                                            history('/en');
+                                                            history(0);
                                                         }}>
                                                             <img className={classes.logoMobile} src={logo}></img>
                                                         </Button>
@@ -417,8 +421,8 @@ export default function MainPage() {
                                                                 size="large"
                                                                 edge="start"
                                                                 color="inherit" onClick={() => {
-                                                            history.push('/en');
-                                                            history.go(0);
+                                                            history('/en');
+                                                            history(0);
                                                         }}>
                                                             <img className={classes.logoMobile} src={logo}></img>
                                                         </Button>
@@ -442,8 +446,8 @@ export default function MainPage() {
                                                                 variant={location.pathname === '/en' ? 'contained' : ''}
                                                                 onClick={() => {
                                                                     handleCloseModal();
-                                                                    history.push('/en');
-                                                                    history.go(0);
+                                                                    history('/en');
+                                                                    history(0);
                                                                 }}>
                                                             Home
                                                         </Button>
@@ -454,8 +458,8 @@ export default function MainPage() {
                                                                 variant={location.pathname.includes('/en/actus') ? 'contained' : ''}
                                                                 onClick={() => {
                                                                     handleCloseModal();
-                                                                    history.push('/en/actus');
-                                                                    history.go(0);
+                                                                    history('/en/actus');
+                                                                    history(0);
                                                                 }}>
                                                             News
                                                         </Button>
@@ -466,8 +470,8 @@ export default function MainPage() {
                                                                 variant={location.pathname.includes('/en/equipe') ? 'contained' : ''}
                                                                 onClick={() => {
                                                                     handleCloseModal();
-                                                                    history.push('/en/equipe');
-                                                                    history.go(0);
+                                                                    history('/en/equipe');
+                                                                    history(0);
                                                                 }}>
                                                             Our team
                                                         </Button>
@@ -478,8 +482,8 @@ export default function MainPage() {
                                                                 variant={location.pathname.includes('/en/FAQ') ? 'contained' : ''}
                                                                 onClick={() => {
                                                                     handleCloseModal();
-                                                                    history.push('/en/FAQ');
-                                                                    history.go(0);
+                                                                    history('/en/FAQ');
+                                                                    history(0);
                                                                 }}>
                                                             FAQ
                                                         </Button>
@@ -490,8 +494,8 @@ export default function MainPage() {
                                                                 variant={location.pathname.includes('/en/precommande') ? 'contained' : ''}
                                                                 onClick={() => {
                                                                     handleCloseModal();
-                                                                    history.push('/en/precommande');
-                                                                    history.go(0);
+                                                                    history('/en/precommande');
+                                                                    history(0);
                                                                 }}>
                                                             Preorder
                                                         </Button>
@@ -521,8 +525,8 @@ export default function MainPage() {
                                                                         size="large"
                                                                         edge="start"
                                                                         color="inherit" onClick={() => {
-                                                                    history.push('/');
-                                                                    history.go(0);
+                                                                    history('/');
+                                                                    history(0);
                                                                 }}>
                                                                     <img className={classes.logo} src={logo}></img>
                                                                 </Button>
@@ -531,8 +535,8 @@ export default function MainPage() {
                                                                 <Button className={classes.menuButton}
                                                                         color={location.pathname === '/' ? 'primary' : ''}
                                                                         onClick={() => {
-                                                                            history.push('/');
-                                                                            history.go(0);
+                                                                            history('/');
+                                                                            history(0);
                                                                         }}>
                                                                     <Typography
                                                                         className={classes.menuText}>Accueil</Typography>
@@ -543,8 +547,8 @@ export default function MainPage() {
                                                                 <Button className={classes.menuButton}
                                                                         color={location.pathname.includes('/actus') ? 'primary' : ''}
                                                                         onClick={() => {
-                                                                            history.push('/actus');
-                                                                            history.go(0);
+                                                                            history('/actus');
+                                                                            history(0);
                                                                         }}>
                                                                     <Typography
                                                                         className={classes.menuText}>Actualités</Typography>
@@ -554,8 +558,8 @@ export default function MainPage() {
                                                                 <Button className={classes.menuButton}
                                                                         color={location.pathname.includes('/equipe') ? 'primary' : ''}
                                                                         onClick={() => {
-                                                                            history.push('/equipe');
-                                                                            history.go(0);
+                                                                            history('/equipe');
+                                                                            history(0);
                                                                         }}>
                                                                     <Typography className={classes.menuText}>Notre
                                                                         équipe</Typography>
@@ -566,8 +570,8 @@ export default function MainPage() {
                                                                 <Button className={classes.menuButton}
                                                                         color={location.pathname.includes('/FAQ') ? 'primary' : ''}
                                                                         onClick={() => {
-                                                                            history.push('/FAQ');
-                                                                            history.go(0);
+                                                                            history('/FAQ');
+                                                                            history(0);
                                                                         }}>
                                                                     <Typography
                                                                         className={classes.menuText}>F.A.Q.</Typography>
@@ -577,8 +581,8 @@ export default function MainPage() {
                                                                 <Button className={classes.menuButton}
                                                                         color={location.pathname.includes('/precommande') ? 'primary' : ''}
                                                                         onClick={() => {
-                                                                            history.push('/precommande');
-                                                                            history.go(0);
+                                                                            history('/precommande');
+                                                                            history(0);
                                                                         }}>
                                                                     <Typography
                                                                         className={classes.menuText}>Précommande</Typography>
@@ -602,8 +606,8 @@ export default function MainPage() {
                                                                         size="large"
                                                                         edge="start"
                                                                         color="inherit" onClick={() => {
-                                                                    history.push('/en');
-                                                                    history.go(0);
+                                                                    history('/en');
+                                                                    history(0);
                                                                 }}>
                                                                     <img className={classes.logo} src={logo}></img>
                                                                 </Button>
@@ -612,8 +616,8 @@ export default function MainPage() {
                                                                 <Button className={classes.menuButton}
                                                                         color={location.pathname === '/en' ? 'primary' : ''}
                                                                         onClick={() => {
-                                                                            history.push('/en');
-                                                                            history.go(0);
+                                                                            history('/en');
+                                                                            history(0);
                                                                         }}>
                                                                     <Typography
                                                                         className={classes.menuText}>Home</Typography>
@@ -624,8 +628,8 @@ export default function MainPage() {
                                                                 <Button className={classes.menuButton}
                                                                         color={location.pathname.includes('/en/actus') ? 'primary' : ''}
                                                                         onClick={() => {
-                                                                            history.push('/en/actus');
-                                                                            history.go(0);
+                                                                            history('/en/actus');
+                                                                            history(0);
                                                                         }}>
                                                                     <Typography
                                                                         className={classes.menuText}>News</Typography>
@@ -635,8 +639,8 @@ export default function MainPage() {
                                                                 <Button className={classes.menuButton}
                                                                         color={location.pathname.includes('/en/equipe') ? 'primary' : ''}
                                                                         onClick={() => {
-                                                                            history.push('/en/equipe');
-                                                                            history.go(0);
+                                                                            history('/en/equipe');
+                                                                            history(0);
                                                                         }}>
                                                                     <Typography className={classes.menuText}>Our
                                                                         team</Typography>
@@ -647,8 +651,8 @@ export default function MainPage() {
                                                                 <Button className={classes.menuButton}
                                                                         color={location.pathname.includes('/en/FAQ') ? 'primary' : ''}
                                                                         onClick={() => {
-                                                                            history.push('/en/FAQ');
-                                                                            history.go(0);
+                                                                            history('/en/FAQ');
+                                                                            history(0);
                                                                         }}>
                                                                     <Typography
                                                                         className={classes.menuText}>F.A.Q.</Typography>
@@ -658,8 +662,8 @@ export default function MainPage() {
                                                                 <Button className={classes.menuButton}
                                                                         color={location.pathname.includes('/en/precommande') ? 'primary' : ''}
                                                                         onClick={() => {
-                                                                            history.push('/en/precommande');
-                                                                            history.go(0);
+                                                                            history('/en/precommande');
+                                                                            history(0);
                                                                         }}>
                                                                     <Typography
                                                                         className={classes.menuText}>Preorder</Typography>
@@ -677,30 +681,31 @@ export default function MainPage() {
                         }
                     </div>
                     <div>
-                        <Switch>
-                            <Route path="/" exact component={Accueil}/>
-                            <Route path="/actus" exact component={Actus}/>
-                            <Route path="/actus/:id" exact component={ZoomActu}/>
-                            <Route path="/equipe" exact component={Equipe}/>
-                            <Route path="/FAQ" exact component={FAQ}/>
-                            <Route path="/precommande" exact component={Precommande}/>
-                            <Route path="/en" exact component={AccueilEN}/>
-                            <Route path="/en/actus" exact component={ActusEN}/>
-                            <Route path="/en/actus/:id" exact component={ZoomActuEN}/>
-                            <Route path="/en/equipe" exact component={EquipeEN}/>
-                            <Route path="/en/FAQ" exact component={FAQ_EN}/>
-                            <Route path="/en/precommande" exact component={PrecommandeEN}/>
-                            <Route path="/admin" exact component={Admin}/>
-                            <Route path="/privacy-policy" exact component={PrivacyPolicy}/>
-                            <Redirect from="/en/privacy-policy" to="/privacy-policy"/>
-                            <Redirect from="/en/admin" to="/admin"/>
+                        <Routes>
+                            <Route path="/" element={<Accueil/>}/>
+                            <Route path="/actus" element={<Actus/>}/>
+                            <Route path="/actus/:id" element={<ZoomActu/>}/>
+                            <Route path="/equipe" element={<Equipe/>}/>
+                            <Route path="/FAQ" element={<FAQ/>}/>
+                            <Route path="/precommande" element={<Precommande/>}/>
+                            <Route path="/admin" element={<Admin/>}/>
+                            <Route path="/account_confirmed" element={<ConfirmAccount/>}/>
+                            <Route path="/password_reset" element={<PasswordReset/>}/>
+                            <Route path="/privacy-policy" element={<PrivacyPolicy/>}/>
+                            <Route path="/en" element={<AccueilEN/>}/>
+                            <Route path="/en/actus" element={<ActusEN/>}/>
+                            <Route path="/en/actus/:id" element={<ZoomActuEN/>}/>
+                            <Route path="/en/equipe" element={<EquipeEN/>}/>
+                            <Route path="/en/FAQ" element={<FAQ_EN/>}/>
+                            <Route path="/en/precommande" element={<PrecommandeEN/>}/>
+                            <Route path="/en/account_confirmed" element={<ConfirmAccountEN/>}/>
+                            <Route path="/en/privacy-policy" render={() => <Navigate to="/privacy-policy"/>}/>
+                            <Route path="/en/admin" render={() => <Navigate to="/admin"/>}/>
                             <Route
                                 render={() => <div><h1>404: page not found</h1><h1>404: page not found</h1><h1>404:
                                     page not
-                                    found</h1><h1>404: page not found</h1><h1>404: page not found</h1><h1>404: page
-                                    not
-                                    found</h1><h1>404: page not found</h1></div>}/>
-                        </Switch>
+                                    found</h1><h1>404: page not found</h1><h1>404: page not found</h1></div>}/>
+                        </Routes>
                     </div>
                 </div>
                 <ScrollButton/>

@@ -1,6 +1,6 @@
 import Auth from '@aws-amplify/auth'
 import { Hub } from '@aws-amplify/core'
-import { useHistory } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 
 const getCurrentUser = async () => {
@@ -13,7 +13,7 @@ const getCurrentUser = async () => {
 }
 
 const useAuth = () => {
-    let history = useHistory()
+    let history = useNavigate()
 
     const [currentUser, setCurrentUser] = useState(null)
     useEffect(() => {
@@ -29,7 +29,7 @@ const useAuth = () => {
 
     const signOut = () => {
         Auth.signOut()
-        history.push('/login')
+        history('/login')
     }
 
     return { currentUser, signIn, signOut }
